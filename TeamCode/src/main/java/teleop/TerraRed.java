@@ -21,8 +21,6 @@ import static teleutil.button.Button.RIGHT_TRIGGER;
 import static teleutil.button.Button.X;
 import static teleutil.button.Button.Y;
 
-import org.firstinspires.ftc.teamcode.PinpointDrive;
-
 @TeleOp(name = "TerraRed", group = "TeleOp")
 public class TerraRed extends Tele {
 
@@ -65,7 +63,7 @@ public class TerraRed extends Tele {
         drive.newMove(gph1.ly,gph1.rx,gph1.lx);
         lift.move(gph2.ly);
         extendo.move(gph2.ry);
-
+        log.show("x encoder", odometry.getX());
         log.show("y encoder", odometry.getY());
         log.show("heading", odometry.getHeading());
         log.show("extendo position", extendo.motorLeft.getPosition());

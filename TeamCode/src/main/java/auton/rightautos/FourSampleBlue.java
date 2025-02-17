@@ -28,11 +28,11 @@ public class FourSampleBlue extends AutoFramework {
 
     @Override
     public void define() {
-        addAutoModule(high);
-        addSegment(1,1,NonstopWP,0,-8,0);
-        addSegment(1,1,NonstopWP,-4,-2,90);
-        addAutoModule(down);
-
+//        addAutoModule(high);
+        addSegment(1,1, NonstopWP,-9,-8,30);
+//        addConcurrentAutoModule(down);
+        addSegment(1,1, NonstopWP,-13,8,-95);
+//        addConcurrentAutoModule(intakeOut);
 
         addPause(30);
 
