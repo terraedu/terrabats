@@ -25,7 +25,7 @@ public class Executor implements Iterator {
         Stage stage = generator.getStage(reactor);
         stage.start();
          whileActive(() -> !stage.shouldStop(), ()-> {
-            stage.loop(); odometry.update(); log.show(odometry.getPose());
+            stage.loop(); odometry.update(); log.show(odometry.odo.getPosition());
         }
         );
         stage.runOnStop();
