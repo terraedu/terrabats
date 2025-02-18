@@ -26,7 +26,7 @@ public class Extendo extends RobotPart {
 
     @Override
     public void init() {
-        motorLeft = create("eil", ElectronicType.PMOTOR_FORWARD);
+        motorLeft = create("eil", ElectronicType.PMOTOR_REVERSE);
         // 0.25
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 1, 0);
         motorLeft.usePositionHolder(0, .1);

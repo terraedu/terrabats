@@ -123,6 +123,7 @@ public class GamepadHandler {
 
     public void linkWithCancel(Button b, ReturnCodeSeg<Boolean> condition, AutoModule one, AutoModule two){ link(b, () -> {if(condition.run()){bot.addAutoModuleWithCancel(one);}else{bot.addAutoModuleWithCancel(two);}}); }
     public void linkWithCancel(Button b, ReturnCodeSeg<Boolean> conditionOne, AutoModule one, ReturnCodeSeg<Boolean> conditionTwo, AutoModule two, AutoModule three){ link(b, conditionOne, () -> bot.addAutoModuleWithCancel(one), conditionTwo, () -> bot.addAutoModuleWithCancel(two),() -> bot.addAutoModuleWithCancel(three));}
+//    public void linkWithCancel(Button b, ReturnCodeSeg<Boolean> conditionOne, AutoModule one, ReturnCodeSeg<Boolean> conditionTwo, AutoModule two, Cod){ link(b, conditionOne, () -> bot.addAutoModuleWithCancel(one), conditionTwo, () -> bot.addAutoModuleWithCancel(two),() -> bot.addAutoModuleWithCancel(three));}
 
     /**
      * Main link method, parameters for type of event handler, codeseg, and mode

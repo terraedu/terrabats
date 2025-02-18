@@ -169,7 +169,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
     public void addSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
-    private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
+    private void addStationarySegment(ReturnCodeSeg<Generator> generator){}
 
     public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
     public void addAccuracy(double scale){ accuracyScales.set(poses.size()-1, scale); }
@@ -203,7 +203,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         Iterator.forAll(segmentTypes, type -> {
             switch (type){
                 case PAUSE:
-                    final double time = getCurrentPause(); addStationarySegment(() -> new PauseGenerator(time)); break;
+//                    final double time = getCurrentPause(); addStationarySegment(() -> new PauseGenerator(time)); break;
                 case SETPOINT:
                     addSegment(config.getSetpointSegment()); break;
                 case WAYPOINT:

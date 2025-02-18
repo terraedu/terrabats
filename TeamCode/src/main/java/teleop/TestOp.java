@@ -24,6 +24,12 @@ public class TestOp extends Tele {
 
     @Override
     public void loopTele() {
+//        log.show("x encoder", odometry.getX());
+//        log.show("y encoder", odometry.getY());
+//        log.show("heading", odometry.getHeading());
+//        log.show("extendo position", extendo.motorLeft.getPosition());
+//        log.show("lift position", lift.motorRight.getPosition());
+
         // odometry positions
         log.show("pose", odometry.getPose());
 

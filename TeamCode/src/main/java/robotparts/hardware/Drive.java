@@ -18,6 +18,9 @@ import static global.Modes.Drive.FAST;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.RobotStatus.DRIVING;
+import static global.Modes.RobotStatus.GRAB;
+import static global.Modes.RobotStatus.SAMPLE;
+import static global.Modes.RobotStatus.SPECIMEN;
 import static global.Modes.driveMode;
 import static global.Modes.robotStatus;
 
@@ -68,7 +71,7 @@ public class Drive extends RobotPart {
     }
 
     public void newMove(double f, double s, double t) {
-        if (robotStatus.get() == DRIVING) {
+        if (robotStatus.get() == DRIVING || robotStatus.get() == SPECIMEN || robotStatus.get() == SAMPLE) {
             fl.setPower(f - .75 * s + t);
             bl.setPower(f + .75 * s - t);
             fr.setPower(f - .75 * s - t);

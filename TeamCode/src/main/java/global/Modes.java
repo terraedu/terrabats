@@ -15,7 +15,7 @@ public interface Modes {
 
     enum GamepadMode implements Mode.ModeType { NORMAL, AUTOMATED }
 
-    enum RobotStatus implements Mode.ModeType { DRIVING, PLACING, INTAKING, PLACING2}
+    enum RobotStatus implements Mode.ModeType { DRIVING, PLACING, INTAKING, PLACING2, SPECIMEN, SAMPLE, GRAB}
     Mode robotStatus = new Mode(RobotStatus.class);
 
     enum TeleStatus implements Mode.ModeType {REDA, BLUEA}

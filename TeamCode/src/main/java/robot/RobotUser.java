@@ -1,9 +1,6 @@
 package robot;
 
-import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
-
 import robotparts.hardware.Extendo;
-//import robotparts.sensors.ColorSensors;
 import robotparts.sensors.DistanceSensors;
 import robotparts.sensors.odometry.NewOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
@@ -13,7 +10,6 @@ import robotparts.hardware.Lift;
 import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
 import robotparts.sensors.GyroSensors;
-//import robotparts.unused.DistanceSensorsOld;
 import robotparts.unused.CustomTestPart;
 import robotparts.unused.TouchSensors;
 

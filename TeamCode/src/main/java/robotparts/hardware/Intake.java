@@ -55,7 +55,7 @@ public class Intake extends RobotPart {
 
         iturret.changePosition("start", 0.97);
         iturret.changePosition("horizontal", 0.6);
-        iturret.changePosition("left", 0);
+        iturret.changePosition("left", 0.4);
         iturret.changePosition("right", 0);
         iturret.changePosition("switcharoo", 0.21);
 

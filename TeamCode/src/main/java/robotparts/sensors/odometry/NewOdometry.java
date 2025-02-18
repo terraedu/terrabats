@@ -1,5 +1,6 @@
 package robotparts.sensors.odometry;
 
+import com.pedropathing.localization.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import geometry.position.Pose;
@@ -17,7 +18,6 @@ import static robot.RobotFramework.odometryThread;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.GoBildaPinpointDriver;
 
 public class NewOdometry extends RobotPart {
 
