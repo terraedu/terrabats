@@ -27,6 +27,7 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule intakeIn = new AutoModule(
             intake.intake(0.1),
             intake.clawGrab(0.1),
+            intake.turretReset(0.1),
             intake.clawAdjust(0.1).attach(intake.electricSlide(0.1)),
             RobotPart.pause(0.2),
             intake.clawGrab(0.1),
