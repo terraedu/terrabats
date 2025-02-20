@@ -1,7 +1,5 @@
 package robotparts.autoSubsystems;
 
-import android.animation.IntArrayEvaluator;
-
 import com.qualcomm.robotcore.hardware.Servo;
 import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
@@ -9,10 +7,7 @@ import com.rowanmcalpin.nextftc.ftc.OpModeData;
 import com.rowanmcalpin.nextftc.ftc.hardware.MultipleServosToPosition;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import robotparts.hardware.Intake;
 
 public class IntakeArmSub extends Subsystem {
     // BOILERPLATE
@@ -54,7 +49,7 @@ public class IntakeArmSub extends Subsystem {
         return new MultipleServosToPosition(servos, TRANSFERSPECIMEN, this);
     }
 
-    public Command stageTrasfer() {
+    public Command stageTransfer() {
         return new MultipleServosToPosition(servos, STAGETRANSFER, this);
     }
 
@@ -86,6 +81,7 @@ public class IntakeArmSub extends Subsystem {
     public Command clawUp() {
         return new MultipleServosToPosition(servos, SEEK, this);
     }
+
     @Override
     public void initialize() {
         iarmr = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "iarmr");

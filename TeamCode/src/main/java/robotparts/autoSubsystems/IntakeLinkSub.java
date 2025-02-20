@@ -64,6 +64,14 @@ public class IntakeLinkSub extends Subsystem {
         return new MultipleServosToPosition(servos, START, this);
     }
 
+    public Command linkEnd() {
+        return  new MultipleServosToPosition(servos, END, this);
+    }
+
+    public Command linkStart() {
+        return  new MultipleServosToPosition(servos, START, this);
+    }
+
     @Override
     public void initialize() {
         linkager = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "linkager");

@@ -51,6 +51,6 @@ public class FConstants {
 
         FollowerConstants.useVoltageCompensationInAuto = true;
         FollowerConstants.useVoltageCompensationInTeleOp = true;
-        FollowerConstants.nominalVoltage = 14;
+        FollowerConstants.nominalVoltage = 13.7;
     }
 }

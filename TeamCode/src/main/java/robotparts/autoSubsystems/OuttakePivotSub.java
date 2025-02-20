@@ -18,6 +18,7 @@ public class OuttakePivotSub extends Subsystem {
     private final double SPECIMENREADY = 0.79;
     private final double PLACE = 0.49;
     private final double SWITCHAROO = 0.52;
+    private final double PREBASKET = 0.6;
     private final double BASKET = 0.3;
 
     public Command moveInit() {
@@ -34,6 +35,10 @@ public class OuttakePivotSub extends Subsystem {
 
     public Command switcharooReady() {
         return new ServoToPosition(pivot, SWITCHAROO, this);
+    }
+
+    public Command prePlaceHigh() {
+        return new ServoToPosition(pivot, PREBASKET, this);
     }
 
     public Command placeHigh() {

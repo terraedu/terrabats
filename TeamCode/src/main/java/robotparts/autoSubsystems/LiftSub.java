@@ -16,7 +16,7 @@ public class LiftSub extends Subsystem {
     private LiftSub() {}
 
     public MotorEx lift;
-    public PIDFController controller = new PIDFController(new PIDCoefficients(0.005, 0.0, 0.0));
+    public PIDFController controller = new PIDFController(new PIDCoefficients(0.05, 0.0, 0.001));
     public String name = "lir";
 
     public Command down() {
@@ -25,6 +25,10 @@ public class LiftSub extends Subsystem {
 
     public Command specimen() {
         return new RunToPosition(lift, 1000, controller, this);
+    }
+
+    public Command placeHigh() {
+        return new RunToPosition(lift, 2050, controller, this);
     }
 
     @Override

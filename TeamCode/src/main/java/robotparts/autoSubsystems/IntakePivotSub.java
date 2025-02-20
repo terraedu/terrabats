@@ -7,6 +7,7 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.ftc.OpModeData;
 import com.rowanmcalpin.nextftc.ftc.hardware.MultipleServosToPosition;
+import com.rowanmcalpin.nextftc.ftc.hardware.MultipleServosToSeperatePositions;
 import com.rowanmcalpin.nextftc.ftc.hardware.ServoToPosition;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class IntakePivotSub extends Subsystem {
         return new ServoToPosition(ipivot, LOW, this);
     }
 
+    @Override
     public void initialize() {
         ipivot = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "ipivot");
         ipivot.setDirection(Servo.Direction.FORWARD);
