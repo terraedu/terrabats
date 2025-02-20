@@ -62,7 +62,7 @@ public class PMotor extends Electronic {
 
         motor.setPower(0);
 
-        motorEncoder.reset();
+//        motorEncoder.reset();
         holdingExact = false;
     }
 
@@ -227,7 +227,7 @@ public class PMotor extends Electronic {
     /**
      * Reset the position of the pmotor
      */
-    public void resetPosition(){ motorEncoder.reset(); }
+    public void resetPosition(){}
 
     /**
      * Get the stall detector
@@ -280,5 +280,5 @@ public class PMotor extends Electronic {
     }
 
 
-    public void softReset(){ motorEncoder.softReset(); }
+    public void softReset(){}
 }

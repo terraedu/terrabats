@@ -29,7 +29,7 @@ public class Lift extends RobotPart {
         motorRight = create("lir", ElectronicType.PMOTOR_REVERSE);
         // 0.25
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 1, 15);
-        motorRight.usePositionHolder(0.18, .5);
+        motorRight.usePositionHolder(0.1, .5);
         adjust = 0;
         globalOffset = 0;
     }
@@ -37,7 +37,7 @@ public class Lift extends RobotPart {
 
     @Override
     public CodeSeg move(double p) {
-        motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0);
+        motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0.05);
         return null;
     }
 

@@ -69,9 +69,7 @@ public abstract class Tele extends OpMode implements Common, RobotUser, AutoModu
     @Override
     public final void loop() {
         loopTele();
-        odometry.update();
         update(true);
-        odometry.getPose();
     }
 
     @Override

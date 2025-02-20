@@ -72,26 +72,18 @@ public class Drive extends RobotPart {
 
     public void newMove(double f, double s, double t) {
         if (robotStatus.get() == DRIVING || robotStatus.get() == SPECIMEN || robotStatus.get() == SAMPLE) {
-            fl.setPower(f - .75 * s + t);
-            bl.setPower(f + .75 * s - t);
-            fr.setPower(f - .75 * s - t);
-            br.setPower(f + .75 * s + t);
+            fl.setPower(f - .9 * s + t);
+            bl.setPower(f + .9 * s - t);
+            fr.setPower(f - .9 * s - t);
+            br.setPower(f + .9 * s + t);
         } else {
-            fl.setPower(.3 * f - .3 * s + .3 * t);
-            bl.setPower(.3 * f + .3 * s - .3 * t);
-            fr.setPower(.3 * f - .3 * s - .3 * t);
-            br.setPower(.3 * f + .3 * s + .3 * t);
+            fl.setPower(.6 * f - .6 * s + .6 * t);
+            bl.setPower(.6 * f + .6 * s - .6 * t);
+            fr.setPower(.6 * f - .6 * s - .6 * t);
+            br.setPower(.6 * f + .6 * s + .6 * t);
         }
 
     }
-
-//    public Stage alignSampleRight(double f, double s, double t) {
-//        return super.moveCustomExit(f, s, t, intake.sampleScanner.centerRight());
-//    }
-//
-//    public Stage alignSampleLeft(double f, double s, double t) {
-//        return super.moveCustomExit(f, s, t, intake.sampleScanner.centerLeft());
-//    }
 
     @Override
     public Stage moveTime(double fp, double sp, double tp, double t) {

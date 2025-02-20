@@ -1,12 +1,15 @@
 package robotparts.sensors;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.opencv.core.Size;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 import autoutil.vision.old.Scanner;
+import debugging.Log;
 import robotparts.RobotPart;
 
 import static global.General.hardwareMap;
@@ -27,6 +30,8 @@ public class Cameras extends RobotPart {
             camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened() {
+                log.show(((OpenCvWebcam) camera).getExposureControl());
+
                 camera.startStreaming((int) frameSize.width, (int) frameSize.height, OpenCvCameraRotation.UPRIGHT);
                 log.show("camera opened");
             }

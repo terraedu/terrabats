@@ -46,7 +46,6 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
         ready();
         update(true);
         runAuto();
-        odometry.update();
         stopAuto();
         end();
     }

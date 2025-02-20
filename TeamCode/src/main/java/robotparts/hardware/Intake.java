@@ -4,6 +4,7 @@ import static autoutil.vision.SampleScanner.servoPos;
 
 import automodules.stage.Stage;
 import autoutil.vision.SampleScanner;
+import autoutil.vision.yolovision.YoloScanner;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
@@ -13,7 +14,7 @@ public class Intake extends RobotPart {
 
     public PServo iarmr, iarml, ipivot, iturret, iclaw, linkager, linkagel;
     public SampleScanner sampleScanner;
-//    public YoloScanner yoloScanner;
+    public YoloScanner yoloScanner;
 
     @Override
     public void init() {
@@ -27,10 +28,12 @@ public class Intake extends RobotPart {
 
         iarmr.changePosition("init", 1);
         iarml.changePosition("init", 1);
-        iarmr.changePosition("specimenready", 0.81);
+        iarmr.changePosition("specimenready", 0.81); // previous 0.81
         iarml.changePosition("specimenready", 0.81);
         iarmr.changePosition("specimen", 0.95);
         iarml.changePosition("specimen", 0.95);
+        iarmr.changePosition("switcharoo", 0.93);
+        iarml.changePosition("switcharoo", 0.93);
         iarmr.changePosition("transferspecimen", 0.87);
         iarml.changePosition("transferspecimen", 0.87);
         iarmr.changePosition("stagetransfer", 0.93);
@@ -46,11 +49,11 @@ public class Intake extends RobotPart {
 
         ipivot.changePosition("init", 0.8);
         ipivot.changePosition("specimenready", 0);
-        ipivot.changePosition("transferspecimen", 0.3);
+        ipivot.changePosition("transferspecimen", 0.34);
         ipivot.changePosition("seek", 0.68);
         ipivot.changePosition("grab", 0.79);
-        ipivot.changePosition("drop", 0.25);
-        ipivot.changePosition("smallinit", 0.4);
+        ipivot.changePosition("drop", 0.4);
+        ipivot.changePosition("smallinit", 0.55);
         ipivot.changePosition("low", 0.15);
 
         iturret.changePosition("start", 0.97);
@@ -72,12 +75,12 @@ public class Intake extends RobotPart {
         linkagel.changePosition("end", 0.06);
         linkager.changePosition("specimen", 0.21);
         linkagel.changePosition("specimen", 0.21);
-        linkager.changePosition("transferspecimen", 0.13);
-        linkagel.changePosition("transferspecimen", 0.13);
-        linkager.changePosition("seek", 0.18);
-        linkagel.changePosition("seek", 0.18);
-        linkager.changePosition("switcharoo", 0.14);
-        linkagel.changePosition("switcharoo", 0.14);
+        linkager.changePosition("transferspecimen", 0.3);
+        linkagel.changePosition("transferspecimen", 0.3);
+        linkager.changePosition("seek", 0.22);
+        linkagel.changePosition("seek", 0.22);
+        linkager.changePosition("switcharoo", 0.33);
+        linkagel.changePosition("switcharoo", 0.33);
         linkager.changePosition("tight", 0.25);
         linkagel.changePosition("tight", 0.25);
 
@@ -88,6 +91,15 @@ public class Intake extends RobotPart {
         iarmr.setPosition("init");
         iarml.setPosition("init");
         iturret.setPosition("start");
+        iclaw.setPosition("start");
+        linkager.setPosition("init");
+        linkagel.setPosition("init");
+        ipivot.setPosition("init");
+    }
+
+    void armInit() {
+        iarmr.setPosition("init");
+        iarml.setPosition("init");
         iclaw.setPosition("start");
         linkager.setPosition("init");
         linkagel.setPosition("init");
@@ -144,8 +156,6 @@ public class Intake extends RobotPart {
     }
 
     void intake() {
-        linkager.setPosition("end");
-        linkagel.setPosition("end");
         ipivot.setPosition("grab");
         iarmr.setPosition("grab");
         iarml.setPosition("grab");
@@ -156,14 +166,16 @@ public class Intake extends RobotPart {
     }
 
     void switcharoo() {
-        linkager.setPosition("start");
-        linkagel.setPosition("start");
-        iarmr.setPosition("specimen");
-        iarml.setPosition("specimen");
+        linkager.setPosition("switcharoo");
+        linkagel.setPosition("switcharoo");
+        iarmr.setPosition("switcharoo");
+        iarml.setPosition("switcharoo");
     }
 
     void smallInit() {
-        iarmr.setPosition("init"); iarml.setPosition("init"); ipivot.setPosition("smallinit");
+        iarmr.setPosition("init");
+        iarml.setPosition("init");
+        ipivot.setPosition("smallinit");
     }
 
     void clawDown() {
@@ -197,6 +209,7 @@ public class Intake extends RobotPart {
 
 
     public Stage init(double t) {return super.customTime(this::moveInit, t);}
+    public Stage armInit(double t) {return super.customTime(this::armInit, t);}
     public Stage specimenReady(double t) {return super.customTime(this::iSpecimenReady, t);}
     public Stage yoinkSpecimen(double t) {return super.customTime(this::yoinkSpecimen, t);}
     public Stage transferSpecimen(double t) {return super.customTime(this::transferSpecimen, t);}
@@ -224,11 +237,13 @@ public class Intake extends RobotPart {
     public Stage linkEnd(double t) {return super.customTime(this::linkEnd, t);}
     public Stage linkStart(double t) {return super.customTime(this::linkStart, t);}
 
-    public void updatePipeline(int loopNum) {
+    public void updatePipeline() {
         if (sampleScanner.getAngle() == -1) return;
-        for (int i = 0; i < loopNum; i++) {
+        for (int i = 0; i < 20; i++) {
             iturret.changePosition("angle", servoPos);
             iturret.setPosition("angle");
         }
     }
+
+    public Stage updatePipeline(double t) {return super.customTime(this::updatePipeline, t);}
 }

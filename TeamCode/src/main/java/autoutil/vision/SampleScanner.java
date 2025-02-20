@@ -40,10 +40,8 @@ public class SampleScanner extends OpenCvPipeline {
     double BIGTHRESH = 40000;
     double SMALLTHRESH = 9000;
 
-    int isCenter;
-
     double focus_x = frameSize.width / 2;
-    double focus_y = 370;
+    double focus_y = 340;
     double rect_center_x;
     double rect_center_y;
     double dist_x;
@@ -52,13 +50,14 @@ public class SampleScanner extends OpenCvPipeline {
 
     // thresholds
     int YELLOW_MASK_THRESHOLD = 90;
-    int BLUE_MASK_THRESHOLD = 150;
-    int RED_MASK_THRESHOLD = 170;
+    int BLUE_MASK_THRESHOLD = 140;
+    int RED_MASK_THRESHOLD = 160;
 
     // RGB
     static final Scalar RED = new Scalar(255, 0, 0);
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar YELLOW = new Scalar(255, 255, 0);
+    static final Scalar WHITE = new Scalar(255, 255, 255);
 
     ArrayList<AnalyzedStone> internalStoneList = new ArrayList<>();
     volatile ArrayList<AnalyzedStone> clientStoneList = new ArrayList<>();
@@ -72,11 +71,12 @@ public class SampleScanner extends OpenCvPipeline {
     }
 
     void findContours(Mat input) {
+        double exposureFactor = 0.85;
+        input.convertTo(input, -1, exposureFactor, 0);
+
         Imgproc.cvtColor(input, ycrcbMat, Imgproc.COLOR_RGB2YCrCb);
         Core.extractChannel(ycrcbMat, cbMat, 2);
         Core.extractChannel(ycrcbMat, crMat, 1);
-
-        int colNum = 0;
 
         contoursOnPlainImageMat = Mat.zeros(input.size(), input.type());
         contours(input, cbMat, yellowThresholdMat, morphedYellowThreshold, YELLOW_MASK_THRESHOLD, Imgproc.THRESH_BINARY_INV, "Yellow");
@@ -104,7 +104,7 @@ public class SampleScanner extends OpenCvPipeline {
         for (MatOfPoint contour : contoursList) {
             RotatedRect rotatedRectFitToContour = Imgproc.minAreaRect(new MatOfPoint2f(contour.toArray()));
 
-            Imgproc.circle(input, new Point(focus_x, focus_y), 1, RED, 10);
+            Imgproc.circle(input, new Point(focus_x, focus_y), 1, WHITE, 10);
 
             rect_center_x = rotatedRectFitToContour.center.x;
             rect_center_y = rotatedRectFitToContour.center.y;
@@ -112,17 +112,8 @@ public class SampleScanner extends OpenCvPipeline {
             dist_x = focus_x - rect_center_x;
             dist_y = focus_y - rect_center_y;
 
-//            lift.liftAdjust(dist_y / 30);
-//            drive.move(0, dist_x / 30, 0);
-
             double area = rotatedRectFitToContour.size.height * rotatedRectFitToContour.size.width;
             dist = Math.pow((Math.pow(dist_x, 2) + Math.pow(dist_y, 2)), 0.5);
-
-            if (rect_center_x > focus_x) {
-                isCenter = 1;
-            } else {
-                isCenter = -1;
-            }
 
             if (minDist == 0 || dist < minDist)  {
                 if (rect_center_x != 0 && rect_center_y != 0 && area < BIGTHRESH && area > SMALLTHRESH) {
@@ -132,6 +123,8 @@ public class SampleScanner extends OpenCvPipeline {
             }
 
             if (++cnt == size && smallDistBox != null) {
+                log.show("dist: ", dist);
+
                 double rotRectAngle = smallDistBox.angle;
                 if (smallDistBox.size.width < smallDistBox.size.height) {
                     rotRectAngle += 90;
@@ -140,7 +133,7 @@ public class SampleScanner extends OpenCvPipeline {
                 double angle = -(rotRectAngle - 180);
                 String degrees = (int) Math.round(angle) + " deg";
                 drawItems(input, smallDistBox, degrees, teamColor);
-                Imgproc.line(input, smallDistBox.center, new Point(focus_x, focus_y), YELLOW);
+                Imgproc.line(input, smallDistBox.center, new Point(focus_x, focus_y), WHITE);
 
                 AnalyzedStone analyzedStone = new AnalyzedStone();
                 analyzedStone.angle = Math.round(angle);
@@ -148,7 +141,7 @@ public class SampleScanner extends OpenCvPipeline {
                 analyzedStone.center = smallDistBox.center;
                 internalStoneList.add(analyzedStone);
 
-                servoPos = (angle * 0.5) / 180;
+                servoPos = -(angle / 300) + 0.6;
                 log.show("servo position ", servoPos);
             }
         }
@@ -171,7 +164,7 @@ public class SampleScanner extends OpenCvPipeline {
                         rect.center.y + 25),
                 Imgproc.FONT_HERSHEY_PLAIN,
                 1,
-                colorScalar,
+                WHITE,
                 1);
     }
 
@@ -216,10 +209,4 @@ public class SampleScanner extends OpenCvPipeline {
         Imgproc.dilate(output, output, dilateElement);
         Imgproc.dilate(output, output, dilateElement);
     }
-
-//    public boolean notLeft() {return isCenter >= 0;}
-//    public boolean notRight() {return isCenter <= 0;}
-//
-//    public Exit centerLeft(){return new Exit(this::notLeft);}
-//    public Exit centerRight(){return new Exit(this::notRight);}
 }

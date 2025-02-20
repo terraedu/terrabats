@@ -37,7 +37,7 @@ public class Extendo extends RobotPart {
 
     @Override
     public CodeSeg move(double p) {
-        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.04);
+        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
         return null;
     }
 

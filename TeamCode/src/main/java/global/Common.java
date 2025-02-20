@@ -96,7 +96,7 @@ public interface Common{
      */
     default void update(boolean showTelemetry){
         bot.update();
-        odometry.update();
+        ;
         gph1.run();
         gph2.run();
         sync.update();

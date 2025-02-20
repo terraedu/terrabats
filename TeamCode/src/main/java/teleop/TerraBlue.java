@@ -31,23 +31,17 @@ public class TerraBlue extends Tele {
 
         Tele auto = this;
         auto.scan(true);
+        intake.sampleScanner = sampleScanner;
 
-//        intake.yoloScanner = (YoloScanner) yoloScanner;
-//        intake.sampleScanner = sampleScanner;
-
-        gph1.link(RIGHT_TRIGGER, ()-> extendo.liftAdjust(5));
-        gph1.link(LEFT_TRIGGER, ()-> extendo.liftAdjust(-5));
-        gph1.link(LEFT_BUMPER, intake::turretLeft);
-        gph1.link(RIGHT_BUMPER, intake::turretRight);
+        gph1.linkWithCancel(RIGHT_BUMPER, robotStatus.isMode(SPECIMEN), upSpecimen, robotStatus.isMode(DRIVING), high, down);
+        gph1.linkWithCancel(RIGHT_TRIGGER, robotStatus.isMode(DRIVING), intakeOut, robotStatus.isMode(INTAKING), intakeIn, DRIVINGMODE);
+        gph1.linkWithCancel(LEFT_TRIGGER, robotStatus.isMode(DRIVING), zestyFlick, updatePipeline);
+        gph1.linkWithCancel(LEFT_BUMPER, robotStatus.isMode(DRIVING), specimenReady, grabSpecimen);
         gph1.link(DPAD_LEFT, intake::turretHorizontal);
         gph1.link(DPAD_UP, intake::turretReset);
-        gph1.link(DPAD_DOWN, () -> intake.updatePipeline(20));
 
-        gph2.linkWithCancel(RIGHT_TRIGGER, robotStatus.isMode(DRIVING), intakeOut, robotStatus.isMode(INTAKING), intakeIn, changeDriving);
-        gph2.link(LEFT_TRIGGER, switcharoo);
-        gph2.linkWithCancel(RIGHT_BUMPER, robotStatus.isMode(SPECIMEN), upSpecimen, robotStatus.isMode(SAMPLE), high, down);
-        gph2.linkWithCancel(LEFT_BUMPER, robotStatus.isMode(DRIVING), specimenReady, grabSpecimen);
-        gph2.link(LEFT_STICK_BUTTON, zestyFlick);
+        gph2.linkWithCancel(LEFT_TRIGGER, robotStatus.isMode(DRIVING), zestyFlick, ()-> intake.updatePipeline(20));
+        gph2.link(RIGHT_TRIGGER, high);
 
         robotStatus.set(DRIVING);
     }
@@ -59,5 +53,7 @@ public class TerraBlue extends Tele {
     public void loopTele() {
         drive.newMove(gph1.ly,gph1.rx,gph1.lx);
         if (teleStatus.modeIs(INTAKING)) {extendo.move(gph1.ry);}
+        lift.move(gph2.rx);
+        extendo.move(gph2.ry);
     }
 }

@@ -37,19 +37,17 @@ public class TerraRedSingle extends Tele {
         Tele auto = this;
         auto.scan(true);
 
-//        intake.yoloScanner = (YoloScanner) yoloScanner;
-//        intake.sampleScanner = sampleScanner;
-//
-//        gph1.link(LEFT_BUMPER, () -> intake.turretLeft());
-//        gph1.link(RIGHT_BUMPER, () -> intake.turretRight());
-//        gph1.link(DPAD_DOWN, () -> intake.updatePipeline(20));++
-//
-        gph1.linkWithCancel(RIGHT_BUMPER, robotStatus.isMode(SPECIMEN), upSpecimen, robotStatus.isMode(SAMPLE), high, down);
-        gph1.linkWithCancel(RIGHT_TRIGGER, robotStatus.isMode(DRIVING), intakeOut, robotStatus.isMode(INTAKING), intakeIn, changeDriving);
-        gph1.link(LEFT_STICK_BUTTON, zestyFlick);
-        gph1.link(LEFT_TRIGGER, switcharoo);
+        intake.sampleScanner = sampleScanner;
+
+        gph1.linkWithCancel(RIGHT_BUMPER, robotStatus.isMode(SPECIMEN), upSpecimen, robotStatus.isMode(DRIVING), high, down);
+        gph1.linkWithCancel(RIGHT_TRIGGER, robotStatus.isMode(DRIVING), intakeOut, robotStatus.isMode(INTAKING), intakeIn, DRIVINGMODE);
+        gph1.linkWithCancel(LEFT_TRIGGER, robotStatus.isMode(DRIVING), zestyFlick, updatePipeline);
         gph1.linkWithCancel(LEFT_BUMPER, robotStatus.isMode(DRIVING), specimenReady, grabSpecimen);
-        gph1.link(DPAD_UP, intake::turretHorizontal);
+        gph1.link(DPAD_LEFT, intake::turretHorizontal);
+        gph1.link(DPAD_UP, intake::turretReset);
+
+        gph2.linkWithCancel(LEFT_TRIGGER, robotStatus.isMode(DRIVING), zestyFlick, ()-> intake.updatePipeline(20));
+        gph2.link(RIGHT_TRIGGER, high);
 
         robotStatus.set(DRIVING);
     }
@@ -60,14 +58,9 @@ public class TerraRedSingle extends Tele {
     @Override
     public void loopTele() {
         drive.newMove(gph1.ly,gph1.rx,gph1.lx);
-        lift.move(gph2.ly);
+        if (teleStatus.modeIs(INTAKING)) {extendo.move(gph1.ry);}
+        lift.move(gph2.rx);
         extendo.move(gph2.ry);
-
-        log.show("x encoder", odometry.getX());
-        log.show("y encoder", odometry.getY());
-        log.show("heading", odometry.getHeading());
-        log.show("extendo position", extendo.motorLeft.getPosition());
-        log.show("lift position", lift.motorRight.getPosition());
     }
 }
 

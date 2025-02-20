@@ -35,7 +35,7 @@ public class Outtake extends RobotPart {
         pivot.changePosition("specimenready", 0.79);
         pivot.changePosition("place", 0.45);
         pivot.changePosition("switcharoo", 0.52);
-        pivot.changePosition("basket", 0.25);
+        pivot.changePosition("basket", 0.3);
 
         claw.changePosition("start", 1);
         claw.changePosition("open", 0.6);
