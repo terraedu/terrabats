@@ -7,6 +7,7 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.ftc.OpModeData;
 import com.rowanmcalpin.nextftc.ftc.hardware.MultipleServosToPosition;
+import com.rowanmcalpin.nextftc.ftc.hardware.ServoToPosition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,39 +23,47 @@ public class IntakeTurretSub extends Subsystem {
     // USER CODE
     public Servo iturret;
 
-    private final double INIT = 0;
-    private final double SPECIMENREADY = 0.2;
-    private final double PLACE = 0.83;
-    private final double SWITCHAROO = 0.055;
-    private final double BASKET = 0.5;
+    private final double START = 0.97;
+    private final double HORIZONTAL = 0.6;
+    private final double LEFT = 0.4;
+    private final double RIGHT = 0;
+    private final double SWITCHAROO = 0.21;
 
     public Command moveInit() {
-        return new MultipleServosToPosition(servos, INIT, this);
+        return new ServoToPosition(iturret, START, this);
     }
 
     public Command specimenReady() {
-        return new MultipleServosToPosition(servos, SPECIMENREADY, this);
+        return new ServoToPosition(iturret, START, this);
     }
 
-    public Command upSpecimen() {
-        return new MultipleServosToPosition(servos, PLACE, this);
+    public Command intakeSeek() {
+        return new ServoToPosition(iturret, START, this);
     }
 
-    public Command switcharooReady() {
-        return new MultipleServosToPosition(servos, SWITCHAROO, this);
+    public Command turretReset() {
+        return new ServoToPosition(iturret, START, this);
     }
 
-    public Command placeHigh() {
-        return new MultipleServosToPosition(servos, BASKET, this);
+    public Command turretHorizontal() {
+        return new ServoToPosition(iturret, HORIZONTAL, this);
+    }
+
+    public Command turretLeft() {
+        return new ServoToPosition(iturret, LEFT, this);
+    }
+
+    public Command turretRight() {
+        return new ServoToPosition(iturret, RIGHT, this);
+    }
+
+    public Command turretSwitcharoo() {
+        return new ServoToPosition(iturret, SWITCHAROO, this);
     }
 
     @Override
     public void initialize() {
-        armr = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "armr");
-        arml = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "arml");
-        servos.add(armr);
-        servos.add(arml);
-        servos.get(0).setDirection(Servo.Direction.FORWARD);
-        servos.get(1).setDirection(Servo.Direction.REVERSE);
+        iturret = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "iturret");
+        iturret.setDirection(Servo.Direction.FORWARD);
     }
 }

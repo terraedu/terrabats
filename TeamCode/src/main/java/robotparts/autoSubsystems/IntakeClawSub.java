@@ -7,6 +7,7 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.ftc.OpModeData;
 import com.rowanmcalpin.nextftc.ftc.hardware.MultipleServosToPosition;
+import com.rowanmcalpin.nextftc.ftc.hardware.ServoToPosition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,39 +23,67 @@ public class IntakeClawSub extends Subsystem {
     // USER CODE
     public Servo iclaw;
 
-    private final double INIT = 0;
-    private final double SPECIMENREADY = 0.2;
-    private final double PLACE = 0.83;
-    private final double SWITCHAROO = 0.055;
-    private final double BASKET = 0.5;
+    private final double CLOSE = 0.45;
+    private final double START = 0.5;
+    private final double ADJUST = 0.41;
+    private final double OPEN = 0.28;
+    private final double OPENNN = 0;
 
     public Command moveInit() {
-        return new MultipleServosToPosition(servos, INIT, this);
+        return new ServoToPosition(iclaw, START, this);
+    }
+
+    public Command armInit() {
+        return new ServoToPosition(iclaw, START, this);
     }
 
     public Command specimenReady() {
-        return new MultipleServosToPosition(servos, SPECIMENREADY, this);
+        return new ServoToPosition(iclaw, OPEN, this);
     }
 
-    public Command upSpecimen() {
-        return new MultipleServosToPosition(servos, PLACE, this);
+    public Command yoinkSpecimen() {
+        return new ServoToPosition(iclaw, START, this);
     }
 
-    public Command switcharooReady() {
-        return new MultipleServosToPosition(servos, SWITCHAROO, this);
+    public Command stageTransfer() {
+        return new ServoToPosition(iclaw, CLOSE, this);
     }
 
-    public Command placeHigh() {
-        return new MultipleServosToPosition(servos, BASKET, this);
+    public Command electricSlide() {
+        return new ServoToPosition(iclaw, ADJUST, this);
+    }
+
+    public Command intakeSeek() {
+        return new ServoToPosition(iclaw, START, this);
+    }
+
+    public Command clawUp() {
+        return new ServoToPosition(iclaw, CLOSE, this);
+    }
+
+    public Command clawGrab() {
+        return new ServoToPosition(iclaw, CLOSE, this);
+    }
+
+    public Command clawLightGrab() {
+        return new ServoToPosition(iclaw, START, this);
+    }
+
+    public Command clawAdjustGrab() {
+        return new ServoToPosition(iclaw, ADJUST, this);
+    }
+
+    public Command clawRelease() {
+        return new ServoToPosition(iclaw, OPEN, this);
+    }
+
+    public Command clawRELEASE() {
+        return new ServoToPosition(iclaw, OPENNN, this);
     }
 
     @Override
     public void initialize() {
-        armr = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "armr");
-        arml = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "arml");
-        servos.add(armr);
-        servos.add(arml);
-        servos.get(0).setDirection(Servo.Direction.FORWARD);
-        servos.get(1).setDirection(Servo.Direction.REVERSE);
+        iclaw = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "iclaw");
+        iclaw.setDirection(Servo.Direction.FORWARD);
     }
 }

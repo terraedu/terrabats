@@ -42,7 +42,7 @@ public interface AutoModuleUser extends RobotUser {
 
     AutoModule intakeIn = new AutoModule(
             intake.linkEnd(0.1),
-            intake.intake(0.1),
+            intake.intake(0.1).attach(intake.clawRELEASE(0.1)),
             intake.clawGrab(0.1),
             intake.turretReset(0.1),
             intake.clawAdjust(0.1).attach(intake.electricSlide(0.1)),
@@ -73,20 +73,18 @@ public interface AutoModuleUser extends RobotUser {
                 outtake.clawGrab(0.1),
                 outtake.clawRelease(0.1),
                 outtake.clawGrab(0.1),
-                outtake.clawRelease(0.1),
-                outtake.clawGrab(0.1),
                 outtake.clawRelease(0.1)
     ).setStartCode(()-> robotStatus.set(INTAKING));
 
     AutoModule grabSpecimen = new AutoModule(
             intake.clawLightGrab(0.1),
             intake.yoinkSpecimen(0.2),
-            RobotPart.pause(0.2),
+            RobotPart.pause(0.05),
             intake.clawGrab(0.1),
             intake.transferSpecimen(0.1),
-            RobotPart.pause(0.35),
+            RobotPart.pause(0.05),
             outtake.clawGrab(0.1),
-            RobotPart.pause(0.3),
+            RobotPart.pause(0.05),
             intake.clawRelease(0.1)
     ).setStartCode(()-> robotStatus.set(SPECIMEN));
 
@@ -104,7 +102,8 @@ public interface AutoModuleUser extends RobotUser {
 
     AutoModule down = new AutoModule(
             outtake.clawRelease(0.1),
-            outtake.init(0.1).attach(lift.stageLift(1, 0)),
+            outtake.init(0.1),
+            lift.stageLift(1, 0),
             intake.init(0.1)
     ).setStartCode(()-> robotStatus.set(DRIVING));
 
@@ -115,11 +114,6 @@ public interface AutoModuleUser extends RobotUser {
             RobotPart.pause(0.1),
             intake.init(0.1)
     );
-
-//    AutoModule sampleAlign = new AutoModule (
-//            drive.alignSampleRight(0, -0.5, 0),
-//            drive.alignSampleLeft(0, 0.5, 0)
-//    );
 
 
 

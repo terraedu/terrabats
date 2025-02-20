@@ -25,7 +25,7 @@ public class IntakePivotSub extends Subsystem {
 
     private final double INIT = 0.8;
     private final double SPECIMENREADY = 0;
-    private final double TRANSFERSPECIMEN = 0.34;
+    private final double TRANSFERSPECIMEN = 0.4;
     private final double SEEK = 0.68;
     private final double GRAB = 0.79;
     private final double DROP = 0.4;
@@ -40,7 +40,7 @@ public class IntakePivotSub extends Subsystem {
         return new ServoToPosition(ipivot, INIT, this);
     }
 
-    public Command iSpecimenReady() {
+    public Command specimenReady() {
         return new ServoToPosition(ipivot, SPECIMENREADY, this);
     }
 
@@ -52,6 +52,9 @@ public class IntakePivotSub extends Subsystem {
         return new ServoToPosition(ipivot, SPECIMENREADY, this);
     }
 
+    public Command electricSlide() {
+        return new ServoToPosition(ipivot, SPECIMENREADY, this);
+    }
     public Command intakeSeek() {
         return new ServoToPosition(ipivot, SEEK, this);
     }
@@ -64,10 +67,6 @@ public class IntakePivotSub extends Subsystem {
         return new ServoToPosition(ipivot, DROP, this);
     }
 
-    public Command electricSlide() {
-        return new ServoToPosition(ipivot, SPECIMENREADY, this);
-    }
-
     public Command smallInit() {
         return new ServoToPosition(ipivot, SMALLINIT, this);
     }
@@ -77,11 +76,7 @@ public class IntakePivotSub extends Subsystem {
     }
 
     public void initialize() {
-        armr = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "armr");
-        arml = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "arml");
-        servos.add(armr);
-        servos.add(arml);
-        servos.get(0).setDirection(Servo.Direction.FORWARD);
-        servos.get(1).setDirection(Servo.Direction.REVERSE);
+        ipivot = OpModeData.INSTANCE.getHardwareMap().get(Servo.class, "ipivot");
+        ipivot.setDirection(Servo.Direction.FORWARD);
     }
 }
