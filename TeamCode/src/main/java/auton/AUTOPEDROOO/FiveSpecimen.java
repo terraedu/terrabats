@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.core.command.groups.ParallelGroup;
 import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
+import com.rowanmcalpin.nextftc.core.command.utility.InstantCommand;
 import com.rowanmcalpin.nextftc.core.command.utility.delays.Delay;
 import com.rowanmcalpin.nextftc.pedro.FollowPath;
 import com.rowanmcalpin.nextftc.pedro.PedroOpMode;
@@ -55,13 +56,13 @@ public class FiveSpecimen extends PedroOpMode {
     private final Pose sample1In = new Pose(-6, 12, 0);
     private final Pose sample2 = new Pose(-15, 15, 0);
     private final Pose sample2In = new Pose(-6, 15, 0);
-    private final Pose sample3 = new Pose(-15, 16.1, 0);
+    private final Pose sample3 = new Pose(-18, 16.1, 0);
     private final Pose sample3In = new Pose(-6, 16.1, 0);
 
     private final Pose blahPose = new Pose(-11, -4, 0);
 
     private final Pose firstWall = new Pose(-3, 7.8, 0);
-    private final Pose firstWallGrab = new Pose(-0.6, 7.8, 0);
+    private final Pose firstWallGrab = new Pose(0, 7.8, 0);
 
     private final Pose specimen = new Pose(-11, -0, 0);
 
@@ -91,7 +92,7 @@ public class FiveSpecimen extends PedroOpMode {
         sample3Path = new Path(new BezierCurve(sample2In, sample2, sample3, sample3In));
         sample3Path.setLinearHeadingInterpolation(0, 0);
 
-        firstWallPath = new Path(new BezierCurve(sample3In, firstWall));
+        firstWallPath = new Path(new BezierCurve(sample3In, firstWallGrab));
         firstWallPath.setLinearHeadingInterpolation(0, 0);
 
         firstWallGrabPath = new Path(new BezierLine(firstWall, firstWallGrab));
@@ -100,7 +101,7 @@ public class FiveSpecimen extends PedroOpMode {
         firstSpecimenPath = new Path(new BezierCurve(firstWallGrab, specimen));
         firstSpecimenPath.setLinearHeadingInterpolation(0, 0);
 
-        blah = new Path(new )
+//        blah = new Path(new )
 
         // PATH CHAINS
         preload = follower.pathBuilder()
@@ -150,8 +151,8 @@ public class FiveSpecimen extends PedroOpMode {
                         LiftSub.INSTANCE.down(),
                         OuttakeArmSub.INSTANCE.moveInit(),
                         OuttakePivotSub.INSTANCE.moveInit(),
-                        IntakePivotSub.INSTANCE.specimenReady(),
-                        IntakeArmSub.INSTANCE.specimenReady(),
+                        IntakePivotSub.INSTANCE.intake(),
+                        IntakeArmSub.INSTANCE.stageTransfer(),
                         IntakeTurretSub.INSTANCE.specimenReady(),
                         IntakeClawSub.INSTANCE.specimenReady(),
                         IntakeLinkSub.INSTANCE.specimenReady(),
@@ -160,23 +161,28 @@ public class FiveSpecimen extends PedroOpMode {
                         OuttakePivotSub.INSTANCE.specimenReady(),
                         OuttakeClawSub.INSTANCE.specimenReady()
                 ),
-                new FollowPath(firstWallGrabPath),
-                IntakeClawSub.INSTANCE.clawGRAB(),
-                new Delay(0.1),
-                new ParallelGroup(
-                        IntakeArmSub.INSTANCE.yoinkSpecimen(),
-                        IntakeLinkSub.INSTANCE.yoinkSpecimen(),
-                        IntakeClawSub.INSTANCE.yoinkSpecimen()
-                ),
-                new Delay(0.1),
-                new ParallelGroup(
-                        IntakeArmSub.INSTANCE.transferSpecimen(),
-                        IntakePivotSub.INSTANCE.transferSpecimen(),
-                        IntakeLinkSub.INSTANCE.transferSpecimen()
-                ),
-                new Delay(0.2),
-                OuttakeClawSub.INSTANCE.clawGrab(),
-                new FollowPath(firstSpecimenPath)
+
+                new FollowPath(firstWallPath),
+                new InstantCommand(() -> {
+                    follower.poseUpdater.resetHeadingToIMU();
+                return null;
+                })
+                //                IntakeClawSub.INSTANCE.clawGRAB(),
+//                new Delay(0.1),
+//                new ParallelGroup(
+//                        IntakeArmSub.INSTANCE.yoinkSpecimen(),
+//                        IntakeLinkSub.INSTANCE.yoinkSpecimen(),
+//                        IntakeClawSub.INSTANCE.yoinkSpecimen()
+//                ),
+//                new Delay(0.1),
+//                new ParallelGroup(
+//                        IntakeArmSub.INSTANCE.transferSpecimen(),
+//                        IntakePivotSub.INSTANCE.transferSpecimen(),
+//                        IntakeLinkSub.INSTANCE.transferSpecimen()
+//                ),
+//                new Delay(0.2),
+//                OuttakeClawSub.INSTANCE.clawGrab(),
+//                new FollowPath(firstSpecimenPath)
         );
     }
 
