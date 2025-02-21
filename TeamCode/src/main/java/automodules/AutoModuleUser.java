@@ -99,7 +99,7 @@ public interface AutoModuleUser extends RobotUser {
 
     AutoModule upSpecimen = new AutoModule(
             intake.clawRelease(0.1),
-            lift.stageLift(1, 23).attach(outtake.upSpecimen(0.1))
+            lift.stageLift(1, 17).attach(outtake.upSpecimen(0.1))
     ).setStartCode(()-> robotStatus.set(SAMPLE));
 
     AutoModule high = new AutoModule(
@@ -130,8 +130,8 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule updatePipeline = new AutoModule(
             intake.turretReset(0.1),
             intake.updatePipeline(0.1),
-            drive.alignSampleRight(0, -0.25, 0),
-            drive.alignSampleLeft(0, 0.25, 0)
+            drive.alignSampleRight(0, -0.4, 0),
+            drive.alignSampleLeft(0, 0.4, 0)
     );
 
 

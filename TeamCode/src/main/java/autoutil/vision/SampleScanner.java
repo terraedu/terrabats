@@ -48,7 +48,7 @@ public class SampleScanner extends OpenCvPipeline {
     double dist_y;
     public static double servoPos;
 
-    int isCenter = 0;
+    public int isCenter = 0;
 
     // thresholds
     int YELLOW_MASK_THRESHOLD = 90;
@@ -66,6 +66,7 @@ public class SampleScanner extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
+        isCenter = 0;
         internalStoneList.clear();
         findContours(input);
         clientStoneList = new ArrayList<>(internalStoneList);

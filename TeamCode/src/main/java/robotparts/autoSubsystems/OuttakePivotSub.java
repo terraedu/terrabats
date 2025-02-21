@@ -16,7 +16,7 @@ public class OuttakePivotSub extends Subsystem {
 
     private final double INIT = 0;
     private final double SPECIMENREADY = 0.79;
-    private final double PLACE = 0.49;
+    private final double PLACE = 0.3;
     private final double SWITCHAROO = 0.52;
     private final double PREBASKET = 0.6;
     private final double BASKET = 0.3;

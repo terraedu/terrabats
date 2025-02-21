@@ -45,30 +45,35 @@ public class FiveSpecimen extends PedroOpMode {
     }
 
     private final Pose startPose = new Pose(0, 0, 0);
-    private final Pose prePreloadPose = new Pose(-4, 0, 0);
-    private final Pose preloadPose = new Pose(-10.3, 0, 0);
+    private final Pose prePreloadPose = new Pose(-8, 0, 0);
+    private final Pose preloadPose = new Pose(-11, 0, 0);
 
     private final Pose corner1 = new Pose(-4, 10, 0);
     private final Pose corner2 = new Pose(-22, 11, 0);
 
     private final Pose sample1 = new Pose(-21, 12, 0);
-    private final Pose sample1In = new Pose(-4, 12, 0);
-    private final Pose sample2 = new Pose(-19, 15, 0);
-    private final Pose sample2In = new Pose(-4, 15, 0);
-    private final Pose sample3 = new Pose(-19, 16, 0);
-    private final Pose sample3In = new Pose(-4, 16, 0);
+    private final Pose sample1In = new Pose(-6, 12, 0);
+    private final Pose sample2 = new Pose(-15, 15, 0);
+    private final Pose sample2In = new Pose(-6, 15, 0);
+    private final Pose sample3 = new Pose(-15, 16.1, 0);
+    private final Pose sample3In = new Pose(-6, 16.1, 0);
 
-    private final Pose firstWall = new Pose(-0.6, 7.8, 0);
+    private final Pose blahPose = new Pose(-11, -4, 0);
+
+    private final Pose firstWall = new Pose(-3, 7.8, 0);
     private final Pose firstWallGrab = new Pose(-0.6, 7.8, 0);
 
-    private final Pose specimen = new Pose(-10, 0, 30);
+    private final Pose specimen = new Pose(-11, -0, 0);
 
     private PathChain preload;
+    private PathChain unload;
     private PathChain samples;
 
     private Path sample1Path;
     private Path sample2Path;
     private Path sample3Path;
+
+    private Path blah;
 
     private Path firstWallPath;
     private Path firstWallGrabPath;
@@ -93,15 +98,14 @@ public class FiveSpecimen extends PedroOpMode {
         firstWallGrabPath.setLinearHeadingInterpolation(0, 0);
 
         firstSpecimenPath = new Path(new BezierCurve(firstWallGrab, specimen));
-        firstWallGrabPath.setLinearHeadingInterpolation(firstWallGrab.getHeading(), specimen.getHeading());
+        firstSpecimenPath.setLinearHeadingInterpolation(0, 0);
+
+        blah = new Path(new )
 
         // PATH CHAINS
         preload = follower.pathBuilder()
-                .addPath(new BezierLine(new Point(startPose), new Point(prePreloadPose)))
+                .addPath(new BezierLine(new Point(startPose), new Point(preloadPose)))
                 .setLinearHeadingInterpolation(0, 0)
-                .addPath(new BezierLine(new Point(prePreloadPose), new Point(preloadPose)))
-                .setLinearHeadingInterpolation(0, 0)
-                .setPathEndTimeoutConstraint(0)
                 .build();
 
         samples = follower.pathBuilder()
@@ -140,14 +144,12 @@ public class FiveSpecimen extends PedroOpMode {
                         OuttakeClawSub.INSTANCE.clawGrab(),
                         new FollowPath(preload)
                 ),
-                OuttakeClawSub.INSTANCE.clawRelease(),
-                new ParallelGroup(
-                        LiftSub.INSTANCE.down(),
-                        OuttakeArmSub.INSTANCE.moveInit(),
-                        OuttakePivotSub.INSTANCE.moveInit()
-                ),
                 new ParallelGroup(
                         new FollowPath(samples),
+                        OuttakeClawSub.INSTANCE.clawRelease(),
+                        LiftSub.INSTANCE.down(),
+                        OuttakeArmSub.INSTANCE.moveInit(),
+                        OuttakePivotSub.INSTANCE.moveInit(),
                         IntakePivotSub.INSTANCE.specimenReady(),
                         IntakeArmSub.INSTANCE.specimenReady(),
                         IntakeTurretSub.INSTANCE.specimenReady(),
@@ -172,13 +174,8 @@ public class FiveSpecimen extends PedroOpMode {
                         IntakePivotSub.INSTANCE.transferSpecimen(),
                         IntakeLinkSub.INSTANCE.transferSpecimen()
                 ),
-                new Delay(0.05),
-                OuttakeClawSub.INSTANCE.clawGrab(),
-                new Delay(0.05),
-                OuttakeClawSub.INSTANCE.clawRelease(),
-                new Delay(0.05),
-                OuttakeClawSub.INSTANCE.clawGrab(),
                 new Delay(0.2),
+                OuttakeClawSub.INSTANCE.clawGrab(),
                 new FollowPath(firstSpecimenPath)
         );
     }
@@ -188,7 +185,7 @@ public class FiveSpecimen extends PedroOpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
-        follower.setMaxPower(2);
+        follower.setMaxPower(1);
         moveInit().invoke();
         buildPaths();
     }

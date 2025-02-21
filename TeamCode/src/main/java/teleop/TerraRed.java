@@ -63,6 +63,6 @@ public class TerraRed extends Tele {
         if (teleStatus.modeIs(INTAKING)) {extendo.move(gph1.ry);}
         lift.move(gph2.rx);
         extendo.move(gph2.ry);
-        log.show("exntdsa", extendo.motorLeft.getPosition());
+        log.show("iscenter", intake.sampleScanner.isCenter);
     }
 }
