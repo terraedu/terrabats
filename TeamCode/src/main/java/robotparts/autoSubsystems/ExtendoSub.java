@@ -5,6 +5,7 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.core.control.coefficients.PIDCoefficients;
 import com.rowanmcalpin.nextftc.core.control.controllers.PIDFController;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.HoldPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 
@@ -16,6 +17,10 @@ public class ExtendoSub extends Subsystem {
     public MotorEx extendo;
     public PIDFController controller = new PIDFController(new PIDCoefficients(0.01, 0.0, 0.0001));
     public String name = "eil";
+
+    public Command getDefaultCommand() { // runs internally automatically
+        return new HoldPosition(extendo, controller, this);
+    }
 
     public Command back() {
         return new RunToPosition(extendo, 0.0, controller, this);

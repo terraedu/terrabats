@@ -49,6 +49,7 @@ public class TerraRed extends Tele {
         gph2.link(RIGHT_BUMPER, clearIntake);
         gph2.link(LEFT_TRIGGER, zestyFlick);
         gph2.link(LEFT_BUMPER, zestiestFlick);
+        gph2.link(A, switcharoo);
 
         robotStatus.set(DRIVING);
     }

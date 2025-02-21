@@ -57,6 +57,16 @@ public interface AutoModuleUser extends RobotUser {
             outtake.clawGrab(0.1)
     ).setStartCode(()-> robotStatus.set(DRIVING));
 
+    AutoModule switcharoo = new AutoModule(
+            intake.clawAdjust(0.1).attach(intake.zestyFlick(0.1)),
+            intake.clawGrab(0.1),
+            intake.init(0.1),
+            RobotPart.pause(0.1),
+            intake.turretReset(0.1),
+            intake.switcharoo(0.1),
+            outtake.clawGrab(0.1)
+    );
+
     AutoModule zestiestFlick = new AutoModule(
             intake.clawRelease(0.1),
             intake.intakeSeek(0.1),
@@ -77,20 +87,19 @@ public interface AutoModuleUser extends RobotUser {
     ).setStartCode(()-> robotStatus.set(INTAKING));
 
     AutoModule grabSpecimen = new AutoModule(
-            intake.clawLightGrab(0.1),
+            intake.clawGRAB(0.1),
             intake.yoinkSpecimen(0.2),
             RobotPart.pause(0.05),
-            intake.clawGrab(0.1),
             intake.transferSpecimen(0.1),
-            RobotPart.pause(0.05),
+            RobotPart.pause(0.2),
             outtake.clawGrab(0.1),
-            RobotPart.pause(0.05),
-            intake.clawRelease(0.1)
+            outtake.clawRelease(0.1),
+            outtake.clawGrab(0.1)
     ).setStartCode(()-> robotStatus.set(SPECIMEN));
 
     AutoModule upSpecimen = new AutoModule(
             intake.clawRelease(0.1),
-            lift.stageLift(1, 24).attach(outtake.upSpecimen(0.1))
+            lift.stageLift(1, 23).attach(outtake.upSpecimen(0.1))
     ).setStartCode(()-> robotStatus.set(SAMPLE));
 
     AutoModule high = new AutoModule(

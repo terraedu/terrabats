@@ -21,7 +21,7 @@ public class OuttakeArmSub extends Subsystem {
 
     private final double INIT = 0;
     private final double SPECIMENREADY = 0.2;
-    private final double PLACE = 0.83;
+    private final double PLACE = 0.78;
     private final double SWITCHAROO = 0.055;
     private final double BASKET = 0.5;
 

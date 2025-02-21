@@ -28,6 +28,7 @@ public class IntakeClawSub extends Subsystem {
     private final double ADJUST = 0.41;
     private final double OPEN = 0.28;
     private final double OPENNN = 0;
+    private final double CLOSEEE = 0.55;
 
     public Command moveInit() {
         return new ServoToPosition(iclaw, START, this);
@@ -63,6 +64,10 @@ public class IntakeClawSub extends Subsystem {
 
     public Command clawGrab() {
         return new ServoToPosition(iclaw, CLOSE, this);
+    }
+
+    public Command clawGRAB() {
+        return new ServoToPosition(iclaw, CLOSEEE, this);
     }
 
     public Command clawLightGrab() {

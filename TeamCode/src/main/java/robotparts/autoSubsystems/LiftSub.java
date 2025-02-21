@@ -7,6 +7,7 @@ import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 
 import com.rowanmcalpin.nextftc.core.control.controllers.PIDFController;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.HoldPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 
@@ -16,15 +17,21 @@ public class LiftSub extends Subsystem {
     private LiftSub() {}
 
     public MotorEx lift;
-    public PIDFController controller = new PIDFController(new PIDCoefficients(0.05, 0.0, 0.001));
+    public PIDFController controller = new PIDFController(new PIDCoefficients(0.03, 0.0, 0.001));
     public String name = "lir";
+
+    // USER CODE
+    @Override
+    public Command getDefaultCommand() { // runs internally automatically
+        return new HoldPosition(lift, controller, this);
+    }
 
     public Command down() {
         return new RunToPosition(lift, 0.0, controller, this);
     }
 
     public Command specimen() {
-        return new RunToPosition(lift, 1000, controller, this);
+        return new RunToPosition(lift, 865, controller, this);
     }
 
     public Command placeHigh() {

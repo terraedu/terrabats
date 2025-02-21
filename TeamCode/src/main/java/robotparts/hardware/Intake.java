@@ -34,8 +34,8 @@ public class Intake extends RobotPart {
         iarml.changePosition("specimen", 0.96);
         iarmr.changePosition("switcharoo", 0.93);
         iarml.changePosition("switcharoo", 0.93);
-        iarmr.changePosition("transferspecimen", 0.87);
-        iarml.changePosition("transferspecimen", 0.87);
+        iarmr.changePosition("transferspecimen", 0.84);
+        iarml.changePosition("transferspecimen", 0.84);
         iarmr.changePosition("stagetransfer", 0.93);
         iarml.changePosition("stagetransfer", 0.93);
         iarmr.changePosition("seek", 0.54);
@@ -63,10 +63,11 @@ public class Intake extends RobotPart {
         iturret.changePosition("switcharoo", 0.21);
 
         iclaw.changePosition("close", 0.45);
-        iclaw.changePosition("start", 0.5);
+        iclaw.changePosition("start", 0.54);
         iclaw.changePosition("adjust", 0.41);
         iclaw.changePosition("open", 0.28);
-        iclaw.changePosition("OPENNN", 0);
+        iclaw.changePosition("OPENNN", 0.05);
+        iclaw.changePosition("CLOSEEE", 0.55);
 
         linkager.changePosition("start", 0.31);
         linkagel.changePosition("start", 0.31);
@@ -76,8 +77,8 @@ public class Intake extends RobotPart {
         linkagel.changePosition("end", 0.06);
         linkager.changePosition("specimen", 0.21);
         linkagel.changePosition("specimen", 0.21);
-        linkager.changePosition("transferspecimen", 0.38);
-        linkagel.changePosition("transferspecimen", 0.38);
+        linkager.changePosition("transferspecimen", 0.3);
+        linkagel.changePosition("transferspecimen", 0.3);
         linkager.changePosition("seek", 0.22);
         linkagel.changePosition("seek", 0.22);
         linkager.changePosition("switcharoo", 0.33);
@@ -199,6 +200,7 @@ public class Intake extends RobotPart {
     public void clawAdjust() {iclaw.setPosition("adjust");}
     public void clawRelease() {iclaw.setPosition("open");}
     public void clawRELEASE() {iclaw.setPosition("OPENNN");}
+    public void clawGRAB() {iclaw.setPosition("CLOSEEE");}
 
     public void turretReset() {iturret.setPosition("start");}
     public void turretHorizontal () {iturret.setPosition("horizontal");}
@@ -231,6 +233,7 @@ public class Intake extends RobotPart {
     public Stage clawAdjust(double t) {return super.customTime(this::clawAdjust, t);}
     public Stage clawRelease(double t) {return super.customTime(this::clawRelease, t);}
     public Stage clawRELEASE(double t) {return super.customTime(this::clawRELEASE, t);}
+    public Stage clawGRAB(double t) {return super.customTime(this::clawGRAB, t);}
 
     public Stage turretReset(double t) {return super.customTime(this::turretReset, t);}
     public Stage turretHorizontal(double t) {return super.customTime(this::turretHorizontal, t);}
