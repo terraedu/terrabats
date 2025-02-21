@@ -85,6 +85,14 @@ public class Drive extends RobotPart {
 
     }
 
+    public Stage alignSampleRight(double f, double s, double t) {
+    return super.moveCustomExit(f, s, t, intake.sampleScanner.centerRight());
+    }
+
+    public Stage alignSampleLeft(double f, double s, double t) {
+        return super.moveCustomExit(f, s, t, intake.sampleScanner.centerLeft());
+    }
+
     @Override
     public Stage moveTime(double fp, double sp, double tp, double t) {
         return super.moveTime(fp, sp, tp, t);

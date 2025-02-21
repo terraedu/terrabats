@@ -129,7 +129,9 @@ public interface AutoModuleUser extends RobotUser {
     // mini automodules
     AutoModule updatePipeline = new AutoModule(
             intake.turretReset(0.1),
-            intake.updatePipeline(0.1)
+            intake.updatePipeline(0.1),
+            drive.alignSampleRight(0, -0.25, 0),
+            drive.alignSampleLeft(0, 0.25, 0)
     );
 
 

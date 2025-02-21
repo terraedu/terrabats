@@ -48,6 +48,8 @@ public class SampleScanner extends OpenCvPipeline {
     double dist_y;
     public static double servoPos;
 
+    int isCenter = 0;
+
     // thresholds
     int YELLOW_MASK_THRESHOLD = 90;
     int BLUE_MASK_THRESHOLD = 140;
@@ -130,6 +132,12 @@ public class SampleScanner extends OpenCvPipeline {
                     rotRectAngle += 90;
                 }
 
+                if (smallDistBox.center.x > focus_x) {
+                    isCenter = 1;
+                } else {
+                    isCenter = -1;
+                }
+
                 double angle = -(rotRectAngle - 180);
                 String degrees = (int) Math.round(angle) + " deg";
                 drawItems(input, smallDistBox, degrees, teamColor);
@@ -209,4 +217,9 @@ public class SampleScanner extends OpenCvPipeline {
         Imgproc.dilate(output, output, dilateElement);
         Imgproc.dilate(output, output, dilateElement);
     }
+        public boolean Right() {return isCenter >= 0;}
+    public boolean Left() {return isCenter <= 0;}
+
+    public Exit centerLeft(){return new Exit(this::Right);}
+    public Exit centerRight(){return new Exit(this::Left);}
 }
