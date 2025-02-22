@@ -22,8 +22,8 @@ public class Outtake extends RobotPart {
 
         armr.changePosition("init", 0);
         arml.changePosition("init", 0);
-        armr.changePosition("specimenready", 0.22);
-        arml.changePosition("specimenready", 0.22);
+        armr.changePosition("specimenready", 0.215);
+        arml.changePosition("specimenready", 0.215);
         armr.changePosition("place", 0.55);
         arml.changePosition("place", 0.55);
         armr.changePosition("switcharoo", 0.053);
@@ -32,8 +32,8 @@ public class Outtake extends RobotPart {
         arml.changePosition("basket", 0.5);
 
         pivot.changePosition("init", 0);
-        pivot.changePosition("specimenready", 0.79);
-        pivot.changePosition("place", 0.3);
+        pivot.changePosition("specimenready", 0.82);
+        pivot.changePosition("place", 0.1);
         pivot.changePosition("switcharoo", 0.52);
         pivot.changePosition("basket", 0.3);
 

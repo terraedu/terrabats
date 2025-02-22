@@ -43,15 +43,18 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule intakeIn = new AutoModule(
             intake.linkEnd(0.1),
             intake.intake(0.1).attach(intake.clawRELEASE(0.1)),
-            intake.clawGrab(0.1),
+            intake.clawGRAB(0.1),
             intake.turretReset(0.1),
-            intake.clawAdjust(0.1).attach(intake.electricSlide(0.1)),
-            RobotPart.pause(0.1),
-            intake.clawGrab(0.1),
+//            intake.electricSlide(0.1),
+            RobotPart.pause(0.2),
             intake.stageTransfer(0.1),
+            intake.clawAdjust(0.1),
+            RobotPart.pause(0.2),
+//            intake.clawGRAB(0.1),
             intake.linkStart(0.1),
             extendo.stageLift(1, -1).attach(outtake.switcharooReady(0.1)),
             intake.turretSwitcharoo(0.1),
+            intake.clawGRAB(0.1),
             intake.armInit(0.1),
             intake.switcharoo(0.1),
             outtake.clawGrab(0.1)
@@ -75,31 +78,38 @@ public interface AutoModuleUser extends RobotUser {
     );
 
     AutoModule specimenReady = new AutoModule(
-            intake.specimenReady(0.1),
+//            intake.specimenReady(0.1),
             outtake.specimenReady(0.1),
-                // clingy claw :) - comment out
-                outtake.clawGrab(0.1),
-                outtake.clawRelease(0.1),
-                outtake.clawGrab(0.1),
-                outtake.clawRelease(0.1),
-                outtake.clawGrab(0.1),
-                outtake.clawRelease(0.1)
+//                // clingy claw :) - comment out
+//                outtake.clawGrab(0.1),
+//                outtake.clawRelease(0.1),
+//                outtake.clawGrab(0.1),
+//                outtake.clawRelease(0.1),
+//                outtake.clawGrab(0.1),
+//                outtake.clawRelease(0.1)
+            intake.smallInit(0.1),
+            intake.linkSeek(0.1),
+            intake.clawRELEASE(0.1)
     ).setStartCode(()-> robotStatus.set(INTAKING));
 
     AutoModule grabSpecimen = new AutoModule(
+//            intake.clawGRAB(0.1),
+//            intake.yoinkSpecimen(0.2),
+//            RobotPart.pause(0.05),
+//            intake.transferSpecimen(0.1),
+//            RobotPart.pause(0.2),
+//            outtake.clawGrab(0.1),
+//            outtake.clawRelease(0.1),
+//            outtake.clawGrab(0.1)
             intake.clawGRAB(0.1),
-            intake.yoinkSpecimen(0.2),
-            RobotPart.pause(0.05),
             intake.transferSpecimen(0.1),
-            RobotPart.pause(0.2),
-            outtake.clawGrab(0.1),
-            outtake.clawRelease(0.1),
+            RobotPart.pause(0.35),
             outtake.clawGrab(0.1)
     ).setStartCode(()-> robotStatus.set(SPECIMEN));
 
     AutoModule upSpecimen = new AutoModule(
             intake.clawRelease(0.1),
-            lift.stageLift(1, 17).attach(outtake.upSpecimen(0.1))
+            lift.stageLift(1, 12.5).attach(outtake.upSpecimen(0.1))
     ).setStartCode(()-> robotStatus.set(SAMPLE));
 
     AutoModule high = new AutoModule(

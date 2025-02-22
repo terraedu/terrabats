@@ -36,8 +36,8 @@ public class Intake extends RobotPart {
         iarml.changePosition("switcharoo", 0.93);
         iarmr.changePosition("transferspecimen", 0.84);
         iarml.changePosition("transferspecimen", 0.84);
-        iarmr.changePosition("stagetransfer", 0.93);
-        iarml.changePosition("stagetransfer", 0.93);
+        iarmr.changePosition("stagetransfer", 0.89);
+        iarml.changePosition("stagetransfer", 0.89);
         iarmr.changePosition("seek", 0.54);
         iarml.changePosition("seek", 0.54);
         iarmr.changePosition("grab", 0.41);
@@ -62,12 +62,12 @@ public class Intake extends RobotPart {
         iturret.changePosition("right", 0);
         iturret.changePosition("switcharoo", 0.21);
 
-        iclaw.changePosition("close", 0.49);
-        iclaw.changePosition("start", 0.59);
-        iclaw.changePosition("adjust", 0.41);
-        iclaw.changePosition("open", 0.28);
-        iclaw.changePosition("OPENNN", 0.05);
-        iclaw.changePosition("CLOSEEE", 0.55);
+        iclaw.changePosition("close", 0.44);
+        iclaw.changePosition("start", 0.4);
+        iclaw.changePosition("adjust", 0.37);
+        iclaw.changePosition("open", 0.25);
+        iclaw.changePosition("OPENNN", 0);
+        iclaw.changePosition("CLOSEEE", 0.41);
 
         linkager.changePosition("start", 0.31);
         linkagel.changePosition("start", 0.31);
@@ -93,7 +93,7 @@ public class Intake extends RobotPart {
         iarmr.setPosition("init");
         iarml.setPosition("init");
         iturret.setPosition("start");
-        iclaw.setPosition("start");
+        iclaw.setPosition("adjust");
         linkager.setPosition("init");
         linkagel.setPosition("init");
         ipivot.setPosition("init");
@@ -210,6 +210,7 @@ public class Intake extends RobotPart {
 
     public void linkEnd() {linkager.setPosition("end"); linkagel.setPosition("end");}
     public void linkStart() {linkager.setPosition("start"); linkagel.setPosition("start");}
+    public void linkSeek() {linkager.setPosition("seek"); linkagel.setPosition("seek");}
 
 
 
@@ -243,6 +244,7 @@ public class Intake extends RobotPart {
 
     public Stage linkEnd(double t) {return super.customTime(this::linkEnd, t);}
     public Stage linkStart(double t) {return super.customTime(this::linkStart, t);}
+    public Stage linkSeek(double t) {return super.customTime(this::linkSeek, t);}
 
     public void updatePipeline() {
         if (sampleScanner.getAngle() == -1) return;
