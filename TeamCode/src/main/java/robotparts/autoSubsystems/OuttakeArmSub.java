@@ -20,7 +20,7 @@ public class OuttakeArmSub extends Subsystem {
     public List<Servo> servos = new ArrayList<>();
 
     private final double INIT = 0;
-    private final double SPECIMENREADY = 0.14;
+    private final double SPECIMENREADY = 0.12;
     private final double specialgrab = 0.11;
 
     private final double PLACE = 0.55;

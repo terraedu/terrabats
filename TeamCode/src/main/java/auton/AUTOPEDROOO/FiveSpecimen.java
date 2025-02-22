@@ -57,20 +57,20 @@ public class FiveSpecimen extends PedroOpMode {
     private final Pose sample1In = new Pose(-3, 12, 0);
     private final Pose sample2 = new Pose(-15, 15.5, 0);
     private final Pose sample2In = new Pose(-4, 15.5, 0);
-    private final Pose sample3 = new Pose(-21, 16, 0);
+    private final Pose sample3 = new Pose(-21, 15, 0);
     private final Pose sample3In = new Pose(-4, 17, 0);
 
     private final Pose blahPose = new Pose(-11, -4, 0);
 
-    private final Pose firstWall = new Pose(0, 7.8, 0);
-    private final Pose firstWallGrab = new Pose(1.35, 7.8, 0);
+    private final Pose firstWall = new Pose(-5, 7.8, 0);
+    private final Pose firstWallGrab = new Pose(1, 7.8, 0);
 
-    private final Pose specimen = new Pose(-11, 2, 0);
+    private final Pose specimen = new Pose(-11, -2, 0);
 
     private PathChain preload;
     private PathChain unload;
     private PathChain samples;
-
+    
     private Path sample1Path;
     private Path sample2Path;
     private Path sample3Path;
@@ -113,8 +113,6 @@ public class FiveSpecimen extends PedroOpMode {
                 .setLinearHeadingInterpolation(0, 0)
                 .addPath(sample2Path)
                 .setLinearHeadingInterpolation(0, 0)
-                .addPath(sample3Path)
-                .setLinearHeadingInterpolation(0, 0)
                 .addPath(firstWallPath)
                 .setLinearHeadingInterpolation(0, 0)
                 .build();
@@ -153,20 +151,38 @@ public class FiveSpecimen extends PedroOpMode {
                         OuttakePivotSub.INSTANCE.specimenReady(),
                         OuttakeClawSub.INSTANCE.specimenReady(),
 
-                        IntakeArmSub.INSTANCE.specimenReady(),
-                        IntakePivotSub.INSTANCE.yoink(),
+                        IntakeArmSub.INSTANCE.armInit(),
+                        IntakePivotSub.INSTANCE.smallInit(),
 
                         IntakeLinkSub.INSTANCE.intakeSeek(),
 
-                        IntakeClawSub.INSTANCE.specimenReady(),
+                        IntakeClawSub.INSTANCE.clawRELEASE(),
 
-                        IntakeTurretSub.INSTANCE.specimenReady(),
+                        IntakeTurretSub.INSTANCE.specimenReady()
 
-//                ),
-////
+                ),
+                new FollowPath(firstWallGrabPath),
                 IntakeClawSub.INSTANCE.clawGrab(),
-                IntakeArmSub.INSTANCE.transferSpecimen()
-////                new FollowPath(firstSpecimenPath)
+                new Delay(0.2),
+
+                IntakeArmSub.INSTANCE.transferSpecimen(),
+                new Delay(0.2),
+
+                OuttakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+
+                new ParallelGroup(
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+                        LiftSub.INSTANCE.specimen(),
+                        OuttakeArmSub.INSTANCE.placeHigh(),
+                        OuttakePivotSub.INSTANCE.placeHigh(),
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+
+                        new FollowPath(firstSpecimenPath)
+
+                )
+
 //                new ParallelGroup(
 //                        OuttakeArmSub.INSTANCE.specimenReady(),
 //                        OuttakeClawSub.INSTANCE.specimenReady(),
@@ -178,7 +194,6 @@ public class FiveSpecimen extends PedroOpMode {
 //                ),
 //                new Delay(2),
 //                IntakeClawSub.INSTANCE.clawGrab(),
-//                new Delay(0.1),
 //                new ParallelGroup(
 //                        IntakeArmSub.INSTANCE.yoinkSpecimen(),
 //                        IntakePivotSub.INSTANCE.yoink()
@@ -191,7 +206,7 @@ public class FiveSpecimen extends PedroOpMode {
 //                        IntakeLinkSub.INSTANCE.linkEnd(),
 //                        IntakePivotSub.INSTANCE.transferSpecimen(),
 //                        new Delay(0.5)
-                )
+//                )
         );
     }
 

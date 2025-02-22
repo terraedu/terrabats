@@ -28,7 +28,7 @@ public class IntakeLinkSub extends Subsystem {
     private final double END = 0.1;
     private final double SPECIMEN = 0.21;
     private final double TRANSFERSPECIMEN = 0.38;
-    private final double SEEK = 0.22;
+    private final double SEEK = 0.19 ;
     private final double SWITCHAROO = 0.33;
     private final double TIGHT = 0.28;
 
