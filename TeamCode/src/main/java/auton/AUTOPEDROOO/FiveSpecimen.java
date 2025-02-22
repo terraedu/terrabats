@@ -54,11 +54,11 @@ public class FiveSpecimen extends PedroOpMode {
     private final Pose corner2 = new Pose(-22, 11, 0);
 
     private final Pose sample1 = new Pose(-21, 12, 0);
-    private final Pose sample1In = new Pose(-6, 12, 0);
+    private final Pose sample1In = new Pose(-3, 12, 0);
     private final Pose sample2 = new Pose(-15, 15.5, 0);
-    private final Pose sample2In = new Pose(-6, 15.5, 0);
+    private final Pose sample2In = new Pose(-4, 15.5, 0);
     private final Pose sample3 = new Pose(-21, 16, 0);
-    private final Pose sample3In = new Pose(-6, 17, 0);
+    private final Pose sample3In = new Pose(-4, 17, 0);
 
     private final Pose blahPose = new Pose(-11, -4, 0);
 
@@ -123,9 +123,7 @@ public class FiveSpecimen extends PedroOpMode {
     public Command moveInit() {
         return new ParallelGroup(
                 IntakeArmSub.INSTANCE.moveInit(),
-                IntakePivotSub.INSTANCE.moveInit(),
-                IntakeTurretSub.INSTANCE.moveInit(),
-                IntakeClawSub.INSTANCE.moveInit(),
+
                 IntakeLinkSub.INSTANCE.moveInit(),
 
                 OuttakeArmSub.INSTANCE.moveInit(),
@@ -142,20 +140,32 @@ public class FiveSpecimen extends PedroOpMode {
                         OuttakeArmSub.INSTANCE.placeHigh(),
                         OuttakePivotSub.INSTANCE.placeHigh(),
                         OuttakeClawSub.INSTANCE.clawGrab(),
+
                         new FollowPath(preload)
-                ),
+
+                        ),
                 new ParallelGroup(
                         new FollowPath(samples),
                         OuttakeClawSub.INSTANCE.clawRelease(),
-                        LiftSub.INSTANCE.down()
+                        LiftSub.INSTANCE.down(),
 
-//                        OuttakeArmSub.INSTANCE.specialahh(),
-//                        OuttakePivotSub.INSTANCE.prePlaceHigh(),
-//                        OuttakeClawSub.INSTANCE.specimenReady()
+                        OuttakeArmSub.INSTANCE.specimenReady(),
+                        OuttakePivotSub.INSTANCE.specimenReady(),
+                        OuttakeClawSub.INSTANCE.specimenReady(),
+
+                        IntakeArmSub.INSTANCE.specimenReady(),
+                        IntakePivotSub.INSTANCE.yoink(),
+
+                        IntakeLinkSub.INSTANCE.intakeSeek(),
+
+                        IntakeClawSub.INSTANCE.specimenReady(),
+
+                        IntakeTurretSub.INSTANCE.specimenReady(),
+
 //                ),
 ////
-//                new FollowPath(firstWallPath),
-//                OuttakeClawSub.INSTANCE.clawGrab(),
+                IntakeClawSub.INSTANCE.clawGrab(),
+                IntakeArmSub.INSTANCE.transferSpecimen()
 ////                new FollowPath(firstSpecimenPath)
 //                new ParallelGroup(
 //                        OuttakeArmSub.INSTANCE.specimenReady(),

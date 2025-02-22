@@ -17,7 +17,7 @@ public class LiftSub extends Subsystem {
     private LiftSub() {}
 
     public MotorEx lift;
-    public PIDFController controller = new PIDFController(new PIDCoefficients(0.02, 0.0, 0.001));
+    public PIDFController controller = new PIDFController(new PIDCoefficients(0.02, 0.0, 0.0));
     public String name = "lir";
 
     // USER CODE
@@ -31,7 +31,7 @@ public class LiftSub extends Subsystem {
     }
 
     public Command specimen() {
-        return new RunToPosition(lift, 500, controller, this);
+        return new RunToPosition(lift, 497, controller, this);
     }
 
     public Command placeHigh() {
