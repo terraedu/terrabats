@@ -31,7 +31,7 @@ public class LiftSub extends Subsystem {
     }
 
     public Command specimen() {
-        return new RunToPosition(lift, 525, controller, this);
+        return new RunToPosition(lift, 500, controller, this);
     }
 
     public Command placeHigh() {

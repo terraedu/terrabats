@@ -25,8 +25,9 @@ public class IntakePivotSub extends Subsystem {
     public Servo ipivot;
 
     private final double INIT = 0.8;
-    private final double SPECIMENREADY = 0;
+    private final double SPECIMENREADY = 0.75;
     private final double TRANSFERSPECIMEN = 0.4;
+    private final double YOINK = 0.55;
     private final double SEEK = 0.68;
     private final double GRAB = 0.79;
     private final double DROP = 0.4;
@@ -43,6 +44,10 @@ public class IntakePivotSub extends Subsystem {
 
     public Command specimenReady() {
         return new ServoToPosition(ipivot, SPECIMENREADY, this);
+    }
+
+    public Command yoink() {
+        return new ServoToPosition(ipivot, YOINK, this);
     }
 
     public Command transferSpecimen() {

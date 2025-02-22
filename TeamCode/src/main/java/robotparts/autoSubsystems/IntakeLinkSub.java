@@ -25,12 +25,12 @@ public class IntakeLinkSub extends Subsystem {
 
     private final double START = 0.31;
     private final double INIT = 0.22;
-    private final double END = 0.06;
+    private final double END = 0.1;
     private final double SPECIMEN = 0.21;
     private final double TRANSFERSPECIMEN = 0.38;
     private final double SEEK = 0.22;
     private final double SWITCHAROO = 0.33;
-    private final double TIGHT = 0.25;
+    private final double TIGHT = 0.28;
 
     public Command moveInit() {
         return new MultipleServosToPosition(servos, INIT, this);
@@ -38,6 +38,10 @@ public class IntakeLinkSub extends Subsystem {
 
     public Command armInit() {
         return new MultipleServosToPosition(servos, INIT, this);
+    }
+
+    public Command tight() {
+        return new MultipleServosToPosition(servos, TIGHT, this);
     }
 
     public Command specimenReady() {

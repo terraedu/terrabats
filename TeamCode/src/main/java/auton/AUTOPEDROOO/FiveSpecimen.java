@@ -29,6 +29,7 @@ import robotparts.autoSubsystems.LiftSub;
 import robotparts.autoSubsystems.OuttakeArmSub;
 import robotparts.autoSubsystems.OuttakeClawSub;
 import robotparts.autoSubsystems.OuttakePivotSub;
+import robotparts.hardware.Intake;
 
 @Autonomous(name = "5+0", group = "auto")
 public class FiveSpecimen extends PedroOpMode {
@@ -47,24 +48,24 @@ public class FiveSpecimen extends PedroOpMode {
 
     private final Pose startPose = new Pose(0, 0, 0);
     private final Pose prePreloadPose = new Pose(-8, 0, 0);
-    private final Pose preloadPose = new Pose(-11, 0, 0);
+    private final Pose preloadPose = new Pose(-10.7, -1, 0);
 
-    private final Pose corner1 = new Pose(-4, 10, 0);
+    private final Pose corner1 = new Pose(-4, 11, 0);
     private final Pose corner2 = new Pose(-22, 11, 0);
 
     private final Pose sample1 = new Pose(-21, 12, 0);
     private final Pose sample1In = new Pose(-6, 12, 0);
-    private final Pose sample2 = new Pose(-15, 15, 0);
-    private final Pose sample2In = new Pose(-6, 15, 0);
-    private final Pose sample3 = new Pose(-18, 16.1, 0);
-    private final Pose sample3In = new Pose(-6, 16.1, 0);
+    private final Pose sample2 = new Pose(-15, 15.5, 0);
+    private final Pose sample2In = new Pose(-6, 15.5, 0);
+    private final Pose sample3 = new Pose(-21, 16, 0);
+    private final Pose sample3In = new Pose(-6, 17, 0);
 
     private final Pose blahPose = new Pose(-11, -4, 0);
 
-    private final Pose firstWall = new Pose(-3, 7.8, 0);
-    private final Pose firstWallGrab = new Pose(0, 7.8, 0);
+    private final Pose firstWall = new Pose(0, 7.8, 0);
+    private final Pose firstWallGrab = new Pose(1.35, 7.8, 0);
 
-    private final Pose specimen = new Pose(-11, -0, 0);
+    private final Pose specimen = new Pose(-11, 2, 0);
 
     private PathChain preload;
     private PathChain unload;
@@ -92,7 +93,7 @@ public class FiveSpecimen extends PedroOpMode {
         sample3Path = new Path(new BezierCurve(sample2In, sample2, sample3, sample3In));
         sample3Path.setLinearHeadingInterpolation(0, 0);
 
-        firstWallPath = new Path(new BezierCurve(sample3In, firstWallGrab));
+        firstWallPath = new Path(new BezierCurve(sample3In, firstWall));
         firstWallPath.setLinearHeadingInterpolation(0, 0);
 
         firstWallGrabPath = new Path(new BezierLine(firstWall, firstWallGrab));
@@ -100,8 +101,6 @@ public class FiveSpecimen extends PedroOpMode {
 
         firstSpecimenPath = new Path(new BezierCurve(firstWallGrab, specimen));
         firstSpecimenPath.setLinearHeadingInterpolation(0, 0);
-
-//        blah = new Path(new )
 
         // PATH CHAINS
         preload = follower.pathBuilder()
@@ -140,49 +139,49 @@ public class FiveSpecimen extends PedroOpMode {
                 new ParallelGroup(
                         OuttakeClawSub.INSTANCE.clawGrab(),
                         LiftSub.INSTANCE.specimen(),
-                        OuttakeArmSub.INSTANCE.upSpecimen(),
-                        OuttakePivotSub.INSTANCE.upSpecimen(),
+                        OuttakeArmSub.INSTANCE.placeHigh(),
+                        OuttakePivotSub.INSTANCE.placeHigh(),
                         OuttakeClawSub.INSTANCE.clawGrab(),
                         new FollowPath(preload)
                 ),
                 new ParallelGroup(
                         new FollowPath(samples),
                         OuttakeClawSub.INSTANCE.clawRelease(),
-                        LiftSub.INSTANCE.down(),
-                        OuttakeArmSub.INSTANCE.moveInit(),
-                        OuttakePivotSub.INSTANCE.moveInit(),
-                        IntakePivotSub.INSTANCE.intake(),
-                        IntakeArmSub.INSTANCE.stageTransfer(),
-                        IntakeTurretSub.INSTANCE.specimenReady(),
-                        IntakeClawSub.INSTANCE.specimenReady(),
-                        IntakeLinkSub.INSTANCE.specimenReady(),
+                        LiftSub.INSTANCE.down()
 
-                        OuttakeArmSub.INSTANCE.specimenReady(),
-                        OuttakePivotSub.INSTANCE.specimenReady(),
-                        OuttakeClawSub.INSTANCE.specimenReady()
-                ),
-
-                new FollowPath(firstWallPath),
-                new InstantCommand(() -> {
-                    follower.poseUpdater.resetHeadingToIMU();
-                return null;
-                })
-                //                IntakeClawSub.INSTANCE.clawGRAB(),
+//                        OuttakeArmSub.INSTANCE.specialahh(),
+//                        OuttakePivotSub.INSTANCE.prePlaceHigh(),
+//                        OuttakeClawSub.INSTANCE.specimenReady()
+//                ),
+////
+//                new FollowPath(firstWallPath),
+//                OuttakeClawSub.INSTANCE.clawGrab(),
+////                new FollowPath(firstSpecimenPath)
+//                new ParallelGroup(
+//                        OuttakeArmSub.INSTANCE.specimenReady(),
+//                        OuttakeClawSub.INSTANCE.specimenReady(),
+//                        OuttakePivotSub.INSTANCE.specimenReady(),
+//                        IntakeArmSub.INSTANCE.specimenReady(),
+//                        IntakePivotSub.INSTANCE.specimenReady(),
+//                        IntakeClawSub.INSTANCE.clawRelease(),
+//                        IntakeLinkSub.INSTANCE.tight()
+//                ),
+//                new Delay(2),
+//                IntakeClawSub.INSTANCE.clawGrab(),
 //                new Delay(0.1),
 //                new ParallelGroup(
 //                        IntakeArmSub.INSTANCE.yoinkSpecimen(),
-//                        IntakeLinkSub.INSTANCE.yoinkSpecimen(),
-//                        IntakeClawSub.INSTANCE.yoinkSpecimen()
+//                        IntakePivotSub.INSTANCE.yoink()
 //                ),
-//                new Delay(0.1),
+//                IntakeClawSub.INSTANCE.clawGRAB(),
+//                IntakeLinkSub.INSTANCE.tight(),
+//                new Delay(0.3),
 //                new ParallelGroup(
 //                        IntakeArmSub.INSTANCE.transferSpecimen(),
+//                        IntakeLinkSub.INSTANCE.linkEnd(),
 //                        IntakePivotSub.INSTANCE.transferSpecimen(),
-//                        IntakeLinkSub.INSTANCE.transferSpecimen()
-//                ),
-//                new Delay(0.2),
-//                OuttakeClawSub.INSTANCE.clawGrab(),
-//                new FollowPath(firstSpecimenPath)
+//                        new Delay(0.5)
+                )
         );
     }
 

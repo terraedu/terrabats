@@ -19,15 +19,15 @@ public class IntakeArmSub extends Subsystem {
     public List<Servo> servos = new ArrayList<>();
 
     private final double INIT = 1;
-    private final double SPECIMENREADY = 0.81;
-    private final double SPECIMEN = 0.95;
+    private final double SPECIMENREADY = 0.93;
+    private final double SPECIMEN = 1;
     private final double SWITCHAROO = 0.93;
     private final double TRANSFERSPECIMEN = 0.87;
     private final double STAGETRANSFER = 0.93;
     private final double SEEK = 0.54;
     private final double GRAB = 0.41;
     private final double SLIDE = 0.7;
-    private final double LOW = 0.22;
+    private final double LOW = 0.15;
 
     public Command moveInit() {
         return new MultipleServosToPosition(servos, INIT, this);

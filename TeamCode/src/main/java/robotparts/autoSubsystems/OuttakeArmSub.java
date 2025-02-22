@@ -20,7 +20,9 @@ public class OuttakeArmSub extends Subsystem {
     public List<Servo> servos = new ArrayList<>();
 
     private final double INIT = 0;
-    private final double SPECIMENREADY = 0.2;
+    private final double SPECIMENREADY = 0.14;
+    private final double specialgrab = 0.11;
+
     private final double PLACE = 0.55;
     private final double SWITCHAROO = 0.053;
     private final double BASKET = 0.5;
@@ -31,6 +33,9 @@ public class OuttakeArmSub extends Subsystem {
 
     public Command specimenReady() {
         return new MultipleServosToPosition(servos, SPECIMENREADY, this);
+    }
+    public Command specialahh() {
+        return new MultipleServosToPosition(servos, specialgrab, this);
     }
 
     public Command upSpecimen() {
