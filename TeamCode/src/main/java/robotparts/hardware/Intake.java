@@ -58,7 +58,7 @@ public class Intake extends RobotPart {
         ipivot.changePosition("smallinit", 0.55);
 
         ipivot.changePosition("low", 0.15);
-
+//
         iturret.changePosition("start", 0.97);
         iturret.changePosition("horizontal", 0.6);
         iturret.changePosition("left", 0.4);
