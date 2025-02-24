@@ -28,7 +28,7 @@ import robotparts.autoSubsystems.OuttakeArmSub;
 import robotparts.autoSubsystems.OuttakeClawSub;
 import robotparts.autoSubsystems.OuttakePivotSub;
 
-@Autonomous(name = "0+4", group = "auto")
+//@Autonomous(name = "0+4", group = "auto")
 public class FourSample extends PedroOpMode {
     public FourSample() {
         super(LiftSub.INSTANCE,
@@ -44,21 +44,24 @@ public class FourSample extends PedroOpMode {
     }
 
     private final Pose startPose = new Pose(0, 0, Math.toRadians(0));
-    private final Pose finishPose = new Pose(-6.3, 0.8, Math.toRadians(28));
-    private final Pose sample1 = new Pose(-2.4, 4, Math.toRadians(-150));
+    private final Pose finishPose = new Pose(-4, .15, Math.toRadians(0));
+    private final Pose finishPose2 = new Pose(-5, .15, Math.toRadians(0));
+
 
     private PathChain move;
-    private PathChain sample1path;
+    private PathChain move2;
 
     public void buildPaths() {
         move = follower.pathBuilder()
                 .addPath(new BezierLine(new Point(startPose), new Point(finishPose)))
-                .setLinearHeadingInterpolation(startPose.getHeading(), finishPose.getHeading())
+                .setLinearHeadingInterpolation(0, 0)
                 .build();
-        sample1path = follower.pathBuilder()
-                .addPath(new BezierCurve(new Point(finishPose), new Point(sample1)))
-                .setLinearHeadingInterpolation(finishPose.getHeading(), sample1.getHeading())
+
+        move2 = follower.pathBuilder()
+                .addPath(new BezierLine(new Point(finishPose), new Point(finishPose2)))
+                .setLinearHeadingInterpolation(0, 0)
                 .build();
+
     }
 
     public Command preload() {
@@ -71,26 +74,28 @@ public class FourSample extends PedroOpMode {
                         OuttakePivotSub.INSTANCE.prePlaceHigh()
                 ),
                 OuttakePivotSub.INSTANCE.placeHigh(),
+                new FollowPath(move2),
+
                 OuttakeClawSub.INSTANCE.clawRelease(),
                 new Delay(0.1),
                 OuttakePivotSub.INSTANCE.prePlaceHigh(),
                 new ParallelGroup(
                         LiftSub.INSTANCE.down(),
-                        new FollowPath(sample1path),
+
                         IntakeArmSub.INSTANCE.stageTransfer(),
                         IntakePivotSub.INSTANCE.stageTransfer(),
                         IntakeClawSub.INSTANCE.stageTransfer(),
                         IntakeTurretSub.INSTANCE.turretReset()
-                ),
-                ExtendoSub.INSTANCE.extend1500(),
-                new ParallelGroup(
-                        IntakeLinkSub.INSTANCE.linkEnd(),
-                        IntakeArmSub.INSTANCE.intakeSeek(),
-                        IntakePivotSub.INSTANCE.intakeSeek(),
-                        IntakeTurretSub.INSTANCE.intakeSeek(),
-                        IntakeClawSub.INSTANCE.intakeSeek(),
-                        IntakeLinkSub.INSTANCE.intakeSeek()
                 )
+//                ExtendoSub.INSTANCE.extend1500(),
+//                new ParallelGroup(
+//                        IntakeLinkSub.INSTANCE.linkEnd(),
+//                        IntakeArmSub.INSTANCE.intakeSeek(),
+//                        IntakePivotSub.INSTANCE.intakeSeek(),
+//                        IntakeTurretSub.INSTANCE.intakeSeek(),
+//                        IntakeClawSub.INSTANCE.intakeSeek(),
+//                        IntakeLinkSub.INSTANCE.intakeSeek()
+//                )
         );
     }
 

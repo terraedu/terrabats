@@ -50,7 +50,7 @@ public class FiveSpecimen extends PedroOpMode {
     private final Pose prePreloadPose = new Pose(-8, 0, 0);
     private final Pose preloadPose = new Pose(-10.7, -1, 0);
 
-    private final Pose corner1 = new Pose(-4, 11, 0);
+    private final Pose corner1 = new Pose(-4, 14, 0);
     private final Pose corner2 = new Pose(-22, 11, 0);
 
     private final Pose sample1 = new Pose(-21, 12, 0);
@@ -62,10 +62,14 @@ public class FiveSpecimen extends PedroOpMode {
 
     private final Pose blahPose = new Pose(-11, -4, 0);
 
-    private final Pose firstWall = new Pose(-5, 7.8, 0);
-    private final Pose firstWallGrab = new Pose(1, 7.8, 0);
+    private final Pose firstWall = new Pose(-5, 9, 0);
+    private final Pose firstWallGrab = new Pose(-.25, 9, 0);
 
-    private final Pose specimen = new Pose(-11, -2, 0);
+    private final Pose specimen = new Pose(-9.9, -1, 0);
+    private final Pose specimen1 = new Pose(-9.9, -2.5, 0);
+    private final Pose specimen2 = new Pose(-9.9, -3, 0);
+    private final Pose specimen3 = new Pose(-9.9, -3.5, 0);
+
 
     private PathChain preload;
     private PathChain unload;
@@ -81,6 +85,17 @@ public class FiveSpecimen extends PedroOpMode {
     private Path firstWallGrabPath;
 
     private Path firstSpecimenPath;
+    private Path firstSpecimenPath1;
+    private Path firstSpecimenPath2;
+    private Path firstSpecimenPath3;
+    private Path specimentowall;
+    private Path specimentowall1;
+    private Path specimentowall2;
+    private Path specimentowall3;
+
+
+
+
 
     public void buildPaths() {
         // PATHS
@@ -93,7 +108,7 @@ public class FiveSpecimen extends PedroOpMode {
         sample3Path = new Path(new BezierCurve(sample2In, sample2, sample3, sample3In));
         sample3Path.setLinearHeadingInterpolation(0, 0);
 
-        firstWallPath = new Path(new BezierCurve(sample3In, firstWall));
+        firstWallPath = new Path(new BezierCurve(sample2In, firstWall));
         firstWallPath.setLinearHeadingInterpolation(0, 0);
 
         firstWallGrabPath = new Path(new BezierLine(firstWall, firstWallGrab));
@@ -101,6 +116,20 @@ public class FiveSpecimen extends PedroOpMode {
 
         firstSpecimenPath = new Path(new BezierCurve(firstWallGrab, specimen));
         firstSpecimenPath.setLinearHeadingInterpolation(0, 0);
+        firstSpecimenPath1 = new Path(new BezierCurve(firstWallGrab, specimen1));
+        firstSpecimenPath1.setLinearHeadingInterpolation(0, 0);
+        firstSpecimenPath2 = new Path(new BezierCurve(firstWallGrab, specimen2));
+        firstSpecimenPath2.setLinearHeadingInterpolation(0, 0);
+        firstSpecimenPath3 = new Path(new BezierCurve(firstWallGrab, specimen3));
+        firstSpecimenPath3.setLinearHeadingInterpolation(0, 0);
+        specimentowall = new Path(new BezierCurve(specimen, firstWall));
+        specimentowall.setLinearHeadingInterpolation(0, 0);
+        specimentowall1 = new Path(new BezierCurve(specimen1, firstWall));
+        specimentowall1.setLinearHeadingInterpolation(0, 0);
+        specimentowall2 = new Path(new BezierCurve(specimen2, firstWall));
+        specimentowall2.setLinearHeadingInterpolation(0, 0);
+        specimentowall3 = new Path(new BezierCurve(specimen3, firstWall));
+        specimentowall3.setLinearHeadingInterpolation(0, 0);
 
         // PATH CHAINS
         preload = follower.pathBuilder()
@@ -162,6 +191,7 @@ public class FiveSpecimen extends PedroOpMode {
 
                 ),
                 new FollowPath(firstWallGrabPath),
+
                 IntakeClawSub.INSTANCE.clawGrab(),
                 new Delay(0.2),
 
@@ -175,39 +205,153 @@ public class FiveSpecimen extends PedroOpMode {
                 new ParallelGroup(
                         OuttakeClawSub.INSTANCE.clawGrab(),
                         LiftSub.INSTANCE.specimen(),
-                        OuttakeArmSub.INSTANCE.placeHigh(),
-                        OuttakePivotSub.INSTANCE.placeHigh(),
+                        OuttakeArmSub.INSTANCE.upSpecimen(),
+                        OuttakePivotSub.INSTANCE.upSpecimen(),
                         OuttakeClawSub.INSTANCE.clawGrab(),
 
                         new FollowPath(firstSpecimenPath)
 
-                )
+                ),
+        new ParallelGroup(
+                new FollowPath(specimentowall),
+                OuttakeClawSub.INSTANCE.clawRelease(),
+                LiftSub.INSTANCE.down(),
 
-//                new ParallelGroup(
-//                        OuttakeArmSub.INSTANCE.specimenReady(),
-//                        OuttakeClawSub.INSTANCE.specimenReady(),
-//                        OuttakePivotSub.INSTANCE.specimenReady(),
-//                        IntakeArmSub.INSTANCE.specimenReady(),
-//                        IntakePivotSub.INSTANCE.specimenReady(),
-//                        IntakeClawSub.INSTANCE.clawRelease(),
-//                        IntakeLinkSub.INSTANCE.tight()
-//                ),
-//                new Delay(2),
-//                IntakeClawSub.INSTANCE.clawGrab(),
-//                new ParallelGroup(
-//                        IntakeArmSub.INSTANCE.yoinkSpecimen(),
-//                        IntakePivotSub.INSTANCE.yoink()
-//                ),
-//                IntakeClawSub.INSTANCE.clawGRAB(),
-//                IntakeLinkSub.INSTANCE.tight(),
-//                new Delay(0.3),
-//                new ParallelGroup(
-//                        IntakeArmSub.INSTANCE.transferSpecimen(),
-//                        IntakeLinkSub.INSTANCE.linkEnd(),
-//                        IntakePivotSub.INSTANCE.transferSpecimen(),
-//                        new Delay(0.5)
-//                )
+                OuttakeArmSub.INSTANCE.specimenReady(),
+                OuttakePivotSub.INSTANCE.specimenReady(),
+                OuttakeClawSub.INSTANCE.specimenReady(),
+
+                IntakeArmSub.INSTANCE.armInit(),
+                IntakePivotSub.INSTANCE.smallInit(),
+
+                IntakeLinkSub.INSTANCE.intakeSeek(),
+
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+
+                IntakeTurretSub.INSTANCE.specimenReady()
+
+        ),
+                new FollowPath(firstWallGrabPath),
+
+                IntakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+
+                IntakeArmSub.INSTANCE.transferSpecimen(),
+                new Delay(0.2),
+
+                OuttakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+        new ParallelGroup(
+                OuttakeClawSub.INSTANCE.clawGrab(),
+                LiftSub.INSTANCE.specimen(),
+                OuttakeArmSub.INSTANCE.placeHigh(),
+                OuttakePivotSub.INSTANCE.placeHigh(),
+                OuttakeClawSub.INSTANCE.clawGrab(),
+
+                new FollowPath(firstSpecimenPath1)
+
+        ),
+        new ParallelGroup(
+                new FollowPath(specimentowall1),
+                OuttakeClawSub.INSTANCE.clawRelease(),
+                LiftSub.INSTANCE.down(),
+
+                OuttakeArmSub.INSTANCE.specimenReady(),
+                OuttakePivotSub.INSTANCE.specimenReady(),
+                OuttakeClawSub.INSTANCE.specimenReady(),
+
+                IntakeArmSub.INSTANCE.armInit(),
+                IntakePivotSub.INSTANCE.smallInit(),
+
+                IntakeLinkSub.INSTANCE.intakeSeek(),
+
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+
+                IntakeTurretSub.INSTANCE.specimenReady()
+
+        ),
+                new FollowPath(firstWallGrabPath),
+                IntakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+
+                IntakeArmSub.INSTANCE.transferSpecimen(),
+                new Delay(0.2),
+
+                OuttakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+                new ParallelGroup(
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+                        LiftSub.INSTANCE.specimen(),
+                        OuttakeArmSub.INSTANCE.placeHigh(),
+                        OuttakePivotSub.INSTANCE.placeHigh(),
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+
+                        new FollowPath(firstSpecimenPath2)
+
+                ),
+                new ParallelGroup(
+                        new FollowPath(specimentowall2),
+                        OuttakeClawSub.INSTANCE.clawRelease(),
+                        LiftSub.INSTANCE.down(),
+
+                        OuttakeArmSub.INSTANCE.specimenReady(),
+                        OuttakePivotSub.INSTANCE.specimenReady(),
+                        OuttakeClawSub.INSTANCE.specimenReady(),
+
+                        IntakeArmSub.INSTANCE.armInit(),
+                        IntakePivotSub.INSTANCE.smallInit(),
+
+                        IntakeLinkSub.INSTANCE.intakeSeek(),
+
+                        IntakeClawSub.INSTANCE.clawRELEASE(),
+
+                        IntakeTurretSub.INSTANCE.specimenReady()
+
+                ),
+                new FollowPath(firstWallGrabPath),
+
+                IntakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+
+                IntakeArmSub.INSTANCE.transferSpecimen(),
+                new Delay(0.2),
+
+                OuttakeClawSub.INSTANCE.clawGrab(),
+                new Delay(0.2),
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+                new ParallelGroup(
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+                        LiftSub.INSTANCE.specimen(),
+                        OuttakeArmSub.INSTANCE.placeHigh(),
+                        OuttakePivotSub.INSTANCE.placeHigh(),
+                        OuttakeClawSub.INSTANCE.clawGrab(),
+
+                        new FollowPath(firstSpecimenPath3)
+
+                ),
+        new ParallelGroup(
+                new FollowPath(specimentowall3),
+                OuttakeClawSub.INSTANCE.clawRelease(),
+                LiftSub.INSTANCE.down(),
+
+                OuttakeArmSub.INSTANCE.specimenReady(),
+                OuttakePivotSub.INSTANCE.specimenReady(),
+                OuttakeClawSub.INSTANCE.specimenReady(),
+
+                IntakeArmSub.INSTANCE.armInit(),
+                IntakePivotSub.INSTANCE.smallInit(),
+
+                IntakeLinkSub.INSTANCE.intakeSeek(),
+
+                IntakeClawSub.INSTANCE.clawRELEASE(),
+
+                IntakeTurretSub.INSTANCE.specimenReady()
+
+        )
         );
+
     }
 
     @Override

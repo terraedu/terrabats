@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
 
-@Autonomous(name= "FiveSpecimenBlue", group = "auto")
+//@Autonomous(name= "FiveSpecimenBlue", group = "auto")
 public class FiveSpecimenBlue extends AutoFramework {
 
     @Override

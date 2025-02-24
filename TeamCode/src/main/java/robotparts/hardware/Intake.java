@@ -28,6 +28,8 @@ public class Intake extends RobotPart {
 
         iarmr.changePosition("init", 1);
         iarml.changePosition("init", 1);
+        iarmr.changePosition("smallinit", .885);
+        iarml.changePosition("smallinit", .885);
         iarmr.changePosition("specimenready", 0.81); // previous 0.81
         iarml.changePosition("specimenready", 0.81);
         iarmr.changePosition("specimen", 0.96);
@@ -54,6 +56,7 @@ public class Intake extends RobotPart {
         ipivot.changePosition("grab", 0.79);
         ipivot.changePosition("drop", 0.4);
         ipivot.changePosition("smallinit", 0.55);
+
         ipivot.changePosition("low", 0.15);
 
         iturret.changePosition("start", 0.97);
@@ -62,7 +65,7 @@ public class Intake extends RobotPart {
         iturret.changePosition("right", 0);
         iturret.changePosition("switcharoo", 0.21);
 
-        iclaw.changePosition("close", 0.44);
+        iclaw.changePosition("close", 0.55);
         iclaw.changePosition("start", 0.4);
         iclaw.changePosition("adjust", 0.37);
         iclaw.changePosition("open", 0.25);
@@ -110,8 +113,8 @@ public class Intake extends RobotPart {
 
     void specimenReady() {
         ipivot.setPosition("specimenready");
-        iarmr.setPosition("specimenready");
-        iarml.setPosition("specimenready");
+        iarmr.setPosition("smallinit");
+        iarml.setPosition("smallinit");
         iturret.setPosition("start");
         iclaw.setPosition("open");
         linkager.setPosition("start");
@@ -180,6 +183,12 @@ public class Intake extends RobotPart {
         iarml.setPosition("init");
         ipivot.setPosition("smallinit");
     }
+    void smallInit2() {
+        iarmr.setPosition("init");
+        iarml.setPosition("init");
+        ipivot.setPosition("smallinit");
+    }
+
 
     void clawDown() {
         linkager.setPosition("start");
@@ -226,6 +235,8 @@ public class Intake extends RobotPart {
     public Stage zestyFlick(double t) {return super.customTime(this::zestyFlick, t);}
     public Stage switcharoo(double t) {return super.customTime(this::switcharoo, t);}
     public Stage smallInit(double t) {return super.customTime(this::smallInit, t);}
+    public Stage smallInit2(double t) {return super.customTime(this::smallInit2, t);}
+
     public Stage clawDown(double t) {return super.customTime(this::clawDown, t);}
     public Stage clawUp(double t) {return super.customTime(this::clawUp, t);}
 
