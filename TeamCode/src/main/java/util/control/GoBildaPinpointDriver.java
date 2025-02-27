@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package util.control;
 
 import static com.qualcomm.robotcore.util.TypeConversion.byteArrayToInt;
 
