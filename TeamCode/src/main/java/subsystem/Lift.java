@@ -46,9 +46,7 @@ public class Lift {
             slides1.setDirection(DcMotorSimple.Direction.REVERSE);
             slides1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slides1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            slides2.setDirection(DcMotorSimple.Direction.FORWARD);
-            slides2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slides2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             timer = new ElapsedTime();
             profile = MotionProfileGenerator.generateSimpleMotionProfile(1, 0, maxvel, maxaccel);
         }
@@ -119,4 +117,4 @@ public class Lift {
         }
 
     }
-}
+
