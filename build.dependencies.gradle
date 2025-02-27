@@ -1,10 +1,6 @@
 repositories {
     mavenCentral()
-    google()
-
-    maven { url = "https://maven.rowanmcalpin.com/" }
-    maven { url = "https://maven.pedropathing.com/" } // Remove if you don't intend to use PedroPathing
-    maven { url = "https://maven.brott.dev/" } // Remove if you don't intend to use the FTC Dashboard (required if using PedroPathing)
+    google() // Needed for androidx
 }
 
 dependencies {
@@ -16,10 +12,6 @@ dependencies {
     implementation 'org.firstinspires.ftc:Hardware:10.2.0'
     implementation 'org.firstinspires.ftc:FtcCommon:10.2.0'
     implementation 'org.firstinspires.ftc:Vision:10.2.0'
-
-    //noinspection GradleDependency
     implementation 'androidx.appcompat:appcompat:1.2.0'
-
-//    implementation 'com.acmerobotics.dashboard:dashboard:0.4.16' // Remove if you don't intend to use the FTC Dashboard (required if using PedroPathing)
 }
 
