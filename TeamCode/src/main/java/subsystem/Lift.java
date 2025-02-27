@@ -58,7 +58,7 @@ public class Lift {
 
             double pid1 = controller1.update(motorPos, target);
 
-
+            // voltaage compensation divides voltage by nominal voltage to get a boosting value
             voltageCompensation = 13.5 / voltageSensor.getVoltage();
             power1 = (pid1) * voltageCompensation;
 
