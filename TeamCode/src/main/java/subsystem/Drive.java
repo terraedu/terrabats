@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
 import java.util.ArrayList;
 
 import mathutil.MathFunc;
@@ -100,6 +102,10 @@ public class Drive{
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         leftRear.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -329,7 +335,7 @@ public class Drive{
     public double getTwistedR(){
         return 0;
     } //??
-    public void setPoseEstimate(Pose2d pose){
+    public void setPoseEstimate(Pose2D pose){
         this.odo.setPosition(pose);
     }
     public void lineTo(double x, double y, double r){

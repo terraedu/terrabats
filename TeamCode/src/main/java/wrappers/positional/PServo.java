@@ -1,4 +1,4 @@
-package wrappers.continuous;
+package wrappers.positional;
 
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
