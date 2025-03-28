@@ -24,7 +24,7 @@ public class IntakePivotSub extends Subsystem {
     // USER CODE
     public Servo ipivot;
 
-    private final double INIT = 0.8;
+    private final double INIT = .03;
     private final double SPECIMENREADY = 0.75;
     private final double TRANSFERSPECIMEN = 0.4;
     private final double YOINK = 0.55;

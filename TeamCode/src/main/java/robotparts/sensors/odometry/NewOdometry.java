@@ -29,10 +29,10 @@ public class NewOdometry extends RobotPart {
 
     @Override
     public void init() {
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        odo = hardwareMap.get(GoBildaPinpointDriver.class,"pinpoint");
         odo.setOffsets(-32, 55);
         odo.setEncoderResolution(234.057143);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
 
 //        odometryThread.setExecutionCode(odometryUpdateCode);
@@ -42,11 +42,11 @@ public class NewOdometry extends RobotPart {
     public void update(){
 
         odo.update();
-        Pose2D pos = odo.getPosition();
+        com.pedropathing.localization.Pose pos = odo.getPosition();
 
-        h = nanAngle(pos.getHeading(AngleUnit.DEGREES));
-        x = nanX((pos.getY(DistanceUnit.MM)/10));
-        y = nanY((pos.getX(DistanceUnit.MM)/10));
+        h = nanAngle(pos.getHeading());
+        x = nanX((pos.getY()/10));
+        y = nanY((pos.getX()/10));
     }
 
     private double lastAngle = 0;

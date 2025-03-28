@@ -6,7 +6,10 @@ import static global.General.voltageScale;
 import static global.Modes.Height.currentHeight;
 import static global.Modes.TeleStatus.REDA;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 @TeleOp(name = "TestOp TESTING ONLY", group = "TeleOp")
 public class TestOp extends Tele {
@@ -32,17 +35,20 @@ public class TestOp extends Tele {
 
         // odometry positions
         log.show("pose", odometry.getPose());
-
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+        dashboardTelemetry.addData("pose", odometry.odo.getPosition());
+dashboardTelemetry.update();
         // heading
-        log.show("heading", gyro.getHeading());
+//        log.show("heading", gyro.getHeading());
 
         // lift motor encoder positions
-        log.show("Right", lift.motorRight.getPosition());
+//        log.show("Right", lift.motorRight.getPosition());
 
         // drive mode
-        log.show("DriveMode", driveMode.get());
+//        log.show("DriveMode", driveMode.get());
 
         // heights
-        log.show("current height", current.getValue(currentHeight));
+//        log.show("current height", current.getValue(currentHeight));
     }
 }

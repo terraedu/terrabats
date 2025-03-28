@@ -15,7 +15,7 @@ public class OuttakeClawSub extends Subsystem {
     public Servo claw;
 
     private final double START = 1;
-    private final double OPEN = 0.6;
+    private final double OPEN = 0.4;
 
     public Command moveInit() {
         return new ServoToPosition(claw, START, this);

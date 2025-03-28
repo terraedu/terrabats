@@ -221,7 +221,7 @@ public class FivePlusOh extends OpMode {
         opmodeTimer.resetTimer();
 
         Constants.setConstants(FConstants.class, LConstants.class);
-        follower = new Follower(hardwareMap);
+//        follower = new Follower(hardwareMap);
         follower.setStartingPose(startPose);
         buildPaths();
     }

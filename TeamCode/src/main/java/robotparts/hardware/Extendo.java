@@ -26,10 +26,10 @@ public class Extendo extends RobotPart {
 
     @Override
     public void init() {
-        motorLeft = create("eil", ElectronicType.PMOTOR_REVERSE);
+        motorLeft = create("eil", ElectronicType.PMOTOR_FORWARD);
         // 0.25
-        motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 1, 0);
-        motorLeft.usePositionHolder(0, .1);
+        motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 4.17, 1, 0);
+        motorLeft.usePositionHolder(0, .2);
         adjust = 0;
         globalOffset = 0;
     }
@@ -37,7 +37,7 @@ public class Extendo extends RobotPart {
 
     @Override
     public CodeSeg move(double p) {
-        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
+        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.1);
         return null;
     }
 

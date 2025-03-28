@@ -20,25 +20,25 @@ public class FConstants {
         FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
         FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 16.6;
+        FollowerConstants.mass = 13.42;
 
-        FollowerConstants.xMovement = 19.725559205122796;
-        FollowerConstants.yMovement = 12.902679450005703;
+        FollowerConstants.xMovement = 23;
+        FollowerConstants.yMovement = 16.3;
 
-        FollowerConstants.forwardZeroPowerAcceleration = -11.992911701766031;
-        FollowerConstants.lateralZeroPowerAcceleration = -29.96098431447647;
+        FollowerConstants.forwardZeroPowerAcceleration = -16.7992911701766031;
+        FollowerConstants.lateralZeroPowerAcceleration = -33.96098431447647;
 
-        FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.5,0,0.1,0);
+        FollowerConstants.translationalPIDFCoefficients.setCoefficients(0.65,0,0.1,0);
         FollowerConstants.useSecondaryTranslationalPID = false;
 //        FollowerConstants.secondaryTranslationalPIDFCoefficients.setCoefficients(0.1,0,0.01,0); // Not being used, @see useSecondaryTranslationalPID
 
-        FollowerConstants.headingPIDFCoefficients.setCoefficients(1.4,0,0.11,0);
+        FollowerConstants.headingPIDFCoefficients.setCoefficients(3.4,0,0.1,0);
         FollowerConstants.useSecondaryHeadingPID = false;
 //        FollowerConstants.secondaryHeadingPIDFCoefficients.setCoefficients(2,0,0.1,0); // Not being used, @see useSecondaryHeadingPID
 
-        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.025,0,0.005,0.6,0);
+        FollowerConstants.drivePIDFCoefficients.setCoefficients(0.035,0,0.001,0.7,0);
         FollowerConstants.useSecondaryDrivePID = true;
-        FollowerConstants.secondaryDrivePIDFCoefficients.setCoefficients(0.015,0,0.0001,0.6,0);
+        FollowerConstants.secondaryDrivePIDFCoefficients.setCoefficients(0.025,0,0.001,0.7,0);
 
         FollowerConstants.zeroPowerAccelerationMultiplier = 4;
         FollowerConstants.centripetalScaling = 0.0004;

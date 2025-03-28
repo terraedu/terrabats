@@ -102,7 +102,7 @@ public class FourSample extends PedroOpMode {
     @Override
     public void onInit() {
         Constants.setConstants(FConstants.class, LConstants.class);
-        follower = new Follower(hardwareMap);
+//        follower = new Follower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
         follower.setMaxPower(0.65);
         buildPaths();

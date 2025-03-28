@@ -20,25 +20,25 @@ public class Outtake extends RobotPart {
         pivot = create("pivot", ElectronicType.PSERVO_FORWARD);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
-        armr.changePosition("init", 0);
-        arml.changePosition("init", 0);
+        armr.changePosition("init", 0.79);
+        arml.changePosition("init", 0.79);
         armr.changePosition("specimenready", 0.215);
         arml.changePosition("specimenready", 0.215);
         armr.changePosition("place", 0.55);
         arml.changePosition("place", 0.55);
         armr.changePosition("switcharoo", 0.053);
         arml.changePosition("switcharoo", 0.053);
-        armr.changePosition("basket", 0.5);
-        arml.changePosition("basket", 0.5);
+        armr.changePosition("basket", 0.35);
+        arml.changePosition("basket", 0.35);
 
-        pivot.changePosition("init", 0);
+        pivot.changePosition("init", 0.03);
         pivot.changePosition("specimenready", 0.82);
         pivot.changePosition("place", 0.1);
         pivot.changePosition("switcharoo", 0.52);
-        pivot.changePosition("basket", 0.3);
+        pivot.changePosition("basket", 0.65);
 
-        claw.changePosition("start", 1);
-        claw.changePosition("open", 0.6);
+        claw.changePosition("start", .8);
+        claw.changePosition("open", 0.4);
 
         robotStatus.set(DRIVING);
     }
@@ -47,7 +47,7 @@ public class Outtake extends RobotPart {
         armr.setPosition("init");
         arml.setPosition("init");
         pivot.setPosition("init");
-        claw.setPosition("start");
+        claw.setPosition("open");
     }
 
     void specimenReady() {
@@ -60,7 +60,6 @@ public class Outtake extends RobotPart {
     void upSpecimen() {
         armr.setPosition("place");
         arml.setPosition("place");
-        pivot.setPosition("place");
     }
 
     void switcharooReady() {

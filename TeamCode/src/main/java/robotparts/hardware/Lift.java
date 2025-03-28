@@ -16,7 +16,7 @@ import util.codeseg.ReturnCodeSeg;
 
 public class Lift extends RobotPart {
 
-    public PMotor motorRight, placeHolder;
+    public PMotor motorRight, motorLeft;
 
     public static final double maxPosition = 50;
     public final double defaultCutoffPosition = 0;
@@ -27,9 +27,13 @@ public class Lift extends RobotPart {
     @Override
     public void init() {
         motorRight = create("lir", ElectronicType.PMOTOR_REVERSE);
+        motorLeft = create("lil", ElectronicType.PMOTOR_FORWARD);
+
         // 0.25
-        motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 1, 15);
-        motorRight.usePositionHolder(0.1, .5);
+        motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 2, 1, 0);
+        motorRight.usePositionHolder(0, .5);
+        motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 2, 1, 0);
+        motorLeft.usePositionHolder(0, .5);
         adjust = 0;
         globalOffset = 0;
     }
@@ -38,6 +42,8 @@ public class Lift extends RobotPart {
     @Override
     public CodeSeg move(double p) {
         motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0.05);
+        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.05);
+
         return null;
     }
 
@@ -72,7 +78,7 @@ public class Lift extends RobotPart {
 
 
     public Stage stageLift(double power, double target) {
-        return moveTarget(() -> motorRight, power, () -> {
+        return moveTarget(() -> motorRight, () -> motorLeft, power, power, () -> {
             double Lasttarget = target;
 
                 return target;
