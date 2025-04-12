@@ -8,12 +8,7 @@ public class TerraRed extends OpMode {
 
     @Override
     public void init() {
-        Outtake outtake = new Outtake();
-        Intake intake = new Intake();
 
-        telemetry.addData("status", "ready");
-        
-        outtake.moveInit();
     }
 
     @Override
