@@ -88,7 +88,7 @@ public class GoBildaPinpointDriver extends I2cDeviceSynchDevice<I2cDeviceSynchSi
 
     @Override
     public String getDeviceName() {
-        return "goBILDA® Pinpoint Odometry Computer";
+        return "goBILDA® Pinpoint 'DC' Computer";
     }
 
 
