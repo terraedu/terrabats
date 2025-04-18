@@ -1,27 +1,41 @@
 package opmode.auton;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import util.control.SquIDrive;
+import util.control.TerraDrive;
 
-
+@Autonomous(name="auton", group="Autonomous")
 public class autontest extends LinearOpMode {
 
-    SquIDrive drive = new SquIDrive();
+
+
+
+
+
+    TerraDrive drive = new TerraDrive();
+
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        drive.init();
+        drive.init(hardwareMap);
 
-        drive.goTo(1,2,3);
+        waitForStart();
+
+
+
+        drive.goTo(0,0,90);
 
         while(opModeIsActive()){
 
             drive.update();
 
+        }
+
+        if(isStopRequested()){
+            drive.stop();
         }
 
 

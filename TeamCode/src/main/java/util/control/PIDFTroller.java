@@ -2,7 +2,7 @@ package util.control;
 
 import com.qualcomm.robotcore.util.RobotLog;
 
-public class PIDFController {
+public class PIDFTroller {
 
     private double lastError_;
     private double errorSum_;
@@ -20,10 +20,10 @@ public class PIDFController {
     public double fTotal;
 
     /* Public OpMode members. */
-    private PIDFController() {}
+    private PIDFTroller() {}
 
     /* Constructor */
-    public PIDFController(double kp, double ki, double kd, double kf, boolean rot){
+    public PIDFTroller(double kp, double ki, double kd, double kf, boolean rot){
         lastError_ = 0;
         lastTime_ = System.currentTimeMillis();
         errorSum_ = 0;

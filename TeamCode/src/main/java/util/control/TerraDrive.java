@@ -1,18 +1,20 @@
 package util.control;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+
+import com.arcrobotics.ftclib.controller.PDController;
+import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
-import subsystem.Drive;
-
-public class SquIDrive {
-    DcMotor fr, br, fl, bl;
+public class TerraDrive {
+    public DcMotor fr, br, fl, bl;
+    public GoBildaPinpointDriver odo;
 
     double xTarget;
     double yTarget;
@@ -25,30 +27,38 @@ public class SquIDrive {
     double x;
     double y;
     double h;
+    double xDist;
+    double yDist;
     double angle;
 
-    private final SquIDController xPID = new SquIDController();
-    private final SquIDController yPID = new SquIDController();
-    private final SquIDController hPID = new SquIDController();
+    public static PDTroller xPID = new PDTroller(0.1,0);
+    public static PDTroller yPID = new PDTroller(0.1,0);
 
-    public GoBildaPinpointDriver odo;
+    public static PDTroller hPID = new PDTroller(0.2 ,0);
 
 
-    public void init(){
 
+
+    public void init(HardwareMap hardwareMap){
+        fl  = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+        bl  = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
-        //TODO FIX OFFSETS
-        odo.setOffsets(-32, 55);
+        odo.setOffsets(-50, 139);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odo.resetPosAndIMU();
 
 
-        fr.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        //TODO FIX THIS FOR CURRENT BOT IJAVVE ONE IS WEIRD
+
+        fr.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
-        bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.FORWARD);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -56,8 +66,8 @@ public class SquIDrive {
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-
     }
+
 
     private double lastAngle = 0;
     private double lastX = 0;
@@ -117,22 +127,34 @@ public class SquIDrive {
         odo.update();
         Pose2D pos = odo.getPosition();
 
+
         hCurrent = nanAngle(pos.getHeading(AngleUnit.DEGREES));
         xCurrent = nanX((pos.getY(DistanceUnit.MM)/10));
         yCurrent = nanY((pos.getX(DistanceUnit.MM)/10));
 
         x = xPID.calculate(xTarget, xCurrent);
         y = yPID.calculate(yTarget, yCurrent);
-        h = hPID.calculateH(hTarget, hCurrent);
+        angle = Math.atan2(yDist, xDist);
+
 
         double xRot = x * Math.cos(angle) - y * Math.sin(angle);
-        double yRot = y * Math.cos(angle) - y * Math.sin(angle);
+        double yRot = x * Math.cos(angle) - y * Math.sin(angle);
+        h = hPID.calculateH(hTarget, hCurrent);
 
+
+        //TODO FIX THIS FOR CURRENT BOT IJAVVE ONE IS WEIRD
         fl.setPower(xRot + yRot + h);
         bl.setPower(xRot - yRot + h);
         fr.setPower(xRot - yRot - h);
         br.setPower(xRot + yRot - h);
 
 
+    }
+
+    public void stop(){
+        fl.setPower(0);
+        bl.setPower(0);
+        fr.setPower(0);
+        br.setPower(0);
     }
 }

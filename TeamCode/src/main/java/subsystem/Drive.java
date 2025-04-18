@@ -12,6 +12,12 @@ public class Drive extends OpMode {
 
     @Override
     public void init() {
+
+        fl  = hardwareMap.get(DcMotor.class, "fl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+        bl  = hardwareMap.get(DcMotor.class, "bl");
+        br = hardwareMap.get(DcMotor.class, "br");
+
         fr.setDirection(DcMotorSimple.Direction.FORWARD);
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
         br.setDirection(DcMotorSimple.Direction.REVERSE);
