@@ -2,7 +2,8 @@ package util.control;
 
 
 
-import com.arcrobotics.ftclib.controller.PDController;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,6 +12,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+
+import java.util.Locale;
 
 public class TerraDrive {
     public DcMotor fr, br, fl, bl;
@@ -24,18 +27,17 @@ public class TerraDrive {
     double yCurrent;
     double hCurrent;
 
+    double xDist;
+    double yDist;
+
     double x;
     double y;
     double h;
-    double xDist;
-    double yDist;
     double angle;
 
-    public static PDTroller xPID = new PDTroller(0.1,0);
-    public static PDTroller yPID = new PDTroller(0.1,0);
-
-    public static PDTroller hPID = new PDTroller(0.2 ,0);
-
+    private final SPTroller xPID = new SPTroller(0.11, 0.01);
+    private final SPTroller yPID = new SPTroller(0.11, 0.01);
+    private final SPTroller hPID = new SPTroller(0, 0);
 
 
 
@@ -46,18 +48,18 @@ public class TerraDrive {
         br = hardwareMap.get(DcMotor.class, "br");
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
+        //TODO FIX OFFSETS
         odo.setOffsets(-50, 139);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
-        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
 
 
 
-        //TODO FIX THIS FOR CURRENT BOT IJAVVE ONE IS WEIRD
 
         fr.setDirection(DcMotorSimple.Direction.REVERSE);
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        br.setDirection(DcMotorSimple.Direction.FORWARD);
         bl.setDirection(DcMotorSimple.Direction.FORWARD);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -127,29 +129,42 @@ public class TerraDrive {
         odo.update();
         Pose2D pos = odo.getPosition();
 
-
         hCurrent = nanAngle(pos.getHeading(AngleUnit.DEGREES));
-        xCurrent = nanX((pos.getY(DistanceUnit.MM)/10));
-        yCurrent = nanY((pos.getX(DistanceUnit.MM)/10));
+        xCurrent = nanX((pos.getY(DistanceUnit.CM)));
+        yCurrent = nanY((pos.getX(DistanceUnit.CM)));
 
         x = xPID.calculate(xTarget, xCurrent);
         y = yPID.calculate(yTarget, yCurrent);
-        angle = Math.atan2(yDist, xDist);
-
+        h = hPID.calculateH(hTarget, hCurrent);
+        xDist = xTarget-xCurrent;
+        yDist = yTarget-yCurrent;
+        angle = Math.atan2(xDist, yDist);
 
         double xRot = x * Math.cos(angle) - y * Math.sin(angle);
-        double yRot = x * Math.cos(angle) - y * Math.sin(angle);
-        h = hPID.calculateH(hTarget, hCurrent);
+        double yRot = x * Math.sin(angle) - y * Math.cos(angle);
 
-
-        //TODO FIX THIS FOR CURRENT BOT IJAVVE ONE IS WEIRD
-        fl.setPower(xRot + yRot + h);
-        bl.setPower(xRot - yRot + h);
-        fr.setPower(xRot - yRot - h);
-        br.setPower(xRot + yRot - h);
+        fl.setPower(xRot - yRot - h);
+        bl.setPower(xRot + yRot - h);
+        fr.setPower(xRot + yRot + h);
+        br.setPower(xRot - yRot + h);
 
 
     }
+
+    public double getXPower(){
+        return x;
+    }
+    public double getYPower(){
+        return y;
+    }
+    public double getHPower(){
+        return h;
+    }
+
+    public double getXRot(){
+        return getXRot();
+    }
+
 
     public void stop(){
         fl.setPower(0);

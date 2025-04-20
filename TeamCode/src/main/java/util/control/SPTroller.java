@@ -4,43 +4,38 @@ import static mathutil.MathFunctions.angleWrap;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class PDTroller {
+public class SPTroller {
     double p;
     double d;
-
-    double error;
-
-    double derivative;
-
-
     double hError;
-
+    double error;
+    double lError;
+    double lhError;
     double out;
 
-    double lastError = 0;
 
-    ElapsedTime timer = new ElapsedTime();
+    double der;
 
-    public PDTroller(double p, double d) {
 
+    ElapsedTime time = new ElapsedTime();
+
+
+    public SPTroller(double p, double d) {
         this.p = p;
         this.d = d;
     }
 
-
     public double calculate(double setpoint, double current) {
 
         error = setpoint - current;
+        der = (error - lError) / time.seconds();
 
-        derivative = (error - lastError) / timer.seconds();
-
-        out = (p * error) + (d * derivative);
-
+        out = (p * error) + (d * der);
 
 
-        timer.reset();
+        lError = error;
+        time.reset();
 
-        lastError = error;
         return out;
 
 
@@ -51,12 +46,12 @@ public class PDTroller {
 
        hError = Math.toDegrees(angleWrap(Math.toRadians(setpoint - current)));
 
-       derivative = (hError - lastError) / timer.seconds();
+       der = (hError - lhError) / time.seconds();
+       out = (p * error) + (d * der);
 
-       out = (p*error) + (d*derivative);
+       lhError = hError;
+       time.reset();
 
-       timer.reset();
-       lastError = hError;
         return out;
 
 

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import gamepad.GamepadHandler;
+import subsystem.Drive;
 import subsystem.Intake;
 
 @TeleOp(name="\uD83D\uDE08", group="teleop")
@@ -20,7 +21,8 @@ public class TerraBlue extends OpMode {
     robotStatus status;
     GamepadHandler gph1 = new GamepadHandler(gamepad1);
     GamepadHandler gph2 = new GamepadHandler(gamepad2);
-
+    Drive drive = new Drive();
+    Intake intake = new Intake();
 
     ElapsedTime time = new ElapsedTime();
 
@@ -29,7 +31,7 @@ public class TerraBlue extends OpMode {
         /**
          * Init Hardware
          */
-        Intake intake = new Intake();
+
         time.reset();
 
         /**
@@ -59,6 +61,9 @@ public class TerraBlue extends OpMode {
         if(gph1.right_trigger && status == robotStatus.driving) {      }
         else if (gph1.right_trigger && status == robotStatus.intaking) {        }
         else if (gph1.right_trigger && status == robotStatus.placing) {        }
+
+
+        drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 
 
