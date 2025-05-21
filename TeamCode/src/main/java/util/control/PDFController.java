@@ -4,9 +4,11 @@ import static mathutil.MathFunctions.angleWrap;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class SPTroller {
-    double p;
-    double d;
+public class PDFController {
+    double Kp;
+    double Kd;
+    double Kf;
+
     double hError;
     double error;
     double lError;
@@ -20,9 +22,11 @@ public class SPTroller {
     ElapsedTime time = new ElapsedTime();
 
 
-    public SPTroller(double p, double d) {
-        this.p = p;
-        this.d = d;
+    public PDFController(double Kp, double Kd, double Kf) {
+        this.Kp = Kp;
+        this.Kd = Kd;
+        //TODO LINEAR EQUATION TO CALCULATE FF VALUE (FIGURE THIS OUT)
+        this.Kf = Kf;
     }
 
     public double calculate(double setpoint, double current) {
@@ -30,7 +34,7 @@ public class SPTroller {
         error = setpoint - current;
         der = (error - lError) / time.seconds();
 
-        out = (p * error) + (d * der);
+        out = (Kp * error) + (Kd * der) + Kf;
 
 
         lError = error;
@@ -47,7 +51,7 @@ public class SPTroller {
        hError = Math.toDegrees(angleWrap(Math.toRadians(setpoint - current)));
 
        der = (hError - lhError) / time.seconds();
-       out = (p * error) + (d * der);
+       out = (Kp * error) + (Kd * der) + Kf;
 
        lhError = hError;
        time.reset();

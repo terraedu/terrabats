@@ -2,9 +2,6 @@ package util.control;
 
 
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
-import com.arcrobotics.ftclib.controller.PIDController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -12,8 +9,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-
-import java.util.Locale;
 
 public class TerraDrive {
     public DcMotor fr, br, fl, bl;
@@ -35,9 +30,9 @@ public class TerraDrive {
     double h;
     double angle;
 
-    private final SPTroller xPID = new SPTroller(0.11, 0.01);
-    private final SPTroller yPID = new SPTroller(0.11, 0.01);
-    private final SPTroller hPID = new SPTroller(0, 0);
+    private final PDFController xPID = new PDFController(0.11, 0.01,0);
+    private final PDFController yPID = new PDFController(0.11, 0.01,0);
+    private final PDFController hPID = new PDFController(0, 0,0);
 
 
 
