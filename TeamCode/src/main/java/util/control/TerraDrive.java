@@ -30,9 +30,9 @@ public class TerraDrive {
     double h;
     double angle;
 
-    private final PDFController xPID = new PDFController(0.11, 0.01,0);
-    private final PDFController yPID = new PDFController(0.11, 0.01,0);
-    private final PDFController hPID = new PDFController(0, 0,0);
+    private final PDFController xPDF = new PDFController(0.0, 0.0,0);
+    private final PDFController yPDF = new PDFController(0.0, 0.0,0);
+    private final PDFController hPDF = new PDFController(0, 0,0);
 
 
 
@@ -44,18 +44,18 @@ public class TerraDrive {
         odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
 
         //TODO FIX OFFSETS
-        odo.setOffsets(-50, 139);
-        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odo.setOffsets(0, 0);
+        odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
 
 
 
 
-        fr.setDirection(DcMotorSimple.Direction.REVERSE);
+        fr.setDirection(DcMotorSimple.Direction.FORWARD);
         fl.setDirection(DcMotorSimple.Direction.FORWARD);
-        br.setDirection(DcMotorSimple.Direction.FORWARD);
-        bl.setDirection(DcMotorSimple.Direction.FORWARD);
+        br.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -128,9 +128,9 @@ public class TerraDrive {
         xCurrent = nanX((pos.getY(DistanceUnit.CM)));
         yCurrent = nanY((pos.getX(DistanceUnit.CM)));
 
-        x = xPID.calculate(xTarget, xCurrent);
-        y = yPID.calculate(yTarget, yCurrent);
-        h = hPID.calculateH(hTarget, hCurrent);
+        x = xPDF.calculate(xTarget, xCurrent);
+        y = yPDF.calculate(yTarget, yCurrent);
+        h = hPDF.calculateH(hTarget, hCurrent);
         xDist = xTarget-xCurrent;
         yDist = yTarget-yCurrent;
         angle = Math.atan2(xDist, yDist);
