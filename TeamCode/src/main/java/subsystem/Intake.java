@@ -48,7 +48,7 @@ public class Intake{
        extendo = hardwareMap.get(PMotor.class, "extendo");
 
        im.setDirection(DcMotorSimple.Direction.FORWARD);
-       extendo.setDirection(DcMotorSimple.Direction.FORWARD);
+       extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
        im.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extendo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

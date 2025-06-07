@@ -1,5 +1,7 @@
 package opmode;
 
+import static subsystem.Intake.intakeState.hover;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -58,15 +60,25 @@ public class TerraBlue extends OpMode {
     @Override
     public void loop() {
 
-        if(gph1.right_trigger && status == robotStatus.driving) {      }
-        else if (gph1.right_trigger && status == robotStatus.intaking) {        }
+        if(gph1.right_trigger && status == robotStatus.driving) {
+            time.reset();
+            intake.goTo(0);
+            if(time.seconds() == 1) {
+            intake.setState(hover);
+            }
+            status = robotStatus.intaking;
+        }
+        else if (gph1.right_trigger && status == robotStatus.intaking) {
+            time.reset();
+
+        }
         else if (gph1.right_trigger && status == robotStatus.placing) {        }
 
 
         drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 
-
+        intake.update();
         gph1.update();
         gph2.update();
 
