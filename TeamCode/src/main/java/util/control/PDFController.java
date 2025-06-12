@@ -9,10 +9,8 @@ public class PDFController {
     double Kd;
     double Kf;
 
-    double hError;
     double error;
     double lError;
-    double lhError;
     double out;
 
 
