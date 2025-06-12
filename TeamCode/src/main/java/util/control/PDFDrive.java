@@ -4,7 +4,7 @@ import static mathutil.MathFunctions.angleWrap;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class PDFController {
+public class PDFDrive {
     double Kp;
     double Kd;
     double Kf;
@@ -22,9 +22,10 @@ public class PDFController {
     ElapsedTime time = new ElapsedTime();
 
 
-    public PDFController(double Kp, double Kd, double Kf) {
+    public PDFDrive(double Kp, double Kd, double Kf) {
         this.Kp = Kp;
         this.Kd = Kd;
+        //TODO LINEAR EQUATION TO CALCULATE FF VALUE (FIGURE THIS OUT)
         this.Kf = Kf;
     }
 

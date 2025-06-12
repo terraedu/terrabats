@@ -30,9 +30,9 @@ public class TerraDrive {
     double h;
     double angle;
 
-    private final PDFController xPDF = new PDFController(0.0, 0.0,0);
-    private final PDFController yPDF = new PDFController(0.0, 0.0,0);
-    private final PDFController hPDF = new PDFController(0, 0,0);
+    private final PDFDrive xPDF = new PDFDrive(0.0, 0.0,0);
+    private final PDFDrive yPDF = new PDFDrive(0.0, 0.0,0);
+    private final PDFDrive hPDF = new PDFDrive(0, 0,0);
 
 
 

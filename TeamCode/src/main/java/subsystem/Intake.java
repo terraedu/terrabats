@@ -16,8 +16,7 @@ import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
 
 public class Intake{
-    double itarget;
-    double icurrent;
+    double iTarget;
 
     private final PDFController iPDF = new PDFController(0.0, 0.0,0);
 
@@ -60,31 +59,27 @@ public class Intake{
     }
 
     public void goTo(double target){
-        this.itarget = target;
+        this.iTarget = target;
     }
 
-    public void iupdate(){
-        double out = iPDF.calculate(itarget, extendo.getCurrentPosition());
+    public void iUpdate(){
+        double out = iPDF.calculate(iTarget, extendo.getCurrentPosition());
         extendo.setPower(out);
     }
 
     public void update(){
         switch(currentIntakeState) {
             case init:
-                itarget = 0;
                 moveInit();
             break;
 
             case hover:
-                itarget = 0;
                 break;
 
             case grab:
-                itarget = 0;
                 break;
 
             default:
-                itarget = 0;
                 moveInit();
         }
    }
