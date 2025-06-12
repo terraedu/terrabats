@@ -16,32 +16,29 @@ import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
 
 public class Intake{
-
     double itarget;
     double icurrent;
-
 
     private final PDFController iPDF = new PDFController(0.0, 0.0,0);
 
     PServo ilink, latch;
     PMotor im, extendo;
 
-
     public enum intakeState{
-
         init,
         grab,
         hover
-
     };
 
     intakeState currentIntakeState;
 
+    public void setState(intakeState newState){
+        this.currentIntakeState = newState;
+    }
+
     double setActionTime = 1;
 
-
     public void init() {
-
        ilink = hardwareMap.get(PServo.class, "ilink");
        latch = hardwareMap.get(PServo.class, "latch");
        im = hardwareMap.get(PMotor.class, "im");
@@ -51,9 +48,15 @@ public class Intake{
        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
        im.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        extendo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       extendo.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+       ilink.addPosition("init", 0);
+       latch.addPosition("init", 0);
+    }
 
+    public void moveInit() {
+        ilink.setPosition("init");
+        ilink.setPosition("init");
     }
 
     public void goTo(double target){
@@ -61,38 +64,28 @@ public class Intake{
     }
 
     public void iupdate(){
-
         double out = iPDF.calculate(itarget, extendo.getCurrentPosition());
         extendo.setPower(out);
-
     }
 
-
-    public void setState(intakeState newState){
-        this.currentIntakeState = newState;
-   }
-
-   public void update(){
-
+    public void update(){
         switch(currentIntakeState) {
             case init:
-            if (currentIntakeState == intakeState.init) {
-
-
-            }
+                itarget = 0;
+                moveInit();
             break;
+
             case hover:
-                if (currentIntakeState == intakeState.hover) {
-                    //do thing
-
-                }
+                itarget = 0;
                 break;
+
             case grab:
-                if (currentIntakeState == intakeState.grab) {
-                    //do thing
-
-                }
+                itarget = 0;
                 break;
+
+            default:
+                itarget = 0;
+                moveInit();
         }
    }
 }

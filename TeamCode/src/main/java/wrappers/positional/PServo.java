@@ -1,11 +1,17 @@
 package wrappers.positional;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
+
+import java.util.HashMap;
 
 public class PServo implements Servo {
     private Servo servo;
     private double offset = 0.0;
+
+    HashMap<String, Double> positions = new HashMap<>();
 
     public PServo(Servo servo) {
         this.servo = servo;
@@ -68,6 +74,15 @@ public class PServo implements Servo {
     @Override
     public Direction getDirection() {
         return this.servo.getDirection();
+    }
+
+    public void addPosition(String name, double position) {
+        positions.put(name, position);
+    }
+
+    public void setPosition(String name) {
+        double position = positions.get(name);
+        setPosition(position);
     }
 
     @Override

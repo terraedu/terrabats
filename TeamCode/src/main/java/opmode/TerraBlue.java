@@ -1,23 +1,25 @@
 package opmode;
 
 import static subsystem.Intake.intakeState.hover;
+import static subsystem.Outtake.outtakeState.init;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import gamepad.GamepadHandler;
 import subsystem.Drive;
 import subsystem.Intake;
+import subsystem.Outtake;
 
-@TeleOp(name="\uD83D\uDE08", group="teleop")
+@TeleOp(name="\uD83D\uDE08", group="teleop") // 😈 is hilarious
 public class TerraBlue extends OpMode {
 
     enum robotStatus {
         driving,
         intaking,
-        placing
+        basketing,
+        specimining
     }
 
     robotStatus status;
@@ -25,28 +27,20 @@ public class TerraBlue extends OpMode {
     GamepadHandler gph2 = new GamepadHandler(gamepad2);
     Drive drive = new Drive();
     Intake intake = new Intake();
+    Outtake outtake = new Outtake();
 
     ElapsedTime time = new ElapsedTime();
 
     @Override
     public void init() {
-        /**
-         * Init Hardware
-         */
-
+        // init hardware
         time.reset();
 
-        /**
-         * Set States
-         */
+        // set states
         intake.setState(Intake.intakeState.init);
 
-        /**
-         * Set Modes
-         */
-
+        // set modes
         status = robotStatus.driving;
-
     }
 
     @Override
@@ -59,28 +53,35 @@ public class TerraBlue extends OpMode {
 
     @Override
     public void loop() {
-
-        if(gph1.right_trigger && status == robotStatus.driving) {
+        // have separate if-else loops for each subsystems?
+        // consider as intake if-else loop ?
+        if (gph1.right_trigger && status == robotStatus.driving) {
             time.reset();
             intake.goTo(0);
-            if(time.seconds() == 1) {
-            intake.setState(hover);
+
+            if (time.seconds() == 1) {
+                intake.setState(hover);
             }
             status = robotStatus.intaking;
+        } else if (gph1.right_trigger && status == robotStatus.intaking) {
+            // go back to init
+        } else if (gph1.right_trigger && status == robotStatus.basketing) {
+            // uhh idk do smth
         }
-        else if (gph1.right_trigger && status == robotStatus.intaking) {
-            time.reset();
 
+        // consider as outtake if-else loop ?
+        if (gph1.right_bumper && status == robotStatus.driving) {
+            // go up to high basket ? do smth
+        } else if (gph1.right_bumper && status == robotStatus.basketing) {
+            outtake.setState(init);
         }
-        else if (gph1.right_trigger && status == robotStatus.placing) {        }
-
 
         drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-
+        outtake.update();
         intake.update();
+        intake.iupdate();
         gph1.update();
         gph2.update();
-
     }
 }
