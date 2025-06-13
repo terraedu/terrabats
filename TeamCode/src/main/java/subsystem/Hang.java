@@ -24,7 +24,7 @@ public class Hang {
 
 
         hangl.setDirection(DcMotorSimple.Direction.FORWARD);
-        hangr.setDirection(DcMotorSimple.Direction.REVERSE);
+        hangr.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
 
