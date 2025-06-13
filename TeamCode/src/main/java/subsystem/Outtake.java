@@ -2,14 +2,18 @@ package subsystem;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import util.control.PDFController;
 import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
 
-public class Outtake {
+public class Outtake extends OpMode {
     PServo arml, armr, linkage, pivot, claw;
     PMotor liftl, liftr;
 
@@ -29,6 +33,7 @@ public class Outtake {
         this.currentOuttakeState = newState;
     }
 
+    @Override
     public void init() {
         arml = hardwareMap.get(PServo.class, "arml");
         armr = hardwareMap.get(PServo.class, "armr");
@@ -52,6 +57,11 @@ public class Outtake {
         linkage.addPosition("init", 0);
         pivot.addPosition("init", 0);
         claw.addPosition("init", 0);
+    }
+
+    @Override
+    public void loop() {
+
     }
 
 

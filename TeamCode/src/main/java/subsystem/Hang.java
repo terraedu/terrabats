@@ -2,11 +2,13 @@ package subsystem;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import wrappers.continuous.CServo;
 
-public class Hang {
+public class Hang extends OpMode {
     CServo hangl, hangr;
 
 
@@ -18,6 +20,7 @@ public class Hang {
 
     hangState currentHangState;
 
+    @Override
     public void init() {
         hangl = hardwareMap.get(CServo.class, "hangl");
         hangr = hardwareMap.get(CServo.class, "hangr");
@@ -27,6 +30,10 @@ public class Hang {
         hangr.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
+    @Override
+    public void loop() {
+
+    }
 
     public void startHang(){
         hangl.setPower(1);

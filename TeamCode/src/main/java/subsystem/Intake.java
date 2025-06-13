@@ -1,21 +1,14 @@
 package subsystem;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 import util.control.PDFController;
 import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
 
-public class Intake{
+public class Intake extends OpMode {
     double iTarget;
 
     private final PDFController iPDF = new PDFController(0.0, 0.0,0);
@@ -37,6 +30,7 @@ public class Intake{
 
     double setActionTime = 1;
 
+    @Override
     public void init() {
        ilink = hardwareMap.get(PServo.class, "ilink");
        latch = hardwareMap.get(PServo.class, "latch");
@@ -52,6 +46,11 @@ public class Intake{
 
        ilink.addPosition("init", 0);
        latch.addPosition("init", 0);
+    }
+
+    @Override
+    public void loop() {
+
     }
 
     public void moveInit() {
