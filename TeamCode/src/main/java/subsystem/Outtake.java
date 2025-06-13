@@ -39,7 +39,7 @@ public class Outtake {
         liftl = hardwareMap.get(PMotor.class, "lil");
         liftr = hardwareMap.get(PMotor.class, "lir");
 
-
+        //TODO set servo directions
         liftl.setDirection(DcMotorSimple.Direction.FORWARD);
         liftr.setDirection(DcMotorSimple.Direction.REVERSE);
 

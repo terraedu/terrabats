@@ -43,7 +43,8 @@ public class Intake{
        im = hardwareMap.get(PMotor.class, "im");
        extendo = hardwareMap.get(PMotor.class, "extendo");
 
-       im.setDirection(DcMotorSimple.Direction.FORWARD);
+        //TODO set servo directions
+        im.setDirection(DcMotorSimple.Direction.FORWARD);
        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
 
        im.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
