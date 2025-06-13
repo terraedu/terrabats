@@ -33,8 +33,10 @@ public class TerraBlue extends OpMode {
 
     hangStatus hStatus;
     robotStatus status;
+
     GamepadHandler gph1 = new GamepadHandler(gamepad1);
     GamepadHandler gph2 = new GamepadHandler(gamepad2);
+
     Drive drive = new Drive();
     Intake intake = new Intake();
     Outtake outtake = new Outtake();
@@ -71,6 +73,7 @@ public class TerraBlue extends OpMode {
 
     @Override
     public void start() {
+
     }
 
     @Override
@@ -114,6 +117,5 @@ public class TerraBlue extends OpMode {
         hang.update();
         gph1.update();
         gph2.update();
-
     }
 }

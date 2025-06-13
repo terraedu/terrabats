@@ -9,22 +9,18 @@ import java.util.ArrayList;
 import util.control.TerraDrive;
 import util.purepursuit.CurvePoint;
 import util.purepursuit.Executor;
+
 @Autonomous(name="ohadusdfgy", group="auto")
 public class autontest extends LinearOpMode {
+
     TerraDrive drive = new TerraDrive();
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         drive.init(hardwareMap);
 
-
         waitForStart();
-
-
-
-            drive.goTo(0,10,0);
-
+        drive.goTo(0,10,0);
 
         while(opModeIsActive()){
             drive.update();
@@ -32,18 +28,11 @@ public class autontest extends LinearOpMode {
             telemetry.addData("XPower", drive.getXPower());
             telemetry.addData("YPower", drive.getYPower());
             telemetry.addData("HPower", drive.getHPower());
-
-
+            telemetry.addData("XRot", drive.getVelocity());
             telemetry.update();
-
-
         }
-
         if(isStopRequested()){
             drive.stop();
         }
-
-
     }
-
 }
