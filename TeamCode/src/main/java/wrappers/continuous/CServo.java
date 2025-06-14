@@ -1,17 +1,14 @@
 package wrappers.continuous;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoController;
 
 public class CServo implements CRServo {
-
     private CRServo crservo;
 
 
-
-    public CServo(CRServo crservo) {
-        this.crservo = crservo;
-    }
+    public CServo(CRServo crservo) { this.crservo = crservo;    }
 
     @Override
     public ServoController getController() {
@@ -35,12 +32,13 @@ public class CServo implements CRServo {
 
     @Override
     public void setPower(double power) {
+        crservo.setPower(power);
 
     }
 
     @Override
     public double getPower() {
-        return 0;
+        return crservo.getPower();
     }
 
     @Override

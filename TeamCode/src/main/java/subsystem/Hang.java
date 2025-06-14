@@ -3,13 +3,16 @@ package subsystem;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import wrappers.continuous.CServo;
 
-public class Hang extends OpMode {
-    CServo hangl, hangr;
+public class Hang {
+    public CRServo hangl;
+    public CRServo hangr;
 
 
     public enum hangState{
@@ -18,22 +21,26 @@ public class Hang extends OpMode {
         in
     }
 
-    hangState currentHangState;
+    public hangState currentHangState;
 
-    @Override
-    public void init() {
-        hangl = hardwareMap.get(CServo.class, "hangl");
-        hangr = hardwareMap.get(CServo.class, "hangr");
+    public void init(HardwareMap hardwareMap) {
+
+        hangl = hardwareMap.get(CRServo.class, "hangl");
+        hangr = hardwareMap.get(CRServo.class, "hangr");
 
 
         hangl.setDirection(DcMotorSimple.Direction.FORWARD);
         hangr.setDirection(DcMotorSimple.Direction.FORWARD);
+        hangr.setPower(0);
+        hangl.setPower(0);
     }
 
-    @Override
-    public void loop() {
 
+    public void setPower(double power){
+        hangl.setPower(power);
+        hangr.setPower(power);
     }
+
 
     public void startHang(){
         hangl.setPower(1);
@@ -54,24 +61,27 @@ public class Hang extends OpMode {
     public void setState(hangState newState){
         this.currentHangState = newState;
     }
-
+    public String currentstate;
     public void update(){
 
         switch(currentHangState) {
             case stationary:
                 stopHang();
-                break;
+                currentstate = "stationary";
 
+                break;
             case out:
                 startHang();
-                break;
+                currentstate = "out";
 
+
+                break;
             case in:
                 reverseHang();
-                break;
+                currentstate = "in";
 
-            default:
-                stopHang();
+
+                break;
         }
 
     }

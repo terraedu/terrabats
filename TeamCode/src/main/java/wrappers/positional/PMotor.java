@@ -77,7 +77,7 @@ public class PMotor implements DcMotorEx {
 
     @Override
     public int getCurrentPosition() {
-        return 0;
+        return motor.getCurrentPosition();
     }
 
     @Override
