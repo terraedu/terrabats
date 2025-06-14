@@ -82,7 +82,7 @@ public class PServo implements Servo {
 
     public void setPosition(String name) {
         double position = positions.get(name);
-        setPosition(position);
+        servo.setPosition(position);
     }
 
     @Override

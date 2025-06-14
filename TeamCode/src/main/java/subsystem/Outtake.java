@@ -1,15 +1,10 @@
 package subsystem;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import util.control.PDFController;
 import wrappers.positional.PMotor;
@@ -17,7 +12,7 @@ import wrappers.positional.PServo;
 
 public class Outtake {
 
-    PServo arml, armr, linkage, pivot, claw;
+    public PServo claw, pivot, linkage, armr, arml;
     public PMotor liftl, liftr;
 
     double oTarget;
@@ -28,6 +23,7 @@ public class Outtake {
 
     public enum outtakeState{
         init,
+        grab,
     }
 
     outtakeState currentOuttakeState;
@@ -47,6 +43,7 @@ public class Outtake {
         liftr = new PMotor(hardwareMap.get(DcMotorEx.class, "lir"));
 
         //TODO set servo directions
+        claw.setDirection(Servo.Direction.REVERSE);
         liftl.setDirection(DcMotorSimple.Direction.FORWARD);
         liftr.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -59,6 +56,9 @@ public class Outtake {
         linkage.addPosition("init", 0);
         pivot.addPosition("init", 0);
         claw.addPosition("init", 0);
+
+        claw.addPosition("grab", 0.4);
+
     }
 
 
@@ -68,7 +68,7 @@ public class Outtake {
         this.oTarget = target;
     }
 
-    public void oUpdate(){
+    public void pdfUpdate(){
         double out = -(oPDF.calculate(oTarget, (liftl.getCurrentPosition())));
         liftl.setPower(out);
         liftr.setPower(out);
@@ -81,12 +81,17 @@ public class Outtake {
     }
 
     public void moveInit() {
-        arml.setPosition("init");
-        armr.setPosition("init");
-        linkage.setPosition("init");
-        pivot.setPosition("init");
+//        arml.setPosition("init");
+//        armr.setPosition("init");
+//        linkage.setPosition("init");
+//        pivot.setPosition("init");
         claw.setPosition("init");
     }
+
+    public void moveGrab() {
+        claw.setPosition("grab");
+    }
+
 
     public void update(){
         switch(currentOuttakeState) {
@@ -94,8 +99,10 @@ public class Outtake {
                 moveInit();
                 break;
 
-            default:
-                moveInit();
+            case grab:
+                moveGrab();
+                break;
+
         }
     }
 }

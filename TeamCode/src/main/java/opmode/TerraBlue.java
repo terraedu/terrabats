@@ -1,16 +1,11 @@
 package opmode;
 
-import static subsystem.Hang.hangState.in;
-import static subsystem.Hang.hangState.out;
 import static subsystem.Hang.hangState.stationary;
 import static subsystem.Intake.intakeState.hover;
 import static subsystem.Intake.intakeState.init;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import gamepad.GamepadHandler;
@@ -63,6 +58,7 @@ public class TerraBlue extends LinearOpMode {
         /**
          * Set States
          */
+        outtake.setState(Outtake.outtakeState.init);
         intake.setState(init);
         hang.setState(stationary);
 
@@ -80,7 +76,9 @@ public class TerraBlue extends LinearOpMode {
              * OUTTAKE
              */
             if(gph1.left_trigger && status == robotStatus.driving){
-                outtake.goTo(400);
+//                outtake.goTo(400);
+                outtake.setState(Outtake.outtakeState.grab);
+
             }
 
 
@@ -119,10 +117,10 @@ public class TerraBlue extends LinearOpMode {
             telemetry.addData("servoPower", hang.hangl.getPower());
             telemetry.addData("servorPower", hang.hangr.getPower());
             telemetry.addData("liftl", -(outtake.liftl.getCurrentPosition()));
-//            telemetry.addData("liftr", outtake.liftr.getCurrentPosition());
+            telemetry.addData("claw", outtake.claw.getPosition());
 
-
-            outtake.oUpdate();
+            outtake.update();
+            outtake.pdfUpdate();
             gph1.update();
             gph2.update();
             telemetry.update();
