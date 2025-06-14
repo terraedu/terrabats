@@ -109,7 +109,8 @@ public class TerraBlue extends LinearOpMode {
             while(gamepad1.dpad_down){hang.reverseHang();}
             while(gamepad1.dpad_right){hang.stopHang();}
 
-            outtake.setPower(gamepad2.left_stick_y);
+            //THIS CAN'T BE THERE AT THE SAME TIME AS THE LIFT
+//            outtake.setPower(gamepad2.left_stick_y);
             drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 //        intake.update();
@@ -121,7 +122,7 @@ public class TerraBlue extends LinearOpMode {
 //            telemetry.addData("liftr", outtake.liftr.getCurrentPosition());
 
 
-//            outtake.oUpdate();
+            outtake.oUpdate();
             gph1.update();
             gph2.update();
             telemetry.update();

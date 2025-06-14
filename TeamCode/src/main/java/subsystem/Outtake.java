@@ -23,7 +23,7 @@ public class Outtake {
     double oTarget;
 
 
-    private final PDFController oPDF = new PDFController(0.1, 0.0,0);
+    private final PDFController oPDF = new PDFController(0.0001, 0.0,0);
 
 
     public enum outtakeState{
@@ -69,7 +69,7 @@ public class Outtake {
     }
 
     public void oUpdate(){
-        double out = oPDF.calculate(oTarget, -(liftl.getCurrentPosition()));
+        double out = -(oPDF.calculate(oTarget, (liftl.getCurrentPosition())));
         liftl.setPower(out);
         liftr.setPower(out);
 
