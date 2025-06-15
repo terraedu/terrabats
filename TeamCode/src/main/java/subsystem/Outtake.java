@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import util.PauseTimer;
 import util.control.PDFController;
 import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
@@ -14,9 +16,10 @@ public class Outtake {
 
     public PServo claw, pivot, linkage, armr, arml;
     public PMotor liftl, liftr;
-
+    ElapsedTime time = new ElapsedTime();
     double oTarget;
 
+    PauseTimer pausetimer = new PauseTimer();
 
     private final PDFController oPDF = new PDFController(0.0001, 0.0,0);
 
@@ -24,6 +27,7 @@ public class Outtake {
     public enum outtakeState{
         init,
         grab,
+        specimen,
     }
 
     outtakeState currentOuttakeState;
@@ -44,6 +48,12 @@ public class Outtake {
 
         //TODO set servo directions
         claw.setDirection(Servo.Direction.REVERSE);
+        pivot.setDirection(Servo.Direction.REVERSE);
+        linkage.setDirection(Servo.Direction.REVERSE);
+        armr.setDirection(Servo.Direction.REVERSE);
+        arml.setDirection(Servo.Direction.FORWARD);
+
+
         liftl.setDirection(DcMotorSimple.Direction.FORWARD);
         liftr.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -51,13 +61,19 @@ public class Outtake {
         liftr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        arml.addPosition("init", 0);
-        armr.addPosition("init", 0);
+        arml.addPosition("init", .3);
+        armr.addPosition("init", .3);
         linkage.addPosition("init", 0);
         pivot.addPosition("init", 0);
         claw.addPosition("init", 0);
 
         claw.addPosition("grab", 0.4);
+
+        pivot.addPosition("place", 0.15);
+        linkage.addPosition("place", 0.55);
+        arml.addPosition("place", 1);
+        armr.addPosition("place", 1);
+
 
     }
 
@@ -81,10 +97,10 @@ public class Outtake {
     }
 
     public void moveInit() {
-//        arml.setPosition("init");
-//        armr.setPosition("init");
-//        linkage.setPosition("init");
-//        pivot.setPosition("init");
+        arml.setPosition("init");
+        armr.setPosition("init");
+        linkage.setPosition("init");
+        pivot.setPosition("init");
         claw.setPosition("init");
     }
 
@@ -92,6 +108,15 @@ public class Outtake {
         claw.setPosition("grab");
     }
 
+    public void movePlace() {
+        armr.setPosition("place");
+        arml.setPosition("place");
+        pivot.setPosition("place");
+    }
+
+    public void moveExtend(){
+        linkage.setPosition("place");
+    }
 
     public void update(){
         switch(currentOuttakeState) {
@@ -100,9 +125,16 @@ public class Outtake {
                 break;
 
             case grab:
+
                 moveGrab();
                 break;
-
+            case specimen:
+                time.reset();
+                moveGrab();
+                movePlace();
+                pausetimer.addPause(1);
+                moveExtend();
+                break;
         }
     }
 }

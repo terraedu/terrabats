@@ -3,6 +3,7 @@ package opmode;
 import static subsystem.Hang.hangState.stationary;
 import static subsystem.Intake.intakeState.hover;
 import static subsystem.Intake.intakeState.init;
+import static subsystem.Outtake.outtakeState.specimen;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -72,12 +73,15 @@ public class TerraBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            if(gph1.x){
+                outtake.setState(Outtake.outtakeState.init);
+            }
             /**
              * OUTTAKE
              */
             if(gph1.left_trigger && status == robotStatus.driving){
 //                outtake.goTo(400);
-                outtake.setState(Outtake.outtakeState.grab);
+                outtake.setState(specimen);
 
             }
 
@@ -117,7 +121,8 @@ public class TerraBlue extends LinearOpMode {
             telemetry.addData("servoPower", hang.hangl.getPower());
             telemetry.addData("servorPower", hang.hangr.getPower());
             telemetry.addData("liftl", -(outtake.liftl.getCurrentPosition()));
-            telemetry.addData("claw", outtake.claw.getPosition());
+            telemetry.addData("pivot", outtake.pivot.getPosition());
+
 
             outtake.update();
             outtake.pdfUpdate();
