@@ -3,7 +3,13 @@ package opmode;
 import static subsystem.Hang.hangState.stationary;
 import static subsystem.Intake.intakeState.hover;
 import static subsystem.Intake.intakeState.init;
-import static subsystem.Outtake.outtakeState.specimen;
+import static subsystem.Outtake.outtakeState.neutral;
+import static subsystem.Outtake.outtakeState.reset;
+import static subsystem.Outtake.outtakeState.sample;
+
+
+import android.icu.text.IDNA;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -14,6 +20,7 @@ import subsystem.Drive;
 import subsystem.Hang;
 import subsystem.Intake;
 import subsystem.Outtake;
+import util.Pause;
 
 @TeleOp(name="\uD83D\uDE08", group="teleop")
 public class TerraBlue extends LinearOpMode {
@@ -38,7 +45,7 @@ public class TerraBlue extends LinearOpMode {
         /**
          * Create Hardware
          */
-
+        Pause pause = new Pause();
         Drive drive = new Drive();
         Intake intake = new Intake();
         Outtake outtake = new Outtake();
@@ -79,9 +86,14 @@ public class TerraBlue extends LinearOpMode {
             /**
              * OUTTAKE
              */
-            if(gph1.left_trigger && status == robotStatus.driving){
+            if(gph1.left_bumper && status == robotStatus.driving){
 //                outtake.goTo(400);
-                outtake.setState(specimen);
+                outtake.setState(sample);
+                status = robotStatus.placing;
+
+            }else if(gph1.left_bumper && status == robotStatus.placing){
+                outtake.setState(reset);
+                status = robotStatus.driving;
 
             }
 
@@ -112,20 +124,20 @@ public class TerraBlue extends LinearOpMode {
             while(gamepad1.dpad_right){hang.stopHang();}
 
             //THIS CAN'T BE THERE AT THE SAME TIME AS THE LIFT
-//            outtake.setPower(gamepad2.left_stick_y);
             drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
 //        intake.update();
-            telemetry.addData("hangMode", hStatus);
-            telemetry.addData("hangState", hang.currentstate);
-            telemetry.addData("servoPower", hang.hangl.getPower());
+            telemetry.addData("counter", outtake.sub.getTime());
+            System.out.println(outtake.sub.getProceed());
+            System.out.println(outtake.sub.getTime());
+
+//            Log.v(INFO, "is working");
+            telemetry.addData("out", outtake.getOut());
             telemetry.addData("servorPower", hang.hangr.getPower());
             telemetry.addData("liftl", -(outtake.liftl.getCurrentPosition()));
             telemetry.addData("pivot", outtake.pivot.getPosition());
 
-
             outtake.update();
-            outtake.pdfUpdate();
+//            outtake.pdfUpdate();
             gph1.update();
             gph2.update();
             telemetry.update();

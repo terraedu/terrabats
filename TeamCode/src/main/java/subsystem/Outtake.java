@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import util.PauseTimer;
+import util.Pause;
 import util.control.PDFController;
 import wrappers.positional.PMotor;
 import wrappers.positional.PServo;
@@ -16,18 +15,21 @@ public class Outtake {
 
     public PServo claw, pivot, linkage, armr, arml;
     public PMotor liftl, liftr;
-    ElapsedTime time = new ElapsedTime();
     double oTarget;
+    double out;
 
-    PauseTimer pausetimer = new PauseTimer();
+    public Pause sub = new Pause();
 
-    private final PDFController oPDF = new PDFController(0.0001, 0.0,0);
+    private final PDFController oPDF = new PDFController(0.0000, 0.0000,-0.15);
 
 
     public enum outtakeState{
         init,
         grab,
-        specimen,
+        sample,
+        reset,
+        neutral
+
     }
 
     outtakeState currentOuttakeState;
@@ -61,18 +63,21 @@ public class Outtake {
         liftr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        arml.addPosition("init", .3);
-        armr.addPosition("init", .3);
+        arml.addPosition("init", .2);
+        armr.addPosition("init", .2);
         linkage.addPosition("init", 0);
         pivot.addPosition("init", 0);
         claw.addPosition("init", 0);
 
         claw.addPosition("grab", 0.4);
 
+        arml.addPosition("transfer", 0 );
+        armr.addPosition("transfer", 0);
+
         pivot.addPosition("place", 0.15);
         linkage.addPosition("place", 0.55);
-        arml.addPosition("place", 1);
-        armr.addPosition("place", 1);
+        arml.addPosition("place", .6 );
+        armr.addPosition("place", .6);
 
 
     }
@@ -85,10 +90,14 @@ public class Outtake {
     }
 
     public void pdfUpdate(){
-        double out = -(oPDF.calculate(oTarget, (liftl.getCurrentPosition())));
+        out = -(oPDF.calculate(oTarget, liftl.getCurrentPosition()));
         liftl.setPower(out);
         liftr.setPower(out);
 
+    }
+
+    public double getOut(){
+        return out;
     }
 
     public void setPower(double power){
@@ -101,17 +110,21 @@ public class Outtake {
         armr.setPosition("init");
         linkage.setPosition("init");
         pivot.setPosition("init");
-        claw.setPosition("init");
     }
 
     public void moveGrab() {
         claw.setPosition("grab");
     }
 
+    public void moveRelease(){ claw.setPosition("init");}
+
     public void movePlace() {
         armr.setPosition("place");
         arml.setPosition("place");
         pivot.setPosition("place");
+    }
+    public void moveRetract() {
+        linkage.setPosition("init");
     }
 
     public void moveExtend(){
@@ -120,21 +133,35 @@ public class Outtake {
 
     public void update(){
         switch(currentOuttakeState) {
+            case neutral:
+                break;
             case init:
+                moveRetract();
                 moveInit();
+                moveGrab();
                 break;
 
             case grab:
 
                 moveGrab();
                 break;
-            case specimen:
-                time.reset();
+            case sample:
+
                 moveGrab();
                 movePlace();
-                pausetimer.addPause(1);
+                if(!sub.pause(500))return;
                 moveExtend();
+                sub.reset();
                 break;
+            case reset:
+                moveRelease();
+                moveRetract();
+                if(!sub.pause(500))return;
+                moveInit();
+                sub.reset();
+                break;
+
+
         }
     }
 }

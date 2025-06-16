@@ -75,10 +75,28 @@ public class PMotor implements DcMotorEx {
         return false;
     }
 
-    @Override
     public int getCurrentPosition() {
+
+
+
         return motor.getCurrentPosition();
     }
+
+    public double getCurrentCalculatedPosition(double diameter, double CPR, double ratio) {
+
+        double countsPerRev = CPR * ratio; //usually 28
+        double d = diameter; //MM
+        double circ = Math.PI * d;
+
+        double position = motor.getCurrentPosition();
+        double revolutions = position / countsPerRev;
+
+        double distance = circ * revolutions;
+
+
+        return distance;
+    }
+
 
     @Override
     public void setMode(RunMode mode) {

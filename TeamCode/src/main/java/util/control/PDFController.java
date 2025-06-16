@@ -27,6 +27,11 @@ public class PDFController {
 
     public double calculate(double setpoint, double current) {
 
+//        if (setpoint == 0){
+//            Kf = 0;
+//        }
+
+
         error = setpoint - current;
         der = (error - lError) / time.seconds();
 
