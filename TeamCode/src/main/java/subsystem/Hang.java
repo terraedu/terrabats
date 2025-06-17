@@ -15,7 +15,7 @@ public class Hang {
     public CRServo hangr;
 
 
-    public enum hangState{
+    public enum hangState {
         stationary,
         out,
         in
@@ -36,35 +36,37 @@ public class Hang {
     }
 
 
-    public void setPower(double power){
+    public void setPower(double power) {
         hangl.setPower(power);
         hangr.setPower(power);
     }
 
 
-    public void startHang(){
+    public void startHang() {
         hangl.setPower(1);
         hangr.setPower(1);
     }
 
-    public void stopHang(){
+    public void stopHang() {
         hangl.setPower(0);
         hangr.setPower(0);
     }
 
-    public void reverseHang(){
+    public void reverseHang() {
         hangl.setPower(-1);
         hangr.setPower(-1);
     }
 
 
-    public void setState(hangState newState){
+    public void setState(hangState newState) {
         this.currentHangState = newState;
     }
-    public String currentstate;
-    public void update(){
 
-        switch(currentHangState) {
+    public String currentstate;
+
+    public void update() {
+
+        switch (currentHangState) {
             case stationary:
                 stopHang();
                 currentstate = "stationary";

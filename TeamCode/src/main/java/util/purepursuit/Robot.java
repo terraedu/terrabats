@@ -8,7 +8,7 @@ public class Robot {
     /**
      * Creates a robot simulation
      */
-    public Robot(){
+    public Robot() {
         worldXPosition = 50;
         worldYPosition = 50;
         worldAngleRad = Math.toRadians(45);
@@ -23,11 +23,11 @@ public class Robot {
     public static double worldYPosition;
     public static double worldAngleRad;
 
-    public double getXPos(){
+    public double getXPos() {
         return worldXPosition;
     }
 
-    public double getYPos(){
+    public double getYPos() {
         return worldYPosition;
     }
 
@@ -43,20 +43,21 @@ public class Robot {
     /**
      * Calculates the change in position of the robot
      */
-    public void update(){
+    public void update() {
         //get the current time
         long currentTimeMillis = System.currentTimeMillis();
         //get the elapsed time
-        double elapsedTime = (currentTimeMillis - lastUpdateTime)/1000.0;
+        double elapsedTime = (currentTimeMillis - lastUpdateTime) / 1000.0;
         //remember the lastUpdateTime
         lastUpdateTime = currentTimeMillis;
-        if(elapsedTime > 1){return;}
-
+        if (elapsedTime > 1) {
+            return;
+        }
 
 
         //increment the positions
-        double totalSpeed = Math.hypot(xSpeed,ySpeed);
-        double angle = Math.atan2(ySpeed,xSpeed) - Math.toRadians(90);
+        double totalSpeed = Math.hypot(xSpeed, ySpeed);
+        double angle = Math.atan2(ySpeed, xSpeed) - Math.toRadians(90);
         double outputAngle = worldAngleRad + angle;
         worldXPosition += totalSpeed * Math.cos(outputAngle) * elapsedTime * 1000 * 0.2;
         worldYPosition += totalSpeed * Math.sin(outputAngle) * elapsedTime * 1000 * 0.2;
@@ -64,9 +65,9 @@ public class Robot {
         worldAngleRad += Constants.movement_heading * elapsedTime * 20 / (2 * Math.PI);
 
 
-        xSpeed += Range.clip((Constants.movement_x-xSpeed)/0.2,-1,1) * elapsedTime;
-        ySpeed += Range.clip((Constants.movement_y-ySpeed)/0.2,-1,1) * elapsedTime;
-        turnSpeed += Range.clip((Constants.movement_heading-turnSpeed)/0.2,-1,1) * elapsedTime;
+        xSpeed += Range.clip((Constants.movement_x - xSpeed) / 0.2, -1, 1) * elapsedTime;
+        ySpeed += Range.clip((Constants.movement_y - ySpeed) / 0.2, -1, 1) * elapsedTime;
+        turnSpeed += Range.clip((Constants.movement_heading - turnSpeed) / 0.2, -1, 1) * elapsedTime;
 
 
 //        SpeedOmeter.yDistTraveled += ySpeed * elapsedTime * 1000;
@@ -80,4 +81,5 @@ public class Robot {
         turnSpeed *= 1.0 - (elapsedTime);
 
 
-    }}
+    }
+}

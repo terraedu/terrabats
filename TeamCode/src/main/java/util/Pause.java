@@ -11,14 +11,13 @@ public class Pause {
     public boolean repeat;
     public boolean proceed;
 
-    public boolean pause(double ms){
-        proceed = false;
+    public boolean pause(double ms) {
         proceed = time.milliseconds() >= ms;
-        if(!repeat) {
-        time.reset();
-        repeat = true;
-        return false;
-        }else if(proceed && (time.milliseconds() >= ms)){
+        if (!repeat) {
+            time.reset();
+            repeat = true;
+            return false;
+        } else if (proceed && (time.milliseconds() >= ms)) {
             time.reset();
             repeat = false;
             return true;
@@ -27,15 +26,15 @@ public class Pause {
         return false;
     }
 
-    public boolean getProceed(){
+    public boolean getProceed() {
         return proceed;
     }
 
-    public double getTime(){
+    public double getTime() {
         return time.milliseconds();
     }
-    public void reset(){
-        proceed = false;
+
+    public void reset() {
         repeat = false;
         time.reset();
     }

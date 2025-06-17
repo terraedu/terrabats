@@ -1,7 +1,6 @@
 package util.control;
 
 
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -35,21 +34,18 @@ public class TerraDrive {
     private final PDFDrive hPDF = new PDFDrive(0, 0);
 
 
-
-    public void init(HardwareMap hardwareMap){
-        fl  = hardwareMap.get(DcMotor.class, "fl");
+    public void init(HardwareMap hardwareMap) {
+        fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
-        bl  = hardwareMap.get(DcMotor.class, "bl");
+        bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
-        odo = hardwareMap.get(GoBildaPinpointDriver.class,"odo");
+        odo = hardwareMap.get(GoBildaPinpointDriver.class, "odo");
 
         //TODO FIX OFFSETS
         odo.setOffsets(0, 0);
         odo.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odo.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odo.resetPosAndIMU();
-
-
 
 
         fr.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -87,6 +83,7 @@ public class TerraDrive {
             return h;
         }
     }
+
     private double nanX(double x) {
         if (Double.isNaN(x)) {
             counterX++;
@@ -99,6 +96,7 @@ public class TerraDrive {
             return x;
         }
     }
+
     private double nanY(double y) {
         if (Double.isNaN(y)) {
             counterY++;
@@ -112,7 +110,7 @@ public class TerraDrive {
         }
     }
 
-    public void goTo(double xTarget, double yTarget, double hTarget){
+    public void goTo(double xTarget, double yTarget, double hTarget) {
 
         this.xTarget = xTarget;
         this.yTarget = yTarget;
@@ -120,7 +118,7 @@ public class TerraDrive {
     }
 
 
-    public void update(){
+    public void update() {
         odo.update();
         Pose2D pos = odo.getPosition();
 
@@ -131,8 +129,8 @@ public class TerraDrive {
         x = xPDF.calculate(xTarget, xCurrent);
         y = yPDF.calculate(yTarget, yCurrent);
         h = hPDF.calculateH(hTarget, hCurrent);
-        xDist = xTarget-xCurrent;
-        yDist = yTarget-yCurrent;
+        xDist = xTarget - xCurrent;
+        yDist = yTarget - yCurrent;
         angle = Math.atan2(xDist, yDist);
 
         double xRot = x * Math.cos(angle) - y * Math.sin(angle);
@@ -146,25 +144,28 @@ public class TerraDrive {
 
     }
 
-    public double getXPower(){
+    public double getXPower() {
         return x;
     }
-    public double getYPower(){
+
+    public double getYPower() {
         return y;
     }
-    public double getHPower(){
+
+    public double getHPower() {
         return h;
     }
+
     public Pose2D getVelocity() {
         return odo.getVelocity();
     }
 
-    public double getXRot(){
+    public double getXRot() {
         return getXRot();
     }
 
 
-    public void stop(){
+    public void stop() {
         fl.setPower(0);
         bl.setPower(0);
         fr.setPower(0);

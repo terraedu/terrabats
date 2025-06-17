@@ -43,10 +43,10 @@ public class GamepadHandler {
         x_down = gamepad.x;
         y = gamepad.y && !y_down;
         y_down = gamepad.y;
-        right_trigger = (gamepad.right_trigger>0.01) && !right_trigger_down;
-        right_trigger_down = (gamepad.right_trigger>0.01);
-        left_trigger = (gamepad.left_trigger>0.01) && !left_trigger_down;
-        left_trigger_down = (gamepad.left_trigger>0.01);
+        right_trigger = (gamepad.right_trigger > 0.01) && !right_trigger_down;
+        right_trigger_down = (gamepad.right_trigger > 0.01);
+        left_trigger = (gamepad.left_trigger > 0.01) && !left_trigger_down;
+        left_trigger_down = (gamepad.left_trigger > 0.01);
         left_bumper = gamepad.left_bumper && !left_bumper_down;
         left_bumper_down = gamepad.left_bumper;
         right_bumper = gamepad.right_bumper && !right_bumper_down;
@@ -60,8 +60,6 @@ public class GamepadHandler {
 
         dpad_up_toggle = gamepad.dpad_up;
         dpad_down_toggle = gamepad.dpad_down;
-
-
 
 
     }

@@ -8,7 +8,9 @@ public class CServo implements CRServo {
     private CRServo crservo;
 
 
-    public CServo(CRServo crservo) { this.crservo = crservo;    }
+    public CServo(CRServo crservo) {
+        this.crservo = crservo;
+    }
 
     @Override
     public ServoController getController() {

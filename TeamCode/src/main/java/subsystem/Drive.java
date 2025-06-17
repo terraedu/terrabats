@@ -10,9 +10,9 @@ public class Drive {
     public DcMotor fr, br, fl, bl;
 
     public void init(HardwareMap hardwareMap) {
-        fl  = hardwareMap.get(DcMotor.class, "fl");
+        fl = hardwareMap.get(DcMotor.class, "fl");
         fr = hardwareMap.get(DcMotor.class, "fr");
-        bl  = hardwareMap.get(DcMotor.class, "bl");
+        bl = hardwareMap.get(DcMotor.class, "bl");
         br = hardwareMap.get(DcMotor.class, "br");
 
         fr.setDirection(DcMotorSimple.Direction.FORWARD);

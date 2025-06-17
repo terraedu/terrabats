@@ -9,17 +9,21 @@ public class Colour {
     private ColorRangeSensor colourSensor;
 
 
-
-    public int getRed(){
+    public int getRed() {
         return colourSensor.red();
     }
-    public int getGreen(){
+
+    public int getGreen() {
         return colourSensor.green();
     }
-    public int getBlue(){
+
+    public int getBlue() {
         return colourSensor.blue();
     }
-    public double getDistance() { return colourSensor.getDistance(DistanceUnit.CM); }
+
+    public double getDistance() {
+        return colourSensor.getDistance(DistanceUnit.CM);
+    }
 
 
 }

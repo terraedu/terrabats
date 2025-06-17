@@ -22,7 +22,7 @@ import subsystem.Intake;
 import subsystem.Outtake;
 import util.Pause;
 
-@TeleOp(name="\uD83D\uDE08", group="teleop")
+@TeleOp(name = "\uD83D\uDE08", group = "teleop")
 public class TerraBlue extends LinearOpMode {
 
     enum robotStatus {
@@ -80,18 +80,18 @@ public class TerraBlue extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if(gph1.x){
+            if (gph1.x) {
                 outtake.setState(Outtake.outtakeState.init);
             }
             /**
              * OUTTAKE
              */
-            if(gph1.left_bumper && status == robotStatus.driving){
+            if (gph1.left_bumper && status == robotStatus.driving) {
 //                outtake.goTo(400);
                 outtake.setState(sample);
                 status = robotStatus.placing;
 
-            }else if(gph1.left_bumper && status == robotStatus.placing){
+            } else if (gph1.left_bumper && status == robotStatus.placing) {
                 outtake.setState(reset);
                 status = robotStatus.driving;
 
@@ -101,35 +101,41 @@ public class TerraBlue extends LinearOpMode {
             /**
              * INTAKE
              */
-            if(gph1.right_trigger && status == robotStatus.driving) {
+            if (gph1.right_trigger && status == robotStatus.driving) {
                 time.reset();
                 intake.goTo(0);
-                if(time.seconds() == 1) {
+                if (time.seconds() == 1) {
                     intake.setState(hover);
                 }
                 status = robotStatus.intaking;
-            }
-            else if (gph1.right_trigger && status == robotStatus.intaking) {
+            } else if (gph1.right_trigger && status == robotStatus.intaking) {
                 time.reset();
 
+            } else if (gph1.right_trigger && status == robotStatus.placing) {
             }
-            else if (gph1.right_trigger && status == robotStatus.placing) {        }
 
             /**
              * HANG
              * the reason we use normal stock sdk gamepad 1 here is because we need it to be a toggle and i cant be bothered
              */
-            while(gamepad1.dpad_up){ hang.startHang();}
-            while(gamepad1.dpad_down){hang.reverseHang();}
-            while(gamepad1.dpad_right){hang.stopHang();}
+            while (gamepad1.dpad_up) {
+                hang.startHang();
+            }
+            while (gamepad1.dpad_down) {
+                hang.reverseHang();
+            }
+            while (gamepad1.dpad_right) {
+                hang.stopHang();
+            }
 
             //THIS CAN'T BE THERE AT THE SAME TIME AS THE LIFT
             drive.move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 //        intake.update();
             telemetry.addData("counter", outtake.sub.getTime());
-            System.out.println(outtake.sub.getProceed());
-            System.out.println(outtake.sub.getTime());
-
+            if(outtake.sub.getProceed()) {
+//                System.out.println(outtake.sub.getTime());
+                System.out.println(outtake.sub.getProceed());
+            }
 //            Log.v(INFO, "is working");
             telemetry.addData("out", outtake.getOut());
             telemetry.addData("servorPower", hang.hangr.getPower());

@@ -13,7 +13,7 @@ public class CurvePoint {
     public double slowdownRad;
     public double slowdownHeadingAmount;
 
-    public CurvePoint(double x, double y, double speed, double headingSpeed, double followDist, double slowdownRad, double slowdownHeadingAmount){
+    public CurvePoint(double x, double y, double speed, double headingSpeed, double followDist, double slowdownRad, double slowdownHeadingAmount) {
 
         this.x = x;
         this.y = y;
@@ -26,7 +26,7 @@ public class CurvePoint {
     }
 
 
-    public CurvePoint(CurvePoint thisPoint){
+    public CurvePoint(CurvePoint thisPoint) {
 
         x = thisPoint.x;
         y = thisPoint.y;
@@ -39,12 +39,12 @@ public class CurvePoint {
 
     }
 
-    public Point toPoint(){
-        return new Point(x,y);
+    public Point toPoint() {
+        return new Point(x, y);
     }
 
 
-    public void setPoint(Point point){
+    public void setPoint(Point point) {
         x = point.x;
         y = point.y;
     }

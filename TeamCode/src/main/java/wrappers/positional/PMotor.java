@@ -78,7 +78,6 @@ public class PMotor implements DcMotorEx {
     public int getCurrentPosition() {
 
 
-
         return motor.getCurrentPosition();
     }
 

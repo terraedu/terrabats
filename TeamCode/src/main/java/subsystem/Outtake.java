@@ -20,10 +20,10 @@ public class Outtake {
 
     public Pause sub = new Pause();
 
-    private final PDFController oPDF = new PDFController(0.0000, 0.0000,-0.15);
+    private final PDFController oPDF = new PDFController(0.0000, 0.0000, -0.15);
 
 
-    public enum outtakeState{
+    public enum outtakeState {
         init,
         grab,
         sample,
@@ -34,7 +34,7 @@ public class Outtake {
 
     outtakeState currentOuttakeState;
 
-    public void setState(outtakeState newState){
+    public void setState(outtakeState newState) {
         this.currentOuttakeState = newState;
     }
 
@@ -71,36 +71,34 @@ public class Outtake {
 
         claw.addPosition("grab", 0.4);
 
-        arml.addPosition("transfer", 0 );
+        arml.addPosition("transfer", 0);
         armr.addPosition("transfer", 0);
 
         pivot.addPosition("place", 0.15);
         linkage.addPosition("place", 0.55);
-        arml.addPosition("place", .6 );
+        arml.addPosition("place", .6);
         armr.addPosition("place", .6);
 
 
     }
 
 
-
-
-    public void goTo(double target){
+    public void goTo(double target) {
         this.oTarget = target;
     }
 
-    public void pdfUpdate(){
+    public void pdfUpdate() {
         out = -(oPDF.calculate(oTarget, liftl.getCurrentPosition()));
         liftl.setPower(out);
         liftr.setPower(out);
 
     }
 
-    public double getOut(){
+    public double getOut() {
         return out;
     }
 
-    public void setPower(double power){
+    public void setPower(double power) {
         liftl.setPower(power);
         liftr.setPower(power);
     }
@@ -116,23 +114,26 @@ public class Outtake {
         claw.setPosition("grab");
     }
 
-    public void moveRelease(){ claw.setPosition("init");}
+    public void moveRelease() {
+        claw.setPosition("init");
+    }
 
     public void movePlace() {
         armr.setPosition("place");
         arml.setPosition("place");
         pivot.setPosition("place");
     }
+
     public void moveRetract() {
         linkage.setPosition("init");
     }
 
-    public void moveExtend(){
+    public void moveExtend() {
         linkage.setPosition("place");
     }
 
-    public void update(){
-        switch(currentOuttakeState) {
+    public void update() {
+        switch (currentOuttakeState) {
             case neutral:
                 break;
             case init:
@@ -149,14 +150,15 @@ public class Outtake {
 
                 moveGrab();
                 movePlace();
-                if(!sub.pause(500))return;
+                sub.getTime();
+                if (!sub.pause(500)) return;
                 moveExtend();
                 sub.reset();
                 break;
             case reset:
                 moveRelease();
                 moveRetract();
-                if(!sub.pause(500))return;
+                if (!sub.pause(500)) return;
                 moveInit();
                 sub.reset();
                 break;

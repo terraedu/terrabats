@@ -20,7 +20,7 @@ import mathutil.MathFunctions;
 
 public class Executor {
 
-    public static void followCurve(ArrayList<CurvePoint> allPoints, double followAngle){
+    public static void followCurve(ArrayList<CurvePoint> allPoints, double followAngle) {
 //        for(int i = 0; i < allPoints.size() - 1; i++)
         CurvePoint followMe = getFollowPointPath(allPoints, new Point(worldXPosition, worldYPosition), allPoints.get(0).followDist);
 
@@ -28,25 +28,25 @@ public class Executor {
 
     }
 
-    public static CurvePoint getFollowPointPath(ArrayList<CurvePoint> pathPoints, Point robotPos, double followRadius){
+    public static CurvePoint getFollowPointPath(ArrayList<CurvePoint> pathPoints, Point robotPos, double followRadius) {
 
         CurvePoint followMe = new CurvePoint(pathPoints.get(0));
 
-        for(int i = 0; i < pathPoints.size() - 1; i ++){
+        for (int i = 0; i < pathPoints.size() - 1; i++) {
 
             CurvePoint startLine = pathPoints.get(i);
-            CurvePoint endLine = pathPoints.get(i+1);
+            CurvePoint endLine = pathPoints.get(i + 1);
 
             ArrayList<Point> intersections = lineCircleIntersection(robotPos, followRadius, startLine.toPoint(), endLine.toPoint());
 
             double closestAngle = 10000000;
 
-            for(Point thisIntersection : intersections){
+            for (Point thisIntersection : intersections) {
 
                 double angle = Math.atan2(thisIntersection.y - worldYPosition, thisIntersection.x - worldXPosition);
                 double deltaAngle = Math.abs(MathFunctions.angleWrap(angle - worldAngleRad));
 
-                if(deltaAngle < closestAngle){
+                if (deltaAngle < closestAngle) {
 
                     closestAngle = deltaAngle;
                     followMe.setPoint(thisIntersection);
@@ -62,12 +62,11 @@ public class Executor {
     }
 
 
+    public static void goToPosition(double x, double y, double h, double speed, double headingSpeed) {
 
-    public static void goToPosition(double x, double y, double h, double speed, double headingSpeed){
+        double distanceToTarget = Math.hypot(x - worldXPosition, y - worldYPosition);
 
-        double distanceToTarget = Math.hypot(x-worldXPosition, y-worldYPosition);
-
-        double absoluteAngleToTarget = Math.atan2(y - worldYPosition, x-worldXPosition);
+        double absoluteAngleToTarget = Math.atan2(y - worldYPosition, x - worldXPosition);
 
         double relativeAngleToPoint = angleWrap(absoluteAngleToTarget - (worldAngleRad - Math.toRadians(90)));
 
@@ -81,9 +80,9 @@ public class Executor {
         movement_y = movementYPower + speed;
 
         double relativeHeadingAngle = relativeAngleToPoint - Math.toRadians(180) - h;
-        movement_heading = Range.clip(relativeHeadingAngle/Math.toRadians(30), -1,1) * headingSpeed;
+        movement_heading = Range.clip(relativeHeadingAngle / Math.toRadians(30), -1, 1) * headingSpeed;
 
-        if(distanceToTarget < 10) {
+        if (distanceToTarget < 10) {
             movement_heading = 0;
         }
 

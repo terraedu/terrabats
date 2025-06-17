@@ -10,21 +10,23 @@ import wrappers.positional.PServo;
 public class Intake {
     double iTarget;
 
-    private final PDFController iPDF = new PDFController(0.0, 0.0,0);
+    private final PDFController iPDF = new PDFController(0.0, 0.0, 0);
 
 
     PServo ilink, latch;
     PMotor im, extendo;
 
-    public enum intakeState{
+    public enum intakeState {
         init,
         grab,
         hover
-    };
+    }
+
+    ;
 
     intakeState currentIntakeState;
 
-    public void setState(intakeState newState){
+    public void setState(intakeState newState) {
         this.currentIntakeState = newState;
     }
 
@@ -53,20 +55,20 @@ public class Intake {
 //        ilink.setPosition("init");
     }
 
-    public void goTo(double target){
+    public void goTo(double target) {
         this.iTarget = target;
     }
 
-    public void pdfUpdate(){
+    public void pdfUpdate() {
         double out = iPDF.calculate(iTarget, extendo.getCurrentPosition());
         extendo.setPower(out);
     }
 
-    public void update(){
-        switch(currentIntakeState) {
+    public void update() {
+        switch (currentIntakeState) {
             case init:
                 moveInit();
-            break;
+                break;
 
             case hover:
                 break;
@@ -77,5 +79,5 @@ public class Intake {
             default:
                 moveInit();
         }
-   }
+    }
 }

@@ -56,21 +56,19 @@ public class PDFDrive {
         return out;
 
 
-
     }
 
     public double calculateH(double setpoint, double current) {
 
-       hError = Math.toDegrees(angleWrap(Math.toRadians(setpoint - current)));
+        hError = Math.toDegrees(angleWrap(Math.toRadians(setpoint - current)));
 
-       der = (hError - lhError) / time.seconds();
-       out = (Kp * error) + (Kd * der) + Kf;
+        der = (hError - lhError) / time.seconds();
+        out = (Kp * error) + (Kd * der) + Kf;
 
-       lhError = hError;
-       time.reset();
+        lhError = hError;
+        time.reset();
 
         return out;
-
 
 
     }
