@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class ColorSensor {
+public class ColourSensor {
 
     private ColorRangeSensor colourSensor;
     public int getRed() {
