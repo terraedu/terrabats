@@ -1,7 +1,6 @@
 package org.terraedu.command.auto;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -10,6 +9,7 @@ import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.util.Pose;
 import org.terraedu.subsystem.PinpointLocalizer;
+import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 
 public class GotoCommand extends CommandBase {
@@ -57,9 +57,9 @@ public class GotoCommand extends CommandBase {
         yControl.setSetPoint(target.y);
         hControl.setSetPoint(target.getAngle());
 
-        double x = xControl.calculate(current.x);
-        double y = yControl.calculate(current.y);
-        double heading = hControl.calculate(current.getAngle());
+        double x = xControl.calculateAngleWrap(current.x);
+        double y = yControl.calculateAngleWrap(current.y);
+        double heading = hControl.calculateAngleWrap(current.getAngle());
 
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
 
