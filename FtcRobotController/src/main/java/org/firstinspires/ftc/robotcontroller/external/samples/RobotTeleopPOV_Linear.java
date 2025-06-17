@@ -127,7 +127,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
             leftDrive.setPower(left);
             rightDrive.setPower(right);
 
-            // Use gamepad left & right Bumpers to open and close the claw
+            // Use org.terraedu.gamepad left & right Bumpers to open and close the claw
             if (gamepad1.right_bumper)
                 clawOffset += CLAW_SPEED;
             else if (gamepad1.left_bumper)
@@ -138,7 +138,7 @@ public class RobotTeleopPOV_Linear extends LinearOpMode {
             leftClaw.setPosition(MID_SERVO + clawOffset);
             rightClaw.setPosition(MID_SERVO - clawOffset);
 
-            // Use gamepad buttons to move arm up (Y) and down (A)
+            // Use org.terraedu.gamepad buttons to move arm up (Y) and down (A)
             if (gamepad1.y)
                 leftArm.setPower(ARM_UP_POWER);
             else if (gamepad1.a)

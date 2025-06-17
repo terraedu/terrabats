@@ -327,12 +327,12 @@ public class UtilityOctoQuadConfigMenu extends LinearOpMode
 
         /**
          * Call this from inside your loop to put the current menu state into
-         * telemetry, and process gamepad inputs for navigating the menu
-         * @param gamepad the gamepad you want to use to navigate the menu
+         * telemetry, and process org.terraedu.gamepad inputs for navigating the menu
+         * @param gamepad the org.terraedu.gamepad you want to use to navigate the menu
          */
         public void loop(Gamepad gamepad)
         {
-            // Capture current state of the gamepad buttons we care about;
+            // Capture current state of the org.terraedu.gamepad buttons we care about;
             // We can only look once or we risk a race condition
             boolean dpadUp = gamepad.dpad_up;
             boolean dpadDn = gamepad.dpad_down;
@@ -442,7 +442,7 @@ public class UtilityOctoQuadConfigMenu extends LinearOpMode
             lbPrev = lb;
 
             // Start building the text display.
-            // First, we add the static directions for gamepad operation
+            // First, we add the static directions for org.terraedu.gamepad operation
             StringBuilder builder = new StringBuilder();
             builder.append("<font color='#119af5' face=monospace>");
             builder.append("Navigate items.....dpad up/down\n")

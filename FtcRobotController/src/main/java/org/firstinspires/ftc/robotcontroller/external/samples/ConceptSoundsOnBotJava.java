@@ -98,14 +98,14 @@ public class ConceptSoundsOnBotJava extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
 
-            // say Silver each time gamepad X is pressed (This sound is a resource)
+            // say Silver each time org.terraedu.gamepad X is pressed (This sound is a resource)
             if (silverFound && (isX = gamepad1.x) && !wasX) {
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, silverFile);
                 telemetry.addData("Playing", "Silver File");
                 telemetry.update();
             }
 
-            // say Gold each time gamepad B is pressed  (This sound is a resource)
+            // say Gold each time org.terraedu.gamepad B is pressed  (This sound is a resource)
             if (goldFound && (isB = gamepad1.b) && !WasB) {
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, goldFile);
                 telemetry.addData("Playing", "Gold File");

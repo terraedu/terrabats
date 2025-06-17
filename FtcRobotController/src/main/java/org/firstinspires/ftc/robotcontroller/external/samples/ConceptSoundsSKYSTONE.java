@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /*
  * This OpMode demonstrates how to play one of the several SKYSTONE/Star Wars sounds loaded into the SDK.
- * It does this by creating a simple "chooser" controlled by the gamepad Up Down buttons.
+ * It does this by creating a simple "chooser" controlled by the org.terraedu.gamepad Up Down buttons.
  * This code also prevents sounds from stacking up by setting a "playing" flag, which is cleared when the sound finishes playing.
  *
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.

@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * This OpMode demonstrates use of the REV Robotics Blinkin LED Driver.
  * AUTO mode cycles through all of the patterns.
  * MANUAL mode allows the user to manually change patterns using the
- * left and right bumpers of a gamepad.
+ * left and right bumpers of a org.terraedu.gamepad.
  *
  * Configure the driver on a servo port, and name it "blinkin".
  *
@@ -58,7 +58,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     private final static int LED_PERIOD = 10;
 
     /*
-     * Rate limit gamepad button presses to every 500ms.
+     * Rate limit org.terraedu.gamepad button presses to every 500ms.
      */
     private final static int GAMEPAD_LOCKOUT = 500;
 
@@ -101,7 +101,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
             doAutoDisplay();
         } else {
             /*
-             * MANUAL mode: Nothing to do, setting the pattern as a result of a gamepad event.
+             * MANUAL mode: Nothing to do, setting the pattern as a result of a org.terraedu.gamepad event.
              */
         }
     }
@@ -109,7 +109,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     /*
      * handleGamepad
      *
-     * Responds to a gamepad button press.  Demonstrates rate limiting for
+     * Responds to a org.terraedu.gamepad button press.  Demonstrates rate limiting for
      * button presses.  If loop() is called every 10ms and and you don't rate
      * limit, then any given button press may register as multiple button presses,
      * which in this application is problematic.

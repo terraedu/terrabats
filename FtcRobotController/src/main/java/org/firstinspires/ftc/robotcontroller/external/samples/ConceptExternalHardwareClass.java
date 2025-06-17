@@ -98,7 +98,7 @@ public class ConceptExternalHardwareClass extends LinearOpMode {
             // Combine drive and turn for blended motion. Use RobotHardware class
             robot.driveRobot(drive, turn);
 
-            // Use gamepad left & right Bumpers to open and close the claw
+            // Use org.terraedu.gamepad left & right Bumpers to open and close the claw
             // Use the SERVO constants defined in RobotHardware class.
             // Each time around the loop, the servos will move by a small amount.
             // Limit the total offset to half of the full travel range
@@ -111,7 +111,7 @@ public class ConceptExternalHardwareClass extends LinearOpMode {
             // Move both servos to new position.  Use RobotHardware class
             robot.setHandPositions(handOffset);
 
-            // Use gamepad buttons to move arm up (Y) and down (A)
+            // Use org.terraedu.gamepad buttons to move arm up (Y) and down (A)
             // Use the MOTOR constants defined in RobotHardware class.
             if (gamepad1.y)
                 arm = robot.ARM_UP_POWER;

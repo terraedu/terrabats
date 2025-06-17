@@ -49,10 +49,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * There will be some variation in the values measured depending on the specific sensor you are using.
  *
  * You can increase the gain (a multiplier to make the sensor report higher values) by holding down
- * the A button on the gamepad, and decrease the gain by holding down the B button on the gamepad.
+ * the A button on the org.terraedu.gamepad, and decrease the gain by holding down the B button on the org.terraedu.gamepad.
  *
  * If the color sensor has a light which is controllable from software, you can use the X button on
- * the gamepad to toggle the light on and off. The REV sensors don't support this, but instead have
+ * the org.terraedu.gamepad to toggle the light on and off. The REV sensors don't support this, but instead have
  * a physical switch on them to turn the light on and off, beginning with REV Color Sensor V2.
  *
  * If the color sensor also supports short-range distance measurements (usually via an infrared
@@ -126,7 +126,7 @@ public class SensorColor extends LinearOpMode {
     final float[] hsvValues = new float[3];
 
     // xButtonPreviouslyPressed and xButtonCurrentlyPressed keep track of the previous and current
-    // state of the X button on the gamepad
+    // state of the X button on the org.terraedu.gamepad
     boolean xButtonPreviouslyPressed = false;
     boolean xButtonCurrentlyPressed = false;
 
@@ -147,10 +147,10 @@ public class SensorColor extends LinearOpMode {
     // Loop until we are asked to stop
     while (opModeIsActive()) {
       // Explain basic gain information via telemetry
-      telemetry.addLine("Hold the A button on gamepad 1 to increase gain, or B to decrease it.\n");
+      telemetry.addLine("Hold the A button on org.terraedu.gamepad 1 to increase gain, or B to decrease it.\n");
       telemetry.addLine("Higher gain values mean that the sensor will report larger numbers for Red, Green, and Blue, and Value\n");
 
-      // Update the gain value if either of the A or B gamepad buttons is being held
+      // Update the gain value if either of the A or B org.terraedu.gamepad buttons is being held
       if (gamepad1.a) {
         // Only increase the gain by a small amount, since this loop will occur multiple times per second.
         gain += 0.005;
@@ -165,7 +165,7 @@ public class SensorColor extends LinearOpMode {
       // not during the loop)
       colorSensor.setGain(gain);
 
-      // Check the status of the X button on the gamepad
+      // Check the status of the X button on the org.terraedu.gamepad
       xButtonCurrentlyPressed = gamepad1.x;
 
       // If the button state is different than what it was, then act

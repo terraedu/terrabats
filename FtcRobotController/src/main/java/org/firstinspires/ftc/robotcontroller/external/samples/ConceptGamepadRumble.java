@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Note: Some gamepads "rumble" better than others.
  *   The Xbox & PS4 have a left (rumble1) and right (rumble2) rumble motor.
  *   These two gamepads have two distinct rumble modes: Large on the left, and small on the right
- *   The Etpark gamepad may only respond to rumble1, and may only run at full power.
- *   The Logitech F310 gamepad does not have *any* rumble ability.
+ *   The Etpark org.terraedu.gamepad may only respond to rumble1, and may only run at full power.
+ *   The Logitech F310 org.terraedu.gamepad does not have *any* rumble ability.
  *
  *   Moral:  You should use this sample to experiment with your specific gamepads to explore their rumble features.
  *
@@ -60,7 +60,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   4) Rumble on non-overlapping mechanical actions. e.g. arm fully-extended or fully-retracted.
  *   5) Use isRumbling() to hold off on a new rumble if one is already in progress.
  *
- * The examples shown here are representstive of how to invoke a gamepad rumble.
+ * The examples shown here are representstive of how to invoke a org.terraedu.gamepad rumble.
  * It is assumed that these will be modified to suit the specific robot and team strategy needs.
  *
  * ########   Read the telemetry display on the Driver Station Screen for instructions.   ######
@@ -74,7 +74,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *          Note that this approach MUST include a way to turn OFF the rumble when the button is released.
  *
  * Ex 3)    This example shows a simple way to trigger a 3-blip sequence.  In this case it is
- *          triggered by the gamepad A (Cross) button, but it could be any sensor, like a touch or light sensor.
+ *          triggered by the org.terraedu.gamepad A (Cross) button, but it could be any sensor, like a touch or light sensor.
  *          Note that this code ensures that it only rumbles once when the input goes true.
  *
  * Ex 4)    This example shows how to trigger a single rumble when an input value gets over a certain value.
@@ -122,7 +122,7 @@ public class ConceptGamepadRumble extends LinearOpMode
         // Loop while monitoring buttons for rumble triggers
         while (opModeIsActive())
         {
-            // Read and save the current gamepad button states.
+            // Read and save the current org.terraedu.gamepad button states.
             boolean currentA = gamepad1.a ;
             boolean currentLB = gamepad1.left_bumper ;
 
@@ -181,7 +181,7 @@ public class ConceptGamepadRumble extends LinearOpMode
 
 
             // ----------------------------------------------------------------------------------------
-            // Example 4. Rumble once when gamepad right trigger goes above the THRESHOLD.
+            // Example 4. Rumble once when org.terraedu.gamepad right trigger goes above the THRESHOLD.
             // ----------------------------------------------------------------------------------------
             if (gamepad1.right_trigger > TRIGGER_THRESHOLD) {
                 if (!highLevel) {

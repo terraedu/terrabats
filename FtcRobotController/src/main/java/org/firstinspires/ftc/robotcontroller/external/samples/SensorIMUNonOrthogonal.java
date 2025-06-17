@@ -52,7 +52,7 @@ import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
  *   Roll value should INCREASE as the robot is tipped UP at the left side. (Rotation about Y)
  *   Yaw value should INCREASE as the robot is rotated Counter Clockwise. (Rotation about Z)
  *
- * The yaw can be reset (to zero) by pressing the Y button on the gamepad (Triangle on a PS4 controller)
+ * The yaw can be reset (to zero) by pressing the Y button on the org.terraedu.gamepad (Triangle on a PS4 controller)
  *
  * This specific sample DOES NOT assume that the Hub is mounted on one of the three orthogonal
  * planes (X/Y, X/Z or Y/Z) OR that the Hub has only been rotated in a range of 90 degree increments.

@@ -79,9 +79,9 @@ import java.util.Locale;
  *     4. SYS: This will usually reach 3 when the other items have also reached 3. If not, continue
  *             slowly moving the device though various axes until it does."</ol>
  *
- * To calibrate the IMU, run this sample OpMode with a gamepad attached to the driver station.
+ * To calibrate the IMU, run this sample OpMode with a org.terraedu.gamepad attached to the driver station.
  * Once the IMU has reached sufficient calibration as reported on telemetry, press the 'A'
- * button on the gamepad to write the calibration to a file. That file can then be indicated
+ * button on the org.terraedu.gamepad to write the calibration to a file. That file can then be indicated
  * later when running an OpMode which uses the IMU.
  *
  * Note: if your intended uses of the IMU do not include use of all its sensors (for example,
