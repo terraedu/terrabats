@@ -3,9 +3,13 @@ package org.terraedu.subsystem;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.util.control.PDFController;
 import org.terraedu.util.wrappers.WSubsystem;
+import org.terraedu.util.wrappers.sensors.OptimizedRevColorSensorV3;
+
+import java.util.function.BooleanSupplier;
 
 public class Intake extends WSubsystem {
 
@@ -13,6 +17,7 @@ public class Intake extends WSubsystem {
 
     private final PDFController controller = new PDFController(0.0, 0.0, 0);
     private final Motor.Encoder encoder;
+    private OptimizedRevColorSensorV3 color;
 
     double intakePower = 0.0;
 
@@ -22,7 +27,14 @@ public class Intake extends WSubsystem {
         HOVER;
     }
 
+    private boolean isReading = false;
+    private boolean hasColor = false;
+
+    public BooleanSupplier intakeSupplier = () -> hasColor;
+
+
     public Intake(Robot robot) {
+        this.color = new OptimizedRevColorSensorV3(robot.colorIntake);
         this.extension = robot.extendo;
         this.encoder = robot.extendoEncoder;
         position = encoder.getPosition();
@@ -47,6 +59,14 @@ public class Intake extends WSubsystem {
         }
     }
 
+    public BooleanSupplier getSupplier() {
+        return intakeSupplier;
+    }
+
+    public void setReading(boolean isReading) {
+        this.isReading = isReading;
+    }
+
     public void setTarget(double target) {
         this.target = target;
     }
@@ -63,6 +83,21 @@ public class Intake extends WSubsystem {
     @Override
     public void read() {
         position = encoder.getPosition();
+
+        if (isReading) {
+            OptimizedRevColorSensorV3.Color color = this.color.getColor();
+
+            switch (Globals.ALLIANCE) {
+                case RED -> hasColor = (
+                        color == OptimizedRevColorSensorV3.Color.RED ||
+                                color == OptimizedRevColorSensorV3.Color.YELLOW
+                );
+                case BLUE -> hasColor = (
+                        color == OptimizedRevColorSensorV3.Color.BLUE ||
+                                color == OptimizedRevColorSensorV3.Color.YELLOW
+                );
+            }
+        }
     }
 
     @Override

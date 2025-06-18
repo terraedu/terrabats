@@ -48,6 +48,7 @@ public class Robot extends WSubsystem {
     public Servo intakeLinkage, latch;
     public DcMotorEx intakeMotor, extendo;
 
+    public RevColorSensorV3 colorIntake;
     public Motor.Encoder extendoEncoder;
 
     //#endregion
@@ -144,6 +145,8 @@ public class Robot extends WSubsystem {
         // --= Intake =-- //
 
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
+
+        colorIntake = hardwareMap.get(RevColorSensorV3.class, "intakeColor");
 
         // --= Outtake =-- //
 
