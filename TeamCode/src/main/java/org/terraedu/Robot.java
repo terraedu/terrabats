@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -54,6 +55,7 @@ public class Robot extends WSubsystem {
     //#region Outtake
     public Servo claw, pivot, outtakeLinkage, armLeft, armRight;
     public DcMotorEx liftLeft, liftRight;
+    public RevColorSensorV3 colorDeposit;
     public Set<DcMotorEx> liftMotors = new HashSet<>();
 
     public Motor.Encoder liftEncoder;
@@ -165,6 +167,8 @@ public class Robot extends WSubsystem {
 
         liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        colorDeposit = hardwareMap.get(RevColorSensorV3.class, "depositColor");
 
         liftMotors.add(liftLeft);
         liftMotors.add(liftRight);

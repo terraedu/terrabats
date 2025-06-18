@@ -8,12 +8,14 @@ import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
 import org.terraedu.util.control.PDFController;
 import org.terraedu.util.wrappers.WSubsystem;
+import org.terraedu.util.wrappers.sensors.OptimizedRevColorSensorV3;
 
 import java.util.Set;
 
 public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
-    private Servo claw, pivot, linkage, armLeft, armRight;
+    private Servo pivot, linkage, armLeft, armRight;
+    private Claw claw;
     private final PDFController controller = new PDFController(0.0000, 0.0000, -0.15);
     private final Motor.Encoder encoder;
 
@@ -58,11 +60,9 @@ public class Deposit extends WSubsystem {
     private double position;
     private double target = 0.0;
 
-    private boolean clawClosed = false;
-
     public Deposit(Robot robot) {
         this.motors = robot.liftMotors;
-        this.claw = robot.claw;
+        this.claw = new Claw(new OptimizedRevColorSensorV3(robot.colorDeposit), robot.claw);
         this.pivot = robot.pivot;
         this.linkage = robot.outtakeLinkage;
         this.armLeft = robot.armLeft;
@@ -85,11 +85,15 @@ public class Deposit extends WSubsystem {
     }
 
     public void setClawClosed(boolean closed) {
-        this.clawClosed = closed;
+        this.claw.setClawState(closed);
     }
 
     public void setLinkage(LinkageState state) {
         linkage.setPosition(state.position);
+    }
+
+    public void setReading(boolean reading) {
+        this.claw.setReading(reading);
     }
 
     @Override
@@ -100,6 +104,7 @@ public class Deposit extends WSubsystem {
     @Override
     public void read() {
         position = encoder.getPosition();
+        claw.read();
     }
 
     @Override
@@ -110,11 +115,7 @@ public class Deposit extends WSubsystem {
             }
         }
 
-        if (clawClosed) {
-            claw.setPosition(DepositPositions.CLAW_GRAB.get());
-        } else {
-            claw.setPosition(DepositPositions.CLAW_GRAB.get());
-        }
+        claw.write();
     }
 
     @Override
