@@ -57,8 +57,8 @@ public class GotoCommand extends CommandBase {
         yControl.setSetPoint(target.y);
         hControl.setSetPoint(target.getAngle());
 
-        double x = xControl.calculateAngleWrap(current.x);
-        double y = yControl.calculateAngleWrap(current.y);
+        double x = xControl.calculate(current.x);
+        double y = yControl.calculate(current.y);
         double heading = hControl.calculateAngleWrap(current.getAngle());
 
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
