@@ -62,7 +62,7 @@ public class TeleopBlue extends CommandOpMode {
         ));
 
         driver.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(
-                () -> { robot.intake.setState(Intake.IntakeState.HOVER); }
+                () -> robot.intake.setState(Intake.IntakeState.HOVER)
         ));
 
         //#region Climb
@@ -146,7 +146,7 @@ public class TeleopBlue extends CommandOpMode {
     }
 
     public boolean isClimbTime() {
-        return timer.seconds() <= 90;
+        return timer.seconds() >= 90;
     }
 
     private double getIntakeSpeed() {
