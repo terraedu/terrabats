@@ -183,6 +183,8 @@ public class Robot extends WSubsystem {
 
         drive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
         hang = new Hang(this);
+        intake = new Intake(this);
+        deposit = new Deposit(this);
         localizer = new PinpointLocalizer(hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint"));
 
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
