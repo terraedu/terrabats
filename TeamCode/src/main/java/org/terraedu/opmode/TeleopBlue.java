@@ -5,8 +5,10 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
@@ -25,17 +27,18 @@ import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Alliance;
+import org.terraedu.util.RobotMode;
 
 @TeleOp(name = "Blue")
 public class TeleopBlue extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
-
+    public RobotMode status;
     private final Robot robot = Robot.getInstance();
 
-    GamepadEx driver;
-    GamepadEx gunner;
+    GamepadEx gph1;
+    GamepadEx gph2;
 
     private MecanumDrive drive;
 
@@ -43,54 +46,92 @@ public class TeleopBlue extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
+        status = RobotMode.DRIVING;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
 
-        driver = new GamepadEx(gamepad1);
-        gunner = new GamepadEx(gamepad2);
+        gph1 = new GamepadEx(gamepad1);
+        gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
 
         //#region Command Registrar
 
-        driver.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ParallelCommandGroup(
+        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new ConditionalCommand(
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                                new WaitCommand(250),
+                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
+                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
+                        ),
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> robot.deposit.setClawClosed((true))),
+                                new WaitCommand(250),
+                                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                                new InstantCommand(() -> status = RobotMode.DRIVING)
+                        ),
+                        () -> status == RobotMode.DRIVING)
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                new ConditionalCommand(
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
+                        ),
+                        new ParallelCommandGroup(
+                                new InstantCommand(() -> robot.deposit.setClawClosed((true))),
+                                new WaitCommand(250),
+                                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                                new InstantCommand(() -> status = RobotMode.DRIVING)
+                        ),
+                        () -> status == RobotMode.SPECIMEN)
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ParallelCommandGroup(
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT)
         ));
 
-        driver.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(
+        gph1.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(
                 () -> robot.intake.setState(Intake.IntakeState.HOVER)
         ));
 
         //#region Climb
 
-        Trigger climbTrigger = new Trigger(this::isClimbTime);
+//        Trigger climbTrigger = new Trigger(this::isClimbTime);
+//
+//        climbTrigger.whileActiveOnce(new SequentialCommandGroup(
+//                new InstantCommand(
+//                        () -> {
+//                            robot.hang.setState(Hang.HangState.OUT);
+//                        }
+//                ),
+//                //TODO(find out how long to make this)
+//                new WaitCommand(200),
+//                new InstantCommand(
+//                        () -> {
+//                            robot.hang.setState(Hang.HangState.STATIONARY);
+//                        }
+//                )
+//        ));
+//
+//        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenHeld(
+//                new InstantCommand(() -> {
+//                    robot.hang.setState(Hang.HangState.OUT);
+//                })
+//        );
 
-        climbTrigger.whileActiveOnce(new SequentialCommandGroup(
-                new InstantCommand(
-                        () -> {
-                            robot.hang.setState(Hang.HangState.OUT);
-                        }
-                ),
-                //TODO(find out how long to make this)
-                new WaitCommand(200),
-                new InstantCommand(
-                        () -> {
-                            robot.hang.setState(Hang.HangState.STATIONARY);
-                        }
-                )
-        ));
-
-        driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenHeld(
-                new InstantCommand(() -> {
-                    robot.hang.setState(Hang.HangState.OUT);
-                })
-        );
-
-        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenHeld(
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenHeld(
                 new InstantCommand(() -> {
                     robot.hang.setState(Hang.HangState.IN);
                 })
@@ -137,6 +178,7 @@ public class TeleopBlue extends CommandOpMode {
     private double joystickScalar(double num, double min) {
         return joystickScalar(num, min, 0.66, 4);
     }
+
     private double joystickScalar(double n, double m, double l, double a) {
         return Math.signum(n) * m
                 + (1 - m) *
@@ -145,12 +187,12 @@ public class TeleopBlue extends CommandOpMode {
                         n / a);
     }
 
-    public boolean isClimbTime() {
-        return timer.seconds() >= 90;
-    }
+//    public boolean isClimbTime() {
+//        return timer.seconds() >= 90;
+//    }
 
     private double getIntakeSpeed() {
-        return driver.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - driver.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
+        return gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
     }
 }
 

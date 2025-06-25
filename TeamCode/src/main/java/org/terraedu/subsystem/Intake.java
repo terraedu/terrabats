@@ -7,17 +7,17 @@ import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.util.control.PDFController;
 import org.terraedu.util.wrappers.WSubsystem;
-import org.terraedu.util.wrappers.sensors.OptimizedRevColorSensorV3;
+import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.function.BooleanSupplier;
 
 public class Intake extends WSubsystem {
 
-    private DcMotorEx extension, intakeMotor;
+    private DcMotorEx extension, intake;
 
     private final PDFController controller = new PDFController(0.0, 0.0, 0);
     private final Motor.Encoder encoder;
-    private OptimizedRevColorSensorV3 color;
+    private RevColorSensorV3 color;
 
     double intakePower = 0.0;
 
@@ -34,8 +34,9 @@ public class Intake extends WSubsystem {
 
 
     public Intake(Robot robot) {
-        this.color = new OptimizedRevColorSensorV3(robot.colorIntake);
+        this.color = new RevColorSensorV3(robot.colorIntake);
         this.extension = robot.extendo;
+        this.intake = robot.intakeMotor;
         this.encoder = robot.extendoEncoder;
         position = encoder.getPosition();
     }
@@ -85,16 +86,16 @@ public class Intake extends WSubsystem {
         position = encoder.getPosition();
 
         if (isReading) {
-            OptimizedRevColorSensorV3.Color color = this.color.getColor();
+            RevColorSensorV3.Color color = this.color.getColor();
 
             switch (Globals.ALLIANCE) {
                 case RED -> hasColor = (
-                        color == OptimizedRevColorSensorV3.Color.RED ||
-                                color == OptimizedRevColorSensorV3.Color.YELLOW
+                        color == RevColorSensorV3.Color.RED ||
+                                color == RevColorSensorV3.Color.YELLOW
                 );
                 case BLUE -> hasColor = (
-                        color == OptimizedRevColorSensorV3.Color.BLUE ||
-                                color == OptimizedRevColorSensorV3.Color.YELLOW
+                        color == RevColorSensorV3.Color.BLUE ||
+                                color == RevColorSensorV3.Color.YELLOW
                 );
             }
         }
@@ -105,8 +106,8 @@ public class Intake extends WSubsystem {
         if (extension.getPower() != controlSignal) {
             extension.setPower(controlSignal);
         }
-        if (intakeMotor.getPower() != intakePower) {
-            intakeMotor.setPower(intakePower);
+        if (intake.getPower() != intakePower) {
+            intake.setPower(intakePower);
         }
     }
 

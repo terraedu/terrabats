@@ -5,13 +5,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.terraedu.Globals;
 import org.terraedu.constants.DepositPositions;
 import org.terraedu.util.wrappers.WSubsystem;
-import org.terraedu.util.wrappers.sensors.OptimizedRevColorSensorV3;
+import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.function.BooleanSupplier;
 
 public class Claw extends WSubsystem {
     private Servo servo;
-    private OptimizedRevColorSensorV3 color;
+    private RevColorSensorV3 color;
 
     private boolean isClawOpen = false;
 
@@ -20,7 +20,7 @@ public class Claw extends WSubsystem {
 
     public BooleanSupplier clawSupplier = () -> hasColor;
 
-    public Claw(OptimizedRevColorSensorV3 color, Servo servo) {
+    public Claw(RevColorSensorV3 color, Servo servo) {
         this.color = color;
         this.servo = servo;
     }
@@ -44,16 +44,16 @@ public class Claw extends WSubsystem {
     @Override
     public void read() {
         if (isReading) {
-            OptimizedRevColorSensorV3.Color color = this.color.getColor();
+            RevColorSensorV3.Color color = this.color.getColor();
 
             switch (Globals.ALLIANCE) {
                 case RED -> hasColor = (
-                        color == OptimizedRevColorSensorV3.Color.RED ||
-                        color == OptimizedRevColorSensorV3.Color.YELLOW
+                        color == RevColorSensorV3.Color.RED ||
+                        color == RevColorSensorV3.Color.YELLOW
                 );
                 case BLUE -> hasColor = (
-                        color == OptimizedRevColorSensorV3.Color.BLUE ||
-                        color == OptimizedRevColorSensorV3.Color.YELLOW
+                        color == RevColorSensorV3.Color.BLUE ||
+                        color == RevColorSensorV3.Color.YELLOW
                 );
             }
         }

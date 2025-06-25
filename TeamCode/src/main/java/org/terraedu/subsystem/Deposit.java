@@ -8,7 +8,7 @@ import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
 import org.terraedu.util.control.PDFController;
 import org.terraedu.util.wrappers.WSubsystem;
-import org.terraedu.util.wrappers.sensors.OptimizedRevColorSensorV3;
+import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.Set;
 
@@ -31,6 +31,7 @@ public class Deposit extends WSubsystem {
     }
 
     public enum FourBarState {
+        SPECI(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
         INIT(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.PIVOT_INIT),
         PLACE(DepositPositions.ARM_PLACE, DepositPositions.PIVOT_PLACE);
@@ -62,7 +63,7 @@ public class Deposit extends WSubsystem {
 
     public Deposit(Robot robot) {
         this.motors = robot.liftMotors;
-        this.claw = new Claw(new OptimizedRevColorSensorV3(robot.colorDeposit), robot.claw);
+        this.claw = new Claw(new RevColorSensorV3(robot.colorDeposit), robot.claw);
         this.pivot = robot.pivot;
         this.linkage = robot.outtakeLinkage;
         this.armLeft = robot.armLeft;

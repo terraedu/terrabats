@@ -9,6 +9,7 @@ public enum DepositPositions {
     ARM_TRANSFER(0),
     PIVOT_PLACE(0.15),
     LINKAGE_PLACE(0.55),
+    ARM_SPECI(0.7),
     ARM_PLACE(0.6);
 
     double position;

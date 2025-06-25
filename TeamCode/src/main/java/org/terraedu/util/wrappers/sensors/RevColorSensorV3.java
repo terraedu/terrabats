@@ -1,15 +1,14 @@
 package org.terraedu.util.wrappers.sensors;
 
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.terraedu.util.math.RGB;
 
-public class OptimizedRevColorSensorV3 {
-    private RevColorSensorV3 device;
+public class RevColorSensorV3 {
+    private com.qualcomm.hardware.rev.RevColorSensorV3 device;
 
-    public OptimizedRevColorSensorV3(RevColorSensorV3 device) {
+    public RevColorSensorV3(com.qualcomm.hardware.rev.RevColorSensorV3 device) {
         this.device = device;
         device.enableLed(true);
     }

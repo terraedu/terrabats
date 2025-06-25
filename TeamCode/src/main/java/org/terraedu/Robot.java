@@ -144,8 +144,9 @@ public class Robot extends WSubsystem {
 
         // --= Intake =-- //
 
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
-        extendoEncoder = new Motor(hardwareMap, "fl").encoder;
+        extendoEncoder = new Motor(hardwareMap, "br").encoder;
 
         colorIntake = hardwareMap.get(RevColorSensorV3.class, "intakeColor");
 
@@ -172,8 +173,8 @@ public class Robot extends WSubsystem {
         liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        colorDeposit = hardwareMap.get(RevColorSensorV3.class, "depositColor");
-        extendoEncoder = new Motor(hardwareMap, "bl").encoder;
+//        colorDeposit = hardwareMap.get(RevColorSensorV3.class, "depositColor");
+        liftEncoder = new Motor(hardwareMap, "fl").encoder;
 
         liftMotors.add(liftLeft);
         liftMotors.add(liftRight);
