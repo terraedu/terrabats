@@ -46,6 +46,7 @@ public class TeleopBlue extends CommandOpMode {
     public void initialize() {
         CommandScheduler.getInstance().reset();
 
+
         status = RobotMode.DRIVING;
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
@@ -56,44 +57,24 @@ public class TeleopBlue extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-
+        robot.deposit.setState(Deposit.FourBarState.INIT);
         //#region Command Registrar
 
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new ConditionalCommand(
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new WaitCommand(250),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
                                 new InstantCommand(() -> status = RobotMode.SPECIMEN)
                         ),
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
-                                new WaitCommand(250),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                                 new InstantCommand(() -> status = RobotMode.DRIVING)
                         ),
                         () -> status == RobotMode.DRIVING)
-        );
-
-        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                new ConditionalCommand(
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
-                        ),
-                        new ParallelCommandGroup(
-                                new InstantCommand(() -> robot.deposit.setClawClosed((true))),
-                                new WaitCommand(250),
-                                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
-                                new InstantCommand(() -> status = RobotMode.DRIVING)
-                        ),
-                        () -> status == RobotMode.SPECIMEN)
         );
 
         gph1.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ParallelCommandGroup(
@@ -170,6 +151,7 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
+        telemetry.addData("deposit", status);
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
         telemetry.update();

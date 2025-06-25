@@ -20,8 +20,8 @@ public class Claw extends WSubsystem {
 
     public BooleanSupplier clawSupplier = () -> hasColor;
 
-    public Claw(RevColorSensorV3 color, Servo servo) {
-        this.color = color;
+    public Claw(Servo servo) {
+//        this.color = color;
         this.servo = servo;
     }
 

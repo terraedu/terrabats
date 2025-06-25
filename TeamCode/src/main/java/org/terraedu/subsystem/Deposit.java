@@ -31,7 +31,7 @@ public class Deposit extends WSubsystem {
     }
 
     public enum FourBarState {
-        SPECI(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
+        SPECI(DepositPositions.ARM_SPECI, DepositPositions.PIVOT_INIT),
         INIT(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.PIVOT_INIT),
         PLACE(DepositPositions.ARM_PLACE, DepositPositions.PIVOT_PLACE);
@@ -63,7 +63,7 @@ public class Deposit extends WSubsystem {
 
     public Deposit(Robot robot) {
         this.motors = robot.liftMotors;
-        this.claw = new Claw(new RevColorSensorV3(robot.colorDeposit), robot.claw);
+        this.claw = new Claw(robot.claw);
         this.pivot = robot.pivot;
         this.linkage = robot.outtakeLinkage;
         this.armLeft = robot.armLeft;

@@ -219,7 +219,7 @@ public class Robot extends WSubsystem {
     }
 
     public void clearBulkCache() {
-        CONTROL_HUB.clearBulkCache();
+        allHubs.forEach(LynxModule::clearBulkCache);
     }
 
     @Override
