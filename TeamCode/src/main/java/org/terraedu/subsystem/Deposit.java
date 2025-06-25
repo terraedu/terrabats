@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
 import org.terraedu.util.control.PDFController;
+import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
@@ -16,7 +17,7 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    private final PDFController controller = new PDFController(0.0000, 0.0000, -0.15);
+    private final SquIDController controller = new SquIDController(0.04);
     private final Motor.Encoder encoder;
 
     public enum DepositState {
@@ -34,7 +35,9 @@ public class Deposit extends WSubsystem {
         SPECI(DepositPositions.ARM_SPECI, DepositPositions.PIVOT_INIT),
         INIT(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.PIVOT_INIT),
-        PLACE(DepositPositions.ARM_PLACE, DepositPositions.PIVOT_PLACE);
+        PLACE(DepositPositions.ARM_PLACE, DepositPositions.PIVOT_PLACE),
+        SPECIPLACE(DepositPositions.ARM_INIT, DepositPositions.PIVOT_SPECI);
+
 
         final double armPos;
         final double pivot;
@@ -104,7 +107,7 @@ public class Deposit extends WSubsystem {
 
     @Override
     public void read() {
-        position = encoder.getPosition();
+        position = -encoder.getPosition();
         claw.read();
     }
 

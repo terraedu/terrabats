@@ -19,8 +19,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
 import org.terraedu.Robot;
+import org.terraedu.command.auto.GotoCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
+import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.command.teleop.TriggerIntakeCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
@@ -64,14 +66,19 @@ public class TeleopBlue extends CommandOpMode {
                 new ConditionalCommand(
                         new ParallelCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                                new WaitCommand(250),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                                new SetLiftCommand(robot.deposit, 0),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
                                 new InstantCommand(() -> status = RobotMode.SPECIMEN)
                         ),
-                        new ParallelCommandGroup(
+                        new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
-                                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                                new SetLiftCommand(robot.deposit, 500),
+                                new WaitCommand(100),
+                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
+                                new WaitCommand(250),
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
                                 new InstantCommand(() -> status = RobotMode.DRIVING)
                         ),
                         () -> status == RobotMode.DRIVING)
@@ -136,11 +143,11 @@ public class TeleopBlue extends CommandOpMode {
         robot.read();
 
 
-        double turn = joystickScalar(gamepad1.right_stick_x, 0.01);
+        double turn = joystickScalar(-gamepad1.left_stick_x, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(gamepad1.left_stick_y, 0.001),
-                (float) joystickScalar(gamepad1.left_stick_x, 0.001),
+                (float) joystickScalar(-gamepad1.right_stick_x, 0.001),
+                (float) joystickScalar(gamepad1.right_stick_y, 0.001),
                 0f
         );
 
@@ -151,7 +158,6 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
-        telemetry.addData("deposit", status);
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
         telemetry.update();
