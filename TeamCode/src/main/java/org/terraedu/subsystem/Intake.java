@@ -1,5 +1,6 @@
 package org.terraedu.subsystem;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -11,9 +12,12 @@ import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.function.BooleanSupplier;
 
+@Config
 public class Intake extends WSubsystem {
 
     private DcMotorEx extension, intake;
+
+    public static double p = 0.0;
 
     private final PDFController controller = new PDFController(0.0, 0.0, 0);
     private final Motor.Encoder encoder;

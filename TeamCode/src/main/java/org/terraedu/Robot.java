@@ -148,6 +148,8 @@ public class Robot extends WSubsystem {
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
         extendoEncoder = new Motor(hardwareMap, "br").encoder;
 
+        extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         colorIntake = hardwareMap.get(RevColorSensorV3.class, "intakeColor");
 
         // --= Outtake =-- //
@@ -169,6 +171,8 @@ public class Robot extends WSubsystem {
 
         liftLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         liftRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -219,7 +223,7 @@ public class Robot extends WSubsystem {
     }
 
     public void clearBulkCache() {
-        allHubs.forEach(LynxModule::clearBulkCache);
+        CONTROL_HUB.clearBulkCache();
     }
 
     @Override

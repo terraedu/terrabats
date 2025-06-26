@@ -1,24 +1,28 @@
 package org.terraedu.subsystem;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
-import org.terraedu.util.control.PDFController;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
-import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.Set;
 
+@Config
 public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    private final SquIDController controller = new SquIDController(0.04);
+    public static double p = 0.04;
+
+    private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
+
+    private double lastPower = 0;
 
     public enum DepositState {
         INIT,
@@ -46,6 +50,18 @@ public class Deposit extends WSubsystem {
             this.armPos = arm.get();
             this.pivot = pivot.get();
         }
+    }
+
+    public double getTarget() {
+        return target;
+    }
+
+    public double getPosition() {
+        return position;
+    }
+
+    public double getPower() {
+        return controlSignal;
     }
 
     public enum LinkageState {
@@ -102,6 +118,7 @@ public class Deposit extends WSubsystem {
 
     @Override
     public void periodic() {
+        controller.setP(p);
         controlSignal = -(controller.calculate(position, target));
     }
 
@@ -113,12 +130,12 @@ public class Deposit extends WSubsystem {
 
     @Override
     public void write() {
-        for (DcMotorEx motor : motors) {
-            if (motor.getPower() != controlSignal) {
-                motor.setPower(controlSignal);
+        motors.forEach((s) -> {
+            if (lastPower != controlSignal) {
+                s.setPower(controlSignal);
+                lastPower = controlSignal;
             }
-        }
-
+        });
         claw.write();
     }
 
