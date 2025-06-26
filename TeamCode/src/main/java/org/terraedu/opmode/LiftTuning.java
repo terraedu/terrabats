@@ -62,16 +62,16 @@ public class LiftTuning extends CommandOpMode {
         robot.deposit.setState(Deposit.FourBarState.INIT);
         //#region Command Registrar
 
-        gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
-                new SetLiftCommand(robot.deposit, 500),
-                new SetLiftCommand(robot.deposit, 50)
-        );
+//        gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
+//                new SetLiftCommand(robot.deposit, 500),
+//                new SetLiftCommand(robot.deposit, 50)
+//        );
 
         //#endregion
 
         //#endregion
 
-        schedule(new TriggerIntakeCommand(this::getIntakeSpeed));
+//        schedule(new TriggerIntakeCommand(this::getIntakeSpeed));
     }
 
     @Override
@@ -93,6 +93,8 @@ public class LiftTuning extends CommandOpMode {
                 0f
         );
 
+        robot.liftMotors.forEach((it) -> it.setPower(getIntakeSpeed()));
+
         drive.set(driveVec, turn);
 
         robot.periodic();
@@ -101,6 +103,7 @@ public class LiftTuning extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("power ", robot.deposit.getPower());
+        telemetry.addData("speewd ", getIntakeSpeed());
         telemetry.addData("target", robot.deposit.getTarget());
         telemetry.addData("pos", robot.deposit.getPosition());
 
