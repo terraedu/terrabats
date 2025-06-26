@@ -37,19 +37,19 @@ public class Deposit extends WSubsystem {
     }
 
     public enum FourBarState {
-        SPECI(DepositPositions.ARM_SPECI, DepositPositions.PIVOT_INIT),
-        INIT(DepositPositions.ARM_INIT, DepositPositions.PIVOT_INIT),
-        TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.PIVOT_INIT),
-        PLACE(DepositPositions.ARM_PLACE, DepositPositions.PIVOT_PLACE),
-        SPECIPLACE(DepositPositions.ARM_INIT, DepositPositions.PIVOT_SPECI);
+        SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
+        INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
+        TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.INIT_PIVOT),
+        PLACE(DepositPositions.PLACE_ARM, DepositPositions.PLACE_PIVOT),
+        SPECIPLACE(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT);
 
 
         final double armPos;
         final double pivot;
 
-        FourBarState(DepositPositions arm, DepositPositions pivot) {
-            this.armPos = arm.get();
-            this.pivot = pivot.get();
+        FourBarState(double arm, double pivot) {
+            this.armPos = arm;
+            this.pivot = pivot;
         }
     }
 
@@ -67,11 +67,11 @@ public class Deposit extends WSubsystem {
 
     public enum LinkageState {
         INIT(DepositPositions.INIT_LINKAGE),
-        PLACE(DepositPositions.LINKAGE_PLACE);
+        PLACE(DepositPositions.PLACE_LINKAGE);
 
         final double position;
-        LinkageState(DepositPositions pos) {
-            position = pos.get();
+        LinkageState(double pos) {
+            position = pos;
         }
     }
 

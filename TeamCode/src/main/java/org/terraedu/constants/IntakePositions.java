@@ -1,16 +1,10 @@
 package org.terraedu.constants;
 
-public enum IntakePositions {
-    INIT_LINKAGE(0.0);
 
-    double position;
+import com.acmerobotics.dashboard.config.Config;
 
-    IntakePositions(double position) {
-        this.position = position;
-    }
-
-    public double get() {
-        return position;
-    }
+@Config
+public class IntakePositions {
+    public static double INIT_LINKAGE = 0.0;
 }
 
