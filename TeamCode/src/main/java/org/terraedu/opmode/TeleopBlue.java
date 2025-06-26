@@ -68,12 +68,13 @@ public class TeleopBlue extends CommandOpMode {
                                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                                 new WaitCommand(250),
                                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new SetLiftCommand(robot.deposit, 0),
+                                new SetLiftCommand(robot.deposit, 50),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
                                 new InstantCommand(() -> status = RobotMode.SPECIMEN)
                         ),
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
+                                new WaitCommand(250),
                                 new SetLiftCommand(robot.deposit, 500),
                                 new WaitCommand(100),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
@@ -158,6 +159,8 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
+        telemetry.addData("power ", robot.liftLeft.getPower());
+
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
         telemetry.update();
