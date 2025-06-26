@@ -65,11 +65,11 @@ public class TeleopBlue extends CommandOpMode {
 
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new ConditionalCommand(
-                        new ParallelCommandGroup(
+                        new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                                 new WaitCommand(250),
                                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new SetLiftCommand(robot.deposit, 50),
+                                new SetLiftCommand(robot.deposit, 0),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
                                 new InstantCommand(() -> status = RobotMode.SPECIMEN)
                         ),
@@ -77,7 +77,7 @@ public class TeleopBlue extends CommandOpMode {
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
                                 new WaitCommand(250),
                                 new SetLiftCommand(robot.deposit, 500),
-                                new WaitCommand(100),
+                                new WaitCommand(250),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                                 new WaitCommand(250),
                                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
