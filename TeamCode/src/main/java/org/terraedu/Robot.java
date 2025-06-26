@@ -169,16 +169,18 @@ public class Robot extends WSubsystem {
         armRight.setDirection(Servo.Direction.REVERSE);
         armLeft.setDirection(Servo.Direction.FORWARD);
 
-        liftLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        liftRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
+
         liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 //        colorDeposit = hardwareMap.get(RevColorSensorV3.class, "depositColor");
         liftEncoder = new Motor(hardwareMap, "fl").encoder;
+        liftEncoder.setDirection(Motor.Direction.REVERSE);
 
         liftMotors.add(liftLeft);
         liftMotors.add(liftRight);

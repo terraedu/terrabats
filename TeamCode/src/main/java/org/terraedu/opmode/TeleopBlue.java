@@ -60,6 +60,7 @@ public class TeleopBlue extends CommandOpMode {
 
         drive = robot.drive;
         robot.deposit.setState(Deposit.FourBarState.INIT);
+
         //#region Command Registrar
 
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(

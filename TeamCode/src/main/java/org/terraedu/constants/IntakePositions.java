@@ -12,6 +12,5 @@ public enum IntakePositions {
     public double get() {
         return position;
     }
-
 }
 

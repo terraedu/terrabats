@@ -18,6 +18,7 @@ public class Deposit extends WSubsystem {
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
     public static double p = 0.04;
+    public static double ff = 0;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
@@ -119,12 +120,12 @@ public class Deposit extends WSubsystem {
     @Override
     public void periodic() {
         controller.setP(p);
-        controlSignal = -(controller.calculate(position, target));
+        controlSignal = (controller.calculate(position, target)) + ff;
     }
 
     @Override
     public void read() {
-        position = -encoder.getPosition();
+        position = encoder.getPosition();
         claw.read();
     }
 
