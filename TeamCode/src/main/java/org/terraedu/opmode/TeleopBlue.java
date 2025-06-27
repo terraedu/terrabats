@@ -60,6 +60,8 @@ public class TeleopBlue extends CommandOpMode {
 
         drive = robot.drive;
         robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setLinkage(Deposit.LinkageState.INIT);
+
 
         //#region Command Registrar
 
@@ -76,7 +78,7 @@ public class TeleopBlue extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
                                 new WaitCommand(250),
-                                new SetLiftCommand(robot.deposit, 500),
+                                new SetLiftCommand(robot.deposit, 600),
                                 new WaitCommand(250),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                                 new WaitCommand(250),
@@ -84,6 +86,21 @@ public class TeleopBlue extends CommandOpMode {
                                 new InstantCommand(() -> status = RobotMode.DRIVING)
                         ),
                         () -> status == RobotMode.DRIVING)
+        );
+
+
+        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                new ConditionalCommand(
+                        new SequentialCommandGroup(
+
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
+                        ),
+                        new SequentialCommandGroup(
+                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
+
+                        ),
+                        () -> status == RobotMode.SPECIMEN)
         );
 
         gph1.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ParallelCommandGroup(
@@ -160,6 +177,8 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
+        telemetry.addData("target", robot.deposit.getTarget());
+        telemetry.addData("pos", robot.deposit.getPosition());
         telemetry.addData("power ", robot.liftLeft.getPower());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

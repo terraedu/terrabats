@@ -221,7 +221,7 @@ public class Robot extends WSubsystem {
     public void write() {
         hang.write();
         intake.write();
-//        deposit.write();
+        deposit.write();
     }
 
     public void clearBulkCache() {
