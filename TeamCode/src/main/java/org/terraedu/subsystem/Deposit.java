@@ -37,7 +37,7 @@ public class Deposit extends WSubsystem {
     }
 
     public enum FourBarState {
-        SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
+        SPECI(DepositPositions.SPECI_ARM, DepositPositions.SPECI_PIVOT),
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.INIT_PIVOT),
         PLACE(DepositPositions.PLACE_ARM, DepositPositions.PLACE_PIVOT),

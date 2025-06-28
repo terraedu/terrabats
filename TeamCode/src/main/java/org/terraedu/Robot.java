@@ -87,7 +87,7 @@ public class Robot extends WSubsystem {
     public Deposit deposit;
     public PinpointLocalizer localizer;
 
-    public Alliance alliance = Alliance.RED;
+    public Alliance alliance = Alliance.BLUE;
 
 
     public static Robot getInstance() {
@@ -143,7 +143,8 @@ public class Robot extends WSubsystem {
         hangServoRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // --= Intake =-- //
-
+        intakeLinkage = new PServo(hardwareMap.get(Servo.class, "ilink"));
+        latch = new PServo(hardwareMap.get(Servo.class, "latch"));
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
         extendoEncoder = new Motor(hardwareMap, "br").encoder;
@@ -223,11 +224,9 @@ public class Robot extends WSubsystem {
         intake.write();
         deposit.write();
     }
-
     public void clearBulkCache() {
-        CONTROL_HUB.clearBulkCache();
+        allHubs.forEach(LynxModule::clearBulkCache);
     }
-
     @Override
     public void reset() {
         localizer.reset();

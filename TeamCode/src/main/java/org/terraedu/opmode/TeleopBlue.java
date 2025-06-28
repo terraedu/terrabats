@@ -22,6 +22,7 @@ import org.terraedu.Robot;
 import org.terraedu.command.auto.GotoCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
+import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.command.teleop.TriggerIntakeCommand;
 import org.terraedu.subsystem.Deposit;
@@ -82,7 +83,6 @@ public class TeleopBlue extends CommandOpMode {
                                 new WaitCommand(250),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                                 new WaitCommand(250),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
                                 new InstantCommand(() -> status = RobotMode.DRIVING)
                         ),
                         () -> status == RobotMode.DRIVING)
@@ -109,9 +109,10 @@ public class TeleopBlue extends CommandOpMode {
                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT)
         ));
 
-        gph1.getGamepadButton(GamepadKeys.Button.A).whenPressed(new InstantCommand(
-                () -> robot.intake.setState(Intake.IntakeState.HOVER)
-        ));
+        gph1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT)
+
+        );
 
         //#region Climb
 
@@ -177,6 +178,7 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
+        telemetry.addData("serov", robot.intakeLinkage.getPosition());
         telemetry.addData("target", robot.deposit.getTarget());
         telemetry.addData("pos", robot.deposit.getPosition());
         telemetry.addData("power ", robot.liftLeft.getPower());
