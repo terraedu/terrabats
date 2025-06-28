@@ -11,6 +11,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -22,8 +23,10 @@ import org.terraedu.Robot;
 import org.terraedu.command.auto.GotoCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
+import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
+import org.terraedu.command.bot.SetSpinCommand;
 import org.terraedu.command.teleop.TriggerIntakeCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
@@ -62,6 +65,7 @@ public class TeleopBlue extends CommandOpMode {
         drive = robot.drive;
         robot.deposit.setState(Deposit.FourBarState.INIT);
         robot.deposit.setLinkage(Deposit.LinkageState.INIT);
+        robot.intake.setState(Intake.IntakeState.INIT);
 
 
         //#region Command Registrar
@@ -103,16 +107,32 @@ public class TeleopBlue extends CommandOpMode {
                         () -> status == RobotMode.SPECIMEN)
         );
 
-        gph1.getGamepadButton(GamepadKeys.Button.X).whenPressed(new ParallelCommandGroup(
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT)
-        ));
 
-        gph1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT)
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
+                new ConditionalCommand(
+                        new SequentialCommandGroup(
+                                new SetExtendoCommand(robot.intake, 450),//500 is the max
+                                new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
+                                new SetSpinCommand(robot.intake, 1),
+                                new InstantCommand(() -> status = RobotMode.INTAKING),
+                                new WaitUntilCommand(robot.intake.getSupplier()),
+                                new SetSpinCommand(robot.intake, 0),
+                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                                new SetExtendoCommand(robot.intake, 0),
+                                new InstantCommand(() -> status = RobotMode.DRIVING)
+                        ),
+                        new SequentialCommandGroup(
+                                new SetSpinCommand(robot.intake, 0),
+                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                                new SetExtendoCommand(robot.intake, 0),
+                                new InstantCommand(() -> status = RobotMode.DRIVING)
 
+
+                        ),
+                        () -> status == RobotMode.DRIVING
+                )
         );
+
 
         //#region Climb
 
@@ -149,7 +169,7 @@ public class TeleopBlue extends CommandOpMode {
 
         //#endregion
 
-        schedule(new TriggerIntakeCommand(this::getIntakeSpeed));
+//        schedule(new TriggerIntakeCommand(this::getIntakeSpeed));
     }
 
     @Override
@@ -179,8 +199,8 @@ public class TeleopBlue extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("serov", robot.intakeLinkage.getPosition());
-        telemetry.addData("target", robot.deposit.getTarget());
-        telemetry.addData("pos", robot.deposit.getPosition());
+        telemetry.addData("target", robot.intake.getTarget());
+        telemetry.addData("pos", robot.intake.getPosition());
         telemetry.addData("power ", robot.liftLeft.getPower());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));

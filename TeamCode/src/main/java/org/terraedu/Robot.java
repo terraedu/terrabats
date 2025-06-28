@@ -149,6 +149,7 @@ public class Robot extends WSubsystem {
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
         extendoEncoder = new Motor(hardwareMap, "br").encoder;
 
+        extendo.setDirection(DcMotorSimple.Direction.REVERSE);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         colorIntake = hardwareMap.get(RevColorSensorV3.class, "intakeColor");

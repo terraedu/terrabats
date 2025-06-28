@@ -8,7 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.constants.IntakePositions;
-import org.terraedu.util.control.PDFController;
+import org.terraedu.util.Alliance;
+import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
@@ -23,7 +24,7 @@ public class Intake extends WSubsystem {
 
     public static double p = 0.0;
 
-    private final PDFController controller = new PDFController(0.0, 0.0, 0);
+    private final SquIDController controller = new SquIDController(0.045);
     private final Motor.Encoder encoder;
     private RevColorSensorV3 color;
 
@@ -47,7 +48,9 @@ public class Intake extends WSubsystem {
     }
 
     public enum IntakeState{
-        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH);
+        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
+        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH);
+
 
 
         final double linkPos;
@@ -66,7 +69,7 @@ public class Intake extends WSubsystem {
 
     public void setState(IntakeState state) {
         linkage.setPosition(state.linkPos);
-//        latch.setPosition(state.latchPos);
+        latch.setPosition(state.latchPos);
     }
 
     public BooleanSupplier getSupplier() {
@@ -77,6 +80,14 @@ public class Intake extends WSubsystem {
         this.isReading = isReading;
     }
 
+    public double getTarget() {
+        return target;
+    }
+
+    public double getPosition() {
+        return position;
+    }
+
     public void setTarget(double target) {
         this.target = target;
     }
@@ -84,6 +95,7 @@ public class Intake extends WSubsystem {
     public void setPower(double power) {
         this.intakePower = power;
     }
+
 
     @Override
     public void periodic() {
@@ -112,6 +124,10 @@ public class Intake extends WSubsystem {
 
     @Override
     public void write() {
+        if(intakePower > 0){
+            isReading = true;
+        }
+
         if (extension.getPower() != controlSignal) {
             extension.setPower(controlSignal);
         }

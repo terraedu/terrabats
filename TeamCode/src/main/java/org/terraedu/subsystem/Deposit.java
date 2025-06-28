@@ -17,7 +17,7 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.14;
+    public static double p = 0.18;
     public static double ff = 0.015;
 
     private final SquIDController controller = new SquIDController(p);
