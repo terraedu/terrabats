@@ -4,11 +4,13 @@ import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.util.Alliance;
+import org.terraedu.util.RobotMode;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
@@ -18,6 +20,7 @@ import java.util.function.BooleanSupplier;
 @Config
 public class Intake extends WSubsystem {
 
+    private ElapsedTime time;
     private DcMotorEx extension, intake;
     private Servo latch, linkage;
 
@@ -96,6 +99,10 @@ public class Intake extends WSubsystem {
         this.intakePower = power;
     }
 
+    public boolean getReading(){
+        return hasColor;
+    }
+
 
     @Override
     public void periodic() {
@@ -124,9 +131,8 @@ public class Intake extends WSubsystem {
 
     @Override
     public void write() {
-        if(intakePower > 0){
-            isReading = true;
-        }
+
+
 
         if (extension.getPower() != controlSignal) {
             extension.setPower(controlSignal);

@@ -70,7 +70,7 @@ public class TeleopBlue extends CommandOpMode {
 
         //#region Command Registrar
 
-        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+        gph1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
@@ -83,7 +83,7 @@ public class TeleopBlue extends CommandOpMode {
                         new SequentialCommandGroup(
                                 new InstantCommand(() -> robot.deposit.setClawClosed((true))),
                                 new WaitCommand(250),
-                                new SetLiftCommand(robot.deposit, 600),
+                                new SetLiftCommand(robot.deposit, 530),
                                 new WaitCommand(250),
                                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                                 new WaitCommand(250),
@@ -93,7 +93,7 @@ public class TeleopBlue extends CommandOpMode {
         );
 
 
-        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
 
@@ -111,11 +111,12 @@ public class TeleopBlue extends CommandOpMode {
         new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
+                                new InstantCommand(()-> robot.intake.setReading(true)),
                                 new SetExtendoCommand(robot.intake, 450),//500 is the max
                                 new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
                                 new SetSpinCommand(robot.intake, 1),
                                 new InstantCommand(() -> status = RobotMode.INTAKING),
-                                new WaitUntilCommand(robot.intake.getSupplier()),
+                                new WaitUntilCommand(robot.intake.intakeSupplier),
                                 new SetSpinCommand(robot.intake, 0),
                                 new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                                 new SetExtendoCommand(robot.intake, 0),
@@ -131,6 +132,17 @@ public class TeleopBlue extends CommandOpMode {
                         ),
                         () -> status == RobotMode.DRIVING
                 )
+        );
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
+                        new SequentialCommandGroup(
+                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                                new SetExtendoCommand(robot.intake, 450),//500 is the max
+                                new SetSpinCommand(robot.intake, -1),
+                                new WaitCommand(750),
+                                new SetSpinCommand(robot.intake, 0),
+                                new SetExtendoCommand(robot.intake, 0)
+                        )
+
         );
 
 
@@ -198,10 +210,11 @@ public class TeleopBlue extends CommandOpMode {
         robot.clearBulkCache();
 
         double loop = System.nanoTime();
-        telemetry.addData("serov", robot.intakeLinkage.getPosition());
-        telemetry.addData("target", robot.intake.getTarget());
-        telemetry.addData("pos", robot.intake.getPosition());
-        telemetry.addData("power ", robot.liftLeft.getPower());
+//        telemetry.addData("serov", robot.intakeLinkage.getPosition());
+//        telemetry.addData("target", robot.intake.getTarget());
+//        telemetry.addData("pos", robot.intake.getPosition());
+//        telemetry.addData("power ", robot.liftLeft.getPower());
+        telemetry.addData("reading", robot.intake.getReading());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
