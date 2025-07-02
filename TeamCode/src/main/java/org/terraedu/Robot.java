@@ -225,9 +225,11 @@ public class Robot extends WSubsystem {
         intake.write();
         deposit.write();
     }
+
     public void clearBulkCache() {
         allHubs.forEach(LynxModule::clearBulkCache);
     }
+
     @Override
     public void reset() {
         localizer.reset();

@@ -3,6 +3,7 @@ package org.terraedu.opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
@@ -70,106 +71,31 @@ public class TeleopBlue extends CommandOpMode {
 
         //#region Command Registrar
 
+        // Y Button – Toggle Specimen Mode
         gph1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new ConditionalCommand(
-                        new SequentialCommandGroup(
-                                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                                new WaitCommand(250),
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new SetLiftCommand(robot.deposit, 0),
-                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
-                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
-                        ),
-                        new SequentialCommandGroup(
-                                new InstantCommand(() -> robot.deposit.setClawClosed((true))),
-                                new WaitCommand(250),
-                                new SetLiftCommand(robot.deposit, 530),
-                                new WaitCommand(250),
-                                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
-                                new WaitCommand(250),
-                                new InstantCommand(() -> status = RobotMode.DRIVING)
-                        ),
-                        () -> status == RobotMode.DRIVING)
-        );
-
-
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
-                new ConditionalCommand(
-                        new SequentialCommandGroup(
-
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
-                        ),
-                        new SequentialCommandGroup(
-                                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                                new InstantCommand(() -> status = RobotMode.SPECIMEN)
-
-                        ),
-                        () -> status == RobotMode.SPECIMEN)
-        );
-
-
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
-                new ConditionalCommand(
-                        new SequentialCommandGroup(
-                                new InstantCommand(()-> robot.intake.setReading(true)),
-                                new SetExtendoCommand(robot.intake, 450),//500 is the max
-                                new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
-                                new SetSpinCommand(robot.intake, 1),
-                                new InstantCommand(() -> status = RobotMode.INTAKING),
-                                new WaitUntilCommand(robot.intake.intakeSupplier),
-                                new SetSpinCommand(robot.intake, 0),
-                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                                new SetExtendoCommand(robot.intake, 0),
-                                new InstantCommand(() -> status = RobotMode.DRIVING)
-                        ),
-                        new SequentialCommandGroup(
-                                new SetSpinCommand(robot.intake, 0),
-                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                                new SetExtendoCommand(robot.intake, 0),
-                                new InstantCommand(() -> status = RobotMode.DRIVING)
-
-
-                        ),
+                        toSpecimenMode(),
+                        toDrivingFromSpecimen(),
                         () -> status == RobotMode.DRIVING
                 )
         );
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
-                        new SequentialCommandGroup(
-                                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                                new SetExtendoCommand(robot.intake, 450),//500 is the max
-                                new SetSpinCommand(robot.intake, -1),
-                                new WaitCommand(750),
-                                new SetSpinCommand(robot.intake, 0),
-                                new SetExtendoCommand(robot.intake, 0)
-                        )
 
+        // DPAD UP – Toggle Linkage between INIT and PLACE
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(toggleSpecimenLinkage());
+
+        // Right Trigger – Intake Logic (Auto-Intake If Driving)
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
+                new ConditionalCommand(
+                        startAutoIntake(),
+                        cancelIntake(),
+                        () -> status == RobotMode.DRIVING
+                )
         );
 
-
-        //#region Climb
-
-//        Trigger climbTrigger = new Trigger(this::isClimbTime);
-//
-//        climbTrigger.whileActiveOnce(new SequentialCommandGroup(
-//                new InstantCommand(
-//                        () -> {
-//                            robot.hang.setState(Hang.HangState.OUT);
-//                        }
-//                ),
-//                //TODO(find out how long to make this)
-//                new WaitCommand(200),
-//                new InstantCommand(
-//                        () -> {
-//                            robot.hang.setState(Hang.HangState.STATIONARY);
-//                        }
-//                )
-//        ));
-//
-//        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenHeld(
-//                new InstantCommand(() -> {
-//                    robot.hang.setState(Hang.HangState.OUT);
-//                })
-//        );
+        // Left Trigger – Manual Eject
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
+                manualEject()
+        );
 
         gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenHeld(
                 new InstantCommand(() -> {
@@ -178,10 +104,6 @@ public class TeleopBlue extends CommandOpMode {
         );
 
         //#endregion
-
-        //#endregion
-
-//        schedule(new TriggerIntakeCommand(this::getIntakeSpeed));
     }
 
     @Override
@@ -240,5 +162,74 @@ public class TeleopBlue extends CommandOpMode {
     private double getIntakeSpeed() {
         return gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) - gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER);
     }
+
+    private Command toSpecimenMode() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                new WaitCommand(250),
+                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                new SetLiftCommand(robot.deposit, 0),
+                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI),
+                new InstantCommand(() -> status = RobotMode.SPECIMEN)
+        );
+    }
+
+    private Command toggleSpecimenLinkage() {
+        return new ConditionalCommand(
+                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                new SequentialCommandGroup(
+                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
+                        new InstantCommand(() -> status = RobotMode.SPECIMEN)
+                ),
+                () -> status == RobotMode.SPECIMEN && robot.deposit.getLinkageState() == Deposit.LinkageState.INIT
+        );
+    }
+    private Command toDrivingFromSpecimen() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+                new WaitCommand(250),
+                new SetLiftCommand(robot.deposit, 530),
+                new WaitCommand(250),
+                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
+                new WaitCommand(250),
+                new InstantCommand(() -> status = RobotMode.DRIVING)
+        );
+    }
+
+    private Command startAutoIntake() {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> robot.intake.setReading(true)),
+                new SetExtendoCommand(robot.intake, 450), // Max is 500
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
+                new SetSpinCommand(robot.intake, 1),
+                new InstantCommand(() -> status = RobotMode.INTAKING),
+                new WaitUntilCommand(robot.intake.intakeSupplier),
+                new SetSpinCommand(robot.intake, 0),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                new SetExtendoCommand(robot.intake, 0),
+                new InstantCommand(() -> status = RobotMode.DRIVING)
+        );
+    }
+
+    private Command cancelIntake() {
+        return new SequentialCommandGroup(
+                new SetSpinCommand(robot.intake, 0),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                new SetExtendoCommand(robot.intake, 0),
+                new InstantCommand(() -> status = RobotMode.DRIVING)
+        );
+    }
+
+    private Command manualEject() {
+        return new SequentialCommandGroup(
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                new SetExtendoCommand(robot.intake, 450),
+                new SetSpinCommand(robot.intake, -1),
+                new WaitCommand(750),
+                new SetSpinCommand(robot.intake, 0),
+                new SetExtendoCommand(robot.intake, 0)
+        );
+    }
+
 }
 

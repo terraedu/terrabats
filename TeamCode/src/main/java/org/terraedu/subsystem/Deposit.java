@@ -53,6 +53,8 @@ public class Deposit extends WSubsystem {
         }
     }
 
+
+
     public double getTarget() {
         return target;
     }
@@ -91,6 +93,8 @@ public class Deposit extends WSubsystem {
         this.encoder = robot.liftEncoder;
     }
 
+    private LinkageState linkageState;
+
     public void setState(DepositState state) {
         this.currentState = state;
     }
@@ -110,7 +114,12 @@ public class Deposit extends WSubsystem {
     }
 
     public void setLinkage(LinkageState state) {
+        this.linkageState = state;
         linkage.setPosition(state.position);
+    }
+
+    public LinkageState getLinkageState() {
+        return linkageState;
     }
 
     public void setReading(boolean reading) {
