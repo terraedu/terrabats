@@ -260,7 +260,10 @@ public class TeleopBlue extends CommandOpMode {
                 new WaitCommand(300),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
                 new WaitCommand(300),
-                new SetLiftCommand(robot.deposit, 0)
+                new SetLiftCommand(robot.deposit, 0),
+                new WaitCommand(200),
+                new SetExtendoCommand(robot.intake, 0)
+
         );
     }
 
