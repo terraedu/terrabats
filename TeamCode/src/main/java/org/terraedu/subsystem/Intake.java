@@ -52,7 +52,9 @@ public class Intake extends WSubsystem {
 
     public enum IntakeState{
         INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
-        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH);
+        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH),
+        RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH);
+
 
 
 
@@ -116,12 +118,18 @@ public class Intake extends WSubsystem {
         if (isReading) {
             RevColorSensorV3.Color color = this.color.getColor();
 
-            switch (Globals.ALLIANCE) {
+            switch (Robot.getInstance().alliance) {
                 case RED -> hasColor = (
+                        color == RevColorSensorV3.Color.RED
+                );
+                case BLUE -> hasColor = (
+                        color == RevColorSensorV3.Color.BLUE
+                );
+                case REDY -> hasColor = (
                         color == RevColorSensorV3.Color.RED ||
                                 color == RevColorSensorV3.Color.YELLOW
                 );
-                case BLUE -> hasColor = (
+                case BLUEY -> hasColor = (
                         color == RevColorSensorV3.Color.BLUE ||
                                 color == RevColorSensorV3.Color.YELLOW
                 );
@@ -131,8 +139,6 @@ public class Intake extends WSubsystem {
 
     @Override
     public void write() {
-
-
 
         if (extension.getPower() != controlSignal) {
             extension.setPower(controlSignal);

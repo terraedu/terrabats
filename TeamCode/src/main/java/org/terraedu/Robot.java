@@ -89,6 +89,9 @@ public class Robot extends WSubsystem {
 
     public Alliance alliance = Alliance.BLUE;
 
+    public void setAlliance(Alliance alliance) {
+        this.alliance = alliance;
+    }
 
     public static Robot getInstance() {
         if (INSTANCE == null) {

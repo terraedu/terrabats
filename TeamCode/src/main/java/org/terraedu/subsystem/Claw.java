@@ -3,6 +3,7 @@ package org.terraedu.subsystem;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.terraedu.Globals;
+import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
@@ -14,6 +15,7 @@ public class Claw extends WSubsystem {
     private RevColorSensorV3 color;
 
     private boolean isClawOpen = false;
+    private boolean isSampleOpen = false;
 
     private boolean isReading = false;
     private boolean hasColor = false;
@@ -32,6 +34,10 @@ public class Claw extends WSubsystem {
     public void setClawState(boolean opened) {
         isClawOpen = opened;
     }
+    public void setSampleState(boolean sampleopened) {
+        isSampleOpen = sampleopened;
+    }
+
 
     public void setReading(boolean isReading) {
         this.isReading = isReading;
@@ -46,7 +52,7 @@ public class Claw extends WSubsystem {
         if (isReading) {
             RevColorSensorV3.Color color = this.color.getColor();
 
-            switch (Globals.ALLIANCE) {
+            switch (Robot.getInstance().alliance) {
                 case RED -> hasColor = (
                         color == RevColorSensorV3.Color.RED ||
                         color == RevColorSensorV3.Color.YELLOW
@@ -63,7 +69,10 @@ public class Claw extends WSubsystem {
     public void write() {
         if (isClawOpen) {
             servo.setPosition(DepositPositions.CLAW_GRAB);
-        } else {
+        } else if(isSampleOpen){
+            servo.setPosition(DepositPositions.SAMPLE_GRAB);
+
+        }else{
             servo.setPosition(DepositPositions.CLAW_INIT);
         }
     }

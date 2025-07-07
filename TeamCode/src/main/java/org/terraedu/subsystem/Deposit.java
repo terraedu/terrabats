@@ -113,6 +113,10 @@ public class Deposit extends WSubsystem {
         this.claw.setClawState(closed);
     }
 
+    public void setSampleClosed(boolean closed) {
+        this.claw.setSampleState(closed);
+    }
+
     public void setLinkage(LinkageState state) {
         this.linkageState = state;
         linkage.setPosition(state.position);
