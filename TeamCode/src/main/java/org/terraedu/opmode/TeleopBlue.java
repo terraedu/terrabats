@@ -83,7 +83,9 @@ public class TeleopBlue extends CommandOpMode {
                         new WaitCommand(500),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
                         new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE)
+                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
+                        new InstantCommand(() -> status = RobotMode.DRIVING)
+
 
 
                 )
@@ -97,7 +99,9 @@ public class TeleopBlue extends CommandOpMode {
                         new SetExtendoCommand(robot.intake, 0),
                         new WaitCommand(500),
                         new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                        new InstantCommand(() -> deposit = PlaceMode.SPECIMEN)
+                        new InstantCommand(() -> deposit = PlaceMode.SPECIMEN),
+                        new InstantCommand(() -> status = RobotMode.DRIVING)
+
 
 
                 )
