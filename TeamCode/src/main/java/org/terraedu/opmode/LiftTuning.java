@@ -31,7 +31,7 @@ import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.RobotMode;
 
-@TeleOp(name = "Lift Tuning")
+//@TeleOp(name = "Lift Tuning")
 public class LiftTuning extends CommandOpMode {
 
     private ElapsedTime timer;
