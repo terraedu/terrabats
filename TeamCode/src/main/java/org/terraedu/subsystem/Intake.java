@@ -134,6 +134,8 @@ public class Intake extends WSubsystem {
                                 color == RevColorSensorV3.Color.YELLOW
                 );
             }
+        }else{
+            hasColor = true;
         }
     }
 
