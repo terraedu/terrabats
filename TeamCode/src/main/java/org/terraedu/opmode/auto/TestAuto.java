@@ -13,7 +13,7 @@ import org.terraedu.command.auto.GotoCommand;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.Pose;
 
-@Autonomous
+@Autonomous(name = "Auto Tuning")
 public class TestAuto extends CommandOpMode {
 
     private double loopTime = 0;
@@ -32,15 +32,15 @@ public class TestAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new GotoCommand(robot, new Pose(10, 10, Math.toRadians(90)))
+                        new GotoCommand(robot, new Pose(10, 0, Math.toRadians(0)))
                 )
         );
+
     }
 
     @Override
     public void run() {
         super.run();
-
         robot.read();
         robot.periodic();
         robot.write();
@@ -48,6 +48,11 @@ public class TestAuto extends CommandOpMode {
 
         double loop = System.nanoTime();
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
+        telemetry.addData("X", robot.localizer.getCurrX());
+        telemetry.addData("Y", robot.localizer.getCurrY());
+        telemetry.addData("Heading", robot.localizer.getCurrHeading());
+
+
         loopTime = loop;
         telemetry.update();
     }

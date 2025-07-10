@@ -34,8 +34,8 @@ import org.terraedu.util.LinkageMode;
 import org.terraedu.util.PlaceMode;
 import org.terraedu.util.RobotMode;
 
-@TeleOp(name = "Red")
-public class TeleopRed extends CommandOpMode {
+@TeleOp(name = "Blue")
+public class TerraBlue extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
@@ -59,7 +59,7 @@ public class TeleopRed extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.init(hardwareMap, telemetry, Alliance.RED);
+        robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
 
         gph1 = new GamepadEx(gamepad1);
@@ -77,13 +77,15 @@ public class TeleopRed extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SPECIMEN)).whenActive(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                        new InstantCommand(() -> robot.setAlliance(Alliance.REDY)),
+                        new InstantCommand(() -> robot.setAlliance(Alliance.BLUEY)),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                        new WaitCommand(500),
+                        new WaitCommand(750),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
                         new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
-                        new InstantCommand(() -> status = RobotMode.DRIVING)
+                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(false))
 
 
 
@@ -93,17 +95,20 @@ public class TeleopRed extends CommandOpMode {
 
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                        new InstantCommand(() -> robot.setAlliance(Alliance.RED)),
+                        new InstantCommand(() -> robot.setAlliance(Alliance.BLUE)),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
                         new SetExtendoCommand(robot.intake, 0),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                        new WaitCommand(750),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
                         new InstantCommand(() -> deposit = PlaceMode.SPECIMEN),
-                        new InstantCommand(() -> status = RobotMode.DRIVING)
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(false))
 
 
 
-                )
+
+                        )
         );
 
         new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
@@ -155,7 +160,7 @@ public class TeleopRed extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                        new WaitCommand(125),
+                        new WaitCommand(300),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
 
                 )
@@ -188,10 +193,10 @@ public class TeleopRed extends CommandOpMode {
         robot.read();
 
 
-        double turn = joystickScalar(-gamepad1.left_stick_x, 0.01);
+        double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(-gamepad1.right_stick_x, 0.001),
+                (float) joystickScalar(gamepad1.right_stick_x, 0.001),
                 (float) joystickScalar(gamepad1.right_stick_y, 0.001),
                 0f
         );
@@ -314,11 +319,12 @@ public class TeleopRed extends CommandOpMode {
                 new SetSpinCommand(robot.intake, 1),
                 new WaitUntilCommand(robot.intake.getSupplier()),
                 new SetSpinCommand(robot.intake, 0),
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.RETURN),
                 new SetExtendoCommand(robot.intake, 0),
-                new SetSpinCommand(robot.intake, -.35),
-                new WaitCommand(150),
+                new SetSpinCommand(robot.intake, -.5),
+                new WaitCommand(300),
                 new SetSpinCommand(robot.intake, 0),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                 new InstantCommand(() -> status = RobotMode.INTAKING)
 
 

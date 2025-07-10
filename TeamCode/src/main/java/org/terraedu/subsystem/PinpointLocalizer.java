@@ -1,5 +1,6 @@
 package org.terraedu.subsystem;
 
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -7,16 +8,53 @@ import org.terraedu.util.control.GoBildaPinpointDriver;
 import org.terraedu.util.wrappers.WSubsystem;
 
 public class PinpointLocalizer extends WSubsystem {
-    GoBildaPinpointDriver pinpoint;
+    public GoBildaPinpointDriver pinpoint;
 
     Pose2D lastPose = new Pose2D(DistanceUnit.INCH, 0.0, 0.0, AngleUnit.RADIANS, 0.0);
+
 
     public PinpointLocalizer(GoBildaPinpointDriver pinpoint) {
         this.pinpoint = pinpoint;
     }
 
+    public void setDirection(GoBildaPinpointDriver.EncoderDirection x, GoBildaPinpointDriver.EncoderDirection y){
+        pinpoint.setEncoderDirections(x,y);
+    }
+
+    public void setResolution(GoBildaPinpointDriver.GoBildaOdometryPods resolution){
+        pinpoint.setEncoderResolution(resolution);
+    }
+
+    public void setCustomResolution(double resolution){
+        pinpoint.setEncoderResolution(resolution);
+    }
+
+    public double getCurrX(){
+        return lastPose.getX(DistanceUnit.INCH);
+    }
+
+    public double getCurrY(){
+        return lastPose.getY(DistanceUnit.INCH);
+
+    }
+
+    public double getCurrHeading(){
+        return lastPose.getHeading(AngleUnit.DEGREES);
+
+    }
+
+
+    public void setOffsets(double x, double y){
+        pinpoint.setOffsets(x,y);
+    }
+
     public Pose2D getPose() {
         return lastPose;
+    }
+
+
+    public Pose2D getCurrent() {
+        return pinpoint.getPosition();
     }
 
     public boolean isReady() {
@@ -28,6 +66,7 @@ public class PinpointLocalizer extends WSubsystem {
 
     @Override
     public void read() {
+        pinpoint.update();
         if (!(Double.isNaN(pinpoint.getPosX()) || Double.isNaN(pinpoint.getPosY()) || Double.isNaN(pinpoint.getHeading()))) {
             lastPose = new Pose2D(
                     DistanceUnit.MM,

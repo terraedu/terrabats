@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class GotoConfig {
-    public static PIDFCoefficients xPID = new PIDFCoefficients();
-    public static PIDFCoefficients yPID = new PIDFCoefficients();
-    public static PIDFCoefficients hPID = new PIDFCoefficients();
+    public static PIDFCoefficients xPID = new PIDFCoefficients(0.2,0,0,0);
+    public static PIDFCoefficients yPID = new PIDFCoefficients(0,0,0,0);
+    public static PIDFCoefficients hPID = new PIDFCoefficients(0,0,0,0);
 }

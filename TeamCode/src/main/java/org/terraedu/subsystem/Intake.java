@@ -52,6 +52,7 @@ public class Intake extends WSubsystem {
 
     public enum IntakeState{
         INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
+        RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH),
         HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH),
         RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH);
 

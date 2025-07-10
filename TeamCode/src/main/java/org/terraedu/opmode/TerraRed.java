@@ -18,7 +18,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
-import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
@@ -35,8 +34,8 @@ import org.terraedu.util.LinkageMode;
 import org.terraedu.util.PlaceMode;
 import org.terraedu.util.RobotMode;
 
-@TeleOp(name = "Blue")
-public class TeleopBlue extends CommandOpMode {
+@TeleOp(name = "Red")
+public class TerraRed extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
@@ -60,7 +59,7 @@ public class TeleopBlue extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        robot.init(hardwareMap, telemetry, Alliance.BLUE);
+        robot.init(hardwareMap, telemetry, Alliance.RED);
         robot.reset();
 
         gph1 = new GamepadEx(gamepad1);
@@ -78,7 +77,7 @@ public class TeleopBlue extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SPECIMEN)).whenActive(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                        new InstantCommand(() -> robot.setAlliance(Alliance.BLUEY)),
+                        new InstantCommand(() -> robot.setAlliance(Alliance.REDY)),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
                         new WaitCommand(500),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
@@ -94,7 +93,7 @@ public class TeleopBlue extends CommandOpMode {
 
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                        new InstantCommand(() -> robot.setAlliance(Alliance.BLUE)),
+                        new InstantCommand(() -> robot.setAlliance(Alliance.RED)),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
                         new SetExtendoCommand(robot.intake, 0),
                         new WaitCommand(500),
@@ -156,6 +155,7 @@ public class TeleopBlue extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
+                        new SetSpinCommand(robot.intake, -1),
                         new WaitCommand(125),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
 
@@ -189,10 +189,10 @@ public class TeleopBlue extends CommandOpMode {
         robot.read();
 
 
-        double turn = joystickScalar(-gamepad1.left_stick_x, 0.01);
+        double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(-gamepad1.right_stick_x, 0.001),
+                (float) joystickScalar(gamepad1.right_stick_x, 0.001),
                 (float) joystickScalar(gamepad1.right_stick_y, 0.001),
                 0f
         );

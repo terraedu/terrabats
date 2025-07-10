@@ -1,5 +1,7 @@
 package org.terraedu.subsystem;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -23,17 +25,17 @@ public class MecanumDrive extends WSubsystem implements TerraDrive {
     }
 
     @Override
-    public void set(Vector3f movement, double turnSpeed) {
+    public void set(@NonNull Vector3f movement, double turnSpeed) {
         double strafe = -movement.y;
         double forward = -movement.x;
 
         double r = Math.hypot(-strafe, forward);
         double robotAngle = Math.atan2(forward, -strafe) + Math.PI / 4;
 
-        double flP = r * Math.cos(robotAngle) + turnSpeed;
-        double frP = r * Math.sin(robotAngle) - turnSpeed;
-        double blP = r * Math.sin(robotAngle) + turnSpeed;
-        double brP = r * Math.cos(robotAngle) - turnSpeed;
+        double flP = r * Math.cos(robotAngle) - turnSpeed;
+        double frP = r * Math.sin(robotAngle) + turnSpeed;
+        double blP = r * Math.sin(robotAngle) - turnSpeed;
+        double brP = r * Math.cos(robotAngle) + turnSpeed;
 
         frontLeft.setPower(flP);
         frontRight.setPower(frP);

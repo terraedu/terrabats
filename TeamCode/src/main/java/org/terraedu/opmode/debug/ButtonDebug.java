@@ -1,4 +1,4 @@
-package org.terraedu.opmode;
+package org.terraedu.opmode.debug;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -14,7 +14,6 @@ import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
@@ -26,7 +25,6 @@ import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.command.bot.SetSpinCommand;
 import org.terraedu.subsystem.Deposit;
-import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Alliance;
