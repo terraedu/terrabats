@@ -16,11 +16,20 @@ public class GotoCommand extends CommandBase {
     private final TerraDrive drive;
     private final PinpointLocalizer localizer;
     private final Pose target;
+    double powX;
+    double powY;
+    public double dist;
+    public double distX;
+    public double distY;
+
+
 
     private ElapsedTime timer = new ElapsedTime();
 
     private final PIDFController xControl;
     private final PIDFController yControl;
+    private final PIDFController xlControl;
+    private final PIDFController ylControl;
     private final PIDFController hControl;
 
     public GotoCommand(Robot robot, Pose pose) {
@@ -30,6 +39,8 @@ public class GotoCommand extends CommandBase {
 
         xControl = new PIDFController(GotoConfig.xPID.p, GotoConfig.xPID.i, GotoConfig.xPID.d, GotoConfig.xPID.f);
         yControl = new PIDFController(GotoConfig.yPID.p, GotoConfig.yPID.i, GotoConfig.yPID.d, GotoConfig.xPID.f);
+        xlControl = new PIDFController(GotoConfig.xlPID.p, GotoConfig.xlPID.i, GotoConfig.xlPID.d, GotoConfig.xlPID.f);
+        ylControl = new PIDFController(GotoConfig.ylPID.p, GotoConfig.ylPID.i, GotoConfig.ylPID.d, GotoConfig.xlPID.f);
         hControl = new PIDFController(GotoConfig.hPID.p, GotoConfig.hPID.i, GotoConfig.hPID.d, GotoConfig.xPID.f);
     }
 
@@ -57,8 +68,21 @@ public class GotoCommand extends CommandBase {
         yControl.setSetPoint(target.y);
         hControl.setSetPoint(target.getAngle());
 
-        double x = xControl.calculate(current.x);
-        double y = yControl.calculate(current.y);
+        distX = target.x - current.x;
+        distY = target.y - current.y;
+        dist = Math.pow(distX, 2) + Math.pow(distY, 2);
+
+        if (dist <= 24) {
+            powX = xControl.calculate(current.x);
+            powY = yControl.calculate(current.y);
+        }else {
+            powX = xlControl.calculate(current.x);
+            powY = ylControl.calculate(current.y);
+        }
+
+        double x = powX;
+        double y = powY;
+
         double heading = hControl.calculateAngleWrap(current.getAngle());
 
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
@@ -73,6 +97,7 @@ public class GotoCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return getPose().distance(target) > 2.0 || timer.seconds() > 3.5;
+        return dist < 0.3 || timer.seconds() > 5;
+//        return false;
     }
 }
