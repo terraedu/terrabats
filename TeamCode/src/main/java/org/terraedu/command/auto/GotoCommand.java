@@ -1,5 +1,9 @@
 package org.terraedu.command.auto;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,6 +23,7 @@ public class GotoCommand extends CommandBase {
     double powX;
     double powY;
     public double dist;
+    public double distH;
     public double distX;
     public double distY;
 
@@ -54,7 +59,7 @@ public class GotoCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        timer.reset();
+//        timer.reset();
         xControl.reset();
         yControl.reset();
         hControl.reset();
@@ -66,13 +71,17 @@ public class GotoCommand extends CommandBase {
 
         xControl.setSetPoint(target.x);
         yControl.setSetPoint(target.y);
+        xlControl.setSetPoint(target.x);
+        ylControl.setSetPoint(target.y);
         hControl.setSetPoint(target.getAngle());
 
         distX = target.x - current.x;
         distY = target.y - current.y;
-        dist = Math.pow(distX, 2) + Math.pow(distY, 2);
 
-        if (dist <= 24) {
+        double distSq = pow(distX, 2) + pow(distY, 2);
+        dist = sqrt(distSq);
+
+        if (abs(dist) <= 30) {
             powX = xControl.calculate(current.x);
             powY = yControl.calculate(current.y);
         }else {
@@ -84,8 +93,9 @@ public class GotoCommand extends CommandBase {
         double y = powY;
 
         double heading = hControl.calculateAngleWrap(current.getAngle());
-
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
+
+        distH = target.getAngle() - currentHeading;
 
         drive.setField(new Vector3f((float) x, (float) y, 0f), heading, (float) currentHeading);
     }
@@ -95,9 +105,18 @@ public class GotoCommand extends CommandBase {
         drive.set(new Vector3f(0f,0f,0f), 0);
     }
 
+    public boolean getFinished(){
+        return isFinished();
+    }
+
     @Override
     public boolean isFinished() {
-        return dist < 0.3 || timer.seconds() > 5;
+        return dist <= 0.2 && distH <= 0.2;
 //        return false;
+//        if(dist > 0.2){
+//            timer.reset();
+//        }
+//        return timer.seconds()>0.2;
+//        return getPose().distance(target) > 2.0;
     }
 }

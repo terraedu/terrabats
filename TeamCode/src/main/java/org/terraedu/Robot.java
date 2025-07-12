@@ -197,7 +197,8 @@ public class Robot extends WSubsystem {
         intake = new Intake(this);
         deposit = new Deposit(this);
         localizer = new PinpointLocalizer(hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint"));
-        localizer.setOffsets(38.1, 171.45);
+        localizer.setOffsets(-171.45, 38.1);
+        //-171.45 38.1
         localizer.setResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         localizer.setDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 

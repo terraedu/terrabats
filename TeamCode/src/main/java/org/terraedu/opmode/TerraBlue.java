@@ -196,7 +196,7 @@ public class TerraBlue extends CommandOpMode {
         double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(gamepad1.right_stick_x, 0.001),
+                (float) joystickScalar(-gamepad1.right_stick_x, 0.001),
                 (float) joystickScalar(gamepad1.right_stick_y, 0.001),
                 0f
         );
