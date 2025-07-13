@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.terraedu.Globals;
 import org.terraedu.Robot;
-import org.terraedu.command.auto.GotoCommand;
+import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.Pose;
 
@@ -32,8 +32,9 @@ public class TestAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new GotoCommand(robot, new Pose(10, 10, Math.toRadians(90)))
-
+                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(90))),
+                        new SetPointCommand(robot, new Pose(10, 30, Math.toRadians(90))),
+                        new SetPointCommand(robot, new Pose(0, 0, Math.toRadians(0)))
 
 
 

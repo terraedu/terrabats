@@ -10,11 +10,9 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.joml.Vector3f;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
-import org.terraedu.command.auto.GotoCommand;
-import org.terraedu.command.auto.GotoConfig;
+import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
@@ -55,7 +53,7 @@ public class AutoTuning extends CommandOpMode {
 
         gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new SequentialCommandGroup(
-                        new GotoCommand(robot, new Pose(10, 10, Math.toRadians(90)))
+                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(90)))
 
 
 
@@ -64,7 +62,7 @@ public class AutoTuning extends CommandOpMode {
                 ),
                 new SequentialCommandGroup(
 
-                        new GotoCommand(robot, new Pose(10, 30, Math.toRadians(90)))
+                        new SetPointCommand(robot, new Pose(10, 30, Math.toRadians(90)))
 
 
 

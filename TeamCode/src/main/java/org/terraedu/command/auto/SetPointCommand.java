@@ -16,7 +16,7 @@ import org.terraedu.subsystem.PinpointLocalizer;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 
-public class GotoCommand extends CommandBase {
+public class SetPointCommand extends CommandBase {
     private final TerraDrive drive;
     private final PinpointLocalizer localizer;
     private final Pose target;
@@ -37,7 +37,7 @@ public class GotoCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public GotoCommand(Robot robot, Pose pose) {
+    public SetPointCommand(Robot robot, Pose pose) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
         this.target = pose;
@@ -114,7 +114,7 @@ public class GotoCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 0.2 && distH <= 0.2;
+        return dist <= 0.2 && distH <= 1;
 //        return false;
 //        if(dist > 0.2){
 //            timer.reset();
