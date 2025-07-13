@@ -45,7 +45,7 @@ public class GotoCommand extends CommandBase {
         xControl = new PIDFController(GotoConfig.xPID.p, GotoConfig.xPID.i, GotoConfig.xPID.d, GotoConfig.xPID.f);
         yControl = new PIDFController(GotoConfig.yPID.p, GotoConfig.yPID.i, GotoConfig.yPID.d, GotoConfig.xPID.f);
         xlControl = new PIDFController(GotoConfig.xlPID.p, GotoConfig.xlPID.i, GotoConfig.xlPID.d, GotoConfig.xlPID.f);
-        ylControl = new PIDFController(GotoConfig.ylPID.p, GotoConfig.ylPID.i, GotoConfig.ylPID.d, GotoConfig.xlPID.f);
+        ylControl = new PIDFController(GotoConfig.ylPID.p, GotoConfig.ylPID.i, GotoConfig.ylPID.d, GotoConfig.ylPID.f);
         hControl = new PIDFController(GotoConfig.hPID.p, GotoConfig.hPID.i, GotoConfig.hPID.d, GotoConfig.xPID.f);
     }
 
@@ -92,12 +92,15 @@ public class GotoCommand extends CommandBase {
         double x = powX;
         double y = -powY;
 
-        double heading = (hControl.calculateAngleWrap(current.getAngle()))*0;
-        double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
 
+
+        double heading = (hControl.calculateAngleWrap(current.getAngle()));
+        double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
+        double x_rotated = (x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading));
+        double y_rotated = (x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading));
         distH = target.getAngle() - currentHeading;
 
-        drive.setField(new Vector3f((float) x, (float) y, 0f), heading, (float) currentHeading);
+        drive.set(new Vector3f((float) x_rotated, (float) y_rotated, 0f), heading);
     }
 
     @Override

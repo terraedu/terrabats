@@ -32,7 +32,15 @@ public class TestAuto extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new GotoCommand(robot, new Pose(10, 0, Math.toRadians(0)))
+                        new GotoCommand(robot, new Pose(10, 10, Math.toRadians(90)))
+
+
+
+
+
+
+
+
                 )
         );
 
