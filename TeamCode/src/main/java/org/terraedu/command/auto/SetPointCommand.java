@@ -108,18 +108,10 @@ public class SetPointCommand extends CommandBase {
         drive.set(new Vector3f(0f,0f,0f), 0);
     }
 
-    public boolean getFinished(){
-        return isFinished();
-    }
-
     @Override
     public boolean isFinished() {
         return dist <= 0.2 && distH <= 1;
 //        return false;
-//        if(dist > 0.2){
-//            timer.reset();
-//        }
-//        return timer.seconds()>0.2;
-//        return getPose().distance(target) > 2.0;
+
     }
 }
