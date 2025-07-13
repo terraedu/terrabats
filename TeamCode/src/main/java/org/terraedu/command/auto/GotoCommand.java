@@ -90,9 +90,9 @@ public class GotoCommand extends CommandBase {
         }
 
         double x = powX;
-        double y = powY;
+        double y = -powY;
 
-        double heading = hControl.calculateAngleWrap(current.getAngle());
+        double heading = (hControl.calculateAngleWrap(current.getAngle()))*0;
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
 
         distH = target.getAngle() - currentHeading;

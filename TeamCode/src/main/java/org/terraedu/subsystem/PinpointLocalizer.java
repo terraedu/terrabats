@@ -10,7 +10,7 @@ import org.terraedu.util.wrappers.WSubsystem;
 public class PinpointLocalizer extends WSubsystem {
     public GoBildaPinpointDriver pinpoint;
 
-    Pose2D lastPose = new Pose2D(DistanceUnit.INCH, 0.0, 0.0, AngleUnit.RADIANS, 0.0);
+    Pose2D lastPose = new Pose2D(DistanceUnit.MM, 0.0, 0.0, AngleUnit.RADIANS, 0.0);
 
 
     public PinpointLocalizer(GoBildaPinpointDriver pinpoint) {
@@ -70,8 +70,8 @@ public class PinpointLocalizer extends WSubsystem {
         if (!(Double.isNaN(pinpoint.getPosX()) || Double.isNaN(pinpoint.getPosY()) || Double.isNaN(pinpoint.getHeading()))) {
             lastPose = new Pose2D(
                     DistanceUnit.MM,
-                    pinpoint.getPosX(),
                     pinpoint.getPosY(),
+                    pinpoint.getPosX(),
                     AngleUnit.RADIANS,
                     normalize(pinpoint.getHeading())
             );
@@ -84,7 +84,7 @@ public class PinpointLocalizer extends WSubsystem {
     @Override
     public void reset() {
         pinpoint.resetPosAndIMU();
-        lastPose = new Pose2D(DistanceUnit.INCH, 0.0, 0.0, AngleUnit.RADIANS, 0.0);
+        lastPose = new Pose2D(DistanceUnit.MM, 0.0, 0.0, AngleUnit.RADIANS, 0.0);
     }
 
     private double normalize(double angle) {

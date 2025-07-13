@@ -87,6 +87,7 @@ public class Robot extends WSubsystem {
     public Deposit deposit;
     public PinpointLocalizer localizer;
 
+
     public Alliance alliance = Alliance.BLUE;
 
     public void setAlliance(Alliance alliance) {
@@ -197,7 +198,7 @@ public class Robot extends WSubsystem {
         intake = new Intake(this);
         deposit = new Deposit(this);
         localizer = new PinpointLocalizer(hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint"));
-        localizer.setOffsets(-171.45, 38.1);
+        localizer.setOffsets(38.1, 171.45);
         //-171.45 38.1
         localizer.setResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         localizer.setDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
