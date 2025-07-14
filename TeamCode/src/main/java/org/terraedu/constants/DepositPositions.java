@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class DepositPositions {
+    //edit
     public static double INIT_LINKAGE = 0.04;
     public static double INIT_ARM = 0.2;
     public static double INIT_PIVOT = 0.01;

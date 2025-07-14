@@ -26,7 +26,6 @@ import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.command.bot.SetSpinCommand;
 import org.terraedu.subsystem.Deposit;
-import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Alliance;
@@ -167,17 +166,6 @@ public class TerraBlue extends CommandOpMode {
         );
 
 
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenHeld(
-                new InstantCommand(() -> {
-                    robot.hang.setState(Hang.HangState.IN);
-                })
-        );
-
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenHeld(
-                new InstantCommand(() -> {
-                    robot.hang.setState(Hang.HangState.OUT);
-                })
-        );
 
         //#endregion
     }

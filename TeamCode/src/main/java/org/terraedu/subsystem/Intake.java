@@ -6,11 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.constants.IntakePositions;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.RobotMode;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
@@ -22,7 +19,7 @@ public class Intake extends WSubsystem {
 
     private ElapsedTime time;
     private DcMotorEx extension, intake;
-    private Servo latch, linkage;
+    private Servo armLeft, armRight,claw,turret;
 
 
     public static double p = 0.0;
@@ -41,30 +38,35 @@ public class Intake extends WSubsystem {
 
 
     public Intake(Robot robot) {
-        this.color = new RevColorSensorV3(robot.colorIntake);
         this.extension = robot.extendo;
-        this.latch = robot.latch;
-        this.linkage = robot.intakeLinkage;
-        this.intake = robot.intakeMotor;
+        this.turret = robot.turret;
+        this.claw = robot.iclaw;
+        this.armLeft = robot.intakeArmLeft;
+        this.armRight = robot.intakeArmRight;
         this.encoder = robot.extendoEncoder;
         position = encoder.getPosition();
     }
 
     public enum IntakeState{
-        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
-        RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH),
-        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH),
-        RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH);
+        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH, 0,0),
+        RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH,0,0),
+        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH,0,0),
+        RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH,0,0);
 
 
 
 
-        final double linkPos;
-        final double latchPos;
+        final double armR;
+        final double armL;
+        final double turret;
+        final double claw;
 
-        IntakeState(double link, double latch) {
-            this.linkPos = link;
-            this.latchPos = latch;
+        IntakeState(double armR, double armL, double turret, double claw) {
+
+            this.armR = armR;
+            this.armL = armL;
+            this.turret = turret;
+            this.claw = claw;
         }
     }
     private double controlSignal;
@@ -74,8 +76,8 @@ public class Intake extends WSubsystem {
 
 
     public void setState(IntakeState state) {
-        linkage.setPosition(state.linkPos);
-        latch.setPosition(state.latchPos);
+        armRight.setPosition(state.armR);
+        armLeft.setPosition(state.armL);
     }
 
     public BooleanSupplier getSupplier() {

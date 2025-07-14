@@ -16,7 +16,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.terraedu.subsystem.Deposit;
-import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.subsystem.PinpointLocalizer;
@@ -39,16 +38,11 @@ public class Robot extends WSubsystem {
     public DcMotorEx backRightMotor;
     //#endregion
 
-    //#region Hang
-    public CRServo hangServoLeft, hangServoRight;
-    //#endregion
-
     //#region Intake
 
-    public Servo intakeLinkage, latch;
+    public Servo intakeArmRight, intakeArmLeft, turret, iclaw;
     public DcMotorEx intakeMotor, extendo;
 
-    public RevColorSensorV3 colorIntake;
     public Motor.Encoder extendoEncoder;
 
     //#endregion
@@ -56,7 +50,6 @@ public class Robot extends WSubsystem {
     //#region Outtake
     public Servo claw, pivot, outtakeLinkage, armLeft, armRight;
     public DcMotorEx liftLeft, liftRight;
-    public RevColorSensorV3 colorDeposit;
     public Set<DcMotorEx> liftMotors = new HashSet<>();
 
     public Motor.Encoder liftEncoder;
@@ -82,7 +75,6 @@ public class Robot extends WSubsystem {
     //#endregion
 
     public MecanumDrive drive;
-    public Hang hang;
     public Intake intake;
     public Deposit deposit;
     public PinpointLocalizer localizer;
@@ -138,31 +130,22 @@ public class Robot extends WSubsystem {
         backLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // --= Hang =-- //
-
-        hangServoLeft = hardwareMap.get(CRServo.class, "hangl");
-        hangServoRight = hardwareMap.get(CRServo.class, "hangr");
-
-        hangServoLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        hangServoRight.setDirection(DcMotorSimple.Direction.FORWARD);
-
         // --= Intake =-- //
-        intakeLinkage = new PServo(hardwareMap.get(Servo.class, "ilink"));
-        latch = new PServo(hardwareMap.get(Servo.class, "latch"));
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        intakeArmRight = new PServo(hardwareMap.get(Servo.class, "ilink"));
+        intakeArmLeft = new PServo(hardwareMap.get(Servo.class, "latch"));
+        iclaw = new PServo(hardwareMap.get(Servo.class, "latch"));
+        turret = new PServo(hardwareMap.get(Servo.class, "latch"));
         extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
         extendoEncoder = new Motor(hardwareMap, "br").encoder;
 
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        colorIntake = hardwareMap.get(RevColorSensorV3.class, "intakeColor");
 
         // --= Outtake =-- //
 
         armLeft = new PServo(hardwareMap.get(Servo.class, "arml"));
         armRight = new PServo(hardwareMap.get(Servo.class, "armr"));
-        outtakeLinkage = new PServo(hardwareMap.get(Servo.class, "linkage"));
         pivot = new PServo(hardwareMap.get(Servo.class, "pivot"));
         claw = new PServo(hardwareMap.get(Servo.class, "claw"));
 
@@ -171,7 +154,6 @@ public class Robot extends WSubsystem {
 
         claw.setDirection(Servo.Direction.REVERSE);
         pivot.setDirection(Servo.Direction.REVERSE);
-        outtakeLinkage.setDirection(Servo.Direction.REVERSE);
         armRight.setDirection(Servo.Direction.REVERSE);
         armLeft.setDirection(Servo.Direction.FORWARD);
 
@@ -194,7 +176,6 @@ public class Robot extends WSubsystem {
         //#endregion
 
         drive = new MecanumDrive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
-        hang = new Hang(this);
         intake = new Intake(this);
         deposit = new Deposit(this);
         localizer = new PinpointLocalizer(hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint"));
@@ -230,7 +211,6 @@ public class Robot extends WSubsystem {
 
     @Override
     public void write() {
-        hang.write();
         intake.write();
         deposit.write();
     }
