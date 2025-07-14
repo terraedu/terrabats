@@ -209,7 +209,7 @@ public class TerraBlue extends CommandOpMode {
         double loop = System.nanoTime();
 //        telemetry.addData("serov", robot.intakeLinkage.getPosition());
 //        telemetry.addData("target", robot.intake.getTarget());
-//        telemetry.addData("pos", robot.intake.getPosition());
+        telemetry.addData("pos", robot.intake.getPosition());
         telemetry.addData("mode ", deposit);
         telemetry.addData("reading", robot.intake.getReading());
 
@@ -313,8 +313,8 @@ public class TerraBlue extends CommandOpMode {
     private Command startAutoIntake() {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.intake.setReading(true)),
-                new SetExtendoCommand(robot.intake, 475),// Max is 500
-                new WaitCommand(500),
+                new SetExtendoCommand(robot.intake, 640),// Max is 660
+                new WaitCommand(700),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
                 new SetSpinCommand(robot.intake, 1),
                 new WaitUntilCommand(robot.intake.getSupplier()),
@@ -344,7 +344,7 @@ public class TerraBlue extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.intake.setReading(false)),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                new SetExtendoCommand(robot.intake, 450),
+                new SetExtendoCommand(robot.intake, 550),
                 new SetSpinCommand(robot.intake, -1),
                 new WaitCommand(750),
                 new SetSpinCommand(robot.intake, 0),

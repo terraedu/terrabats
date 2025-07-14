@@ -25,9 +25,9 @@ public class Intake extends WSubsystem {
     private Servo latch, linkage;
 
 
-    public static double p = 0.0;
+    public static double p = 0.045;
 
-    private final SquIDController controller = new SquIDController(0.045);
+    private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
     private RevColorSensorV3 color;
 

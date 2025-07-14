@@ -20,7 +20,7 @@ import org.terraedu.util.Alliance;
 import org.terraedu.util.Pose;
 import org.terraedu.util.RobotMode;
 
-@TeleOp(name = "Auto Tuning Tele")
+//@TeleOp(name = "Auto Tuning Tele")
 public class AutoTuning extends CommandOpMode {
     private double loopTime = 0;
     private final Robot robot = Robot.getInstance();
@@ -53,16 +53,12 @@ public class AutoTuning extends CommandOpMode {
 
         gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new SequentialCommandGroup(
-                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(90)))
+                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(0)), 3),
+                        new SetPointCommand(robot, new Pose(10, 20, Math.toRadians(90)), 3),
+                        new SetPointCommand(robot, new Pose(0, 0, Math.toRadians(0)), 3)
 
 
 
-
-
-                ),
-                new SequentialCommandGroup(
-
-                        new SetPointCommand(robot, new Pose(10, 30, Math.toRadians(90)))
 
 
 

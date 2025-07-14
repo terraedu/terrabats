@@ -4,17 +4,21 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.auto.SetPointCommand;
+import org.terraedu.command.auto.WayPointCommand;
+import org.terraedu.subsystem.Deposit;
+import org.terraedu.subsystem.Intake;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.Pose;
 
 @Autonomous(name = "Auto Tuning")
-public class TestAuto extends CommandOpMode {
+public class fivespec extends CommandOpMode {
 
     private double loopTime = 0;
     private final Robot robot = Robot.getInstance();
@@ -29,12 +33,14 @@ public class TestAuto extends CommandOpMode {
 
         robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
+        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.intake.setState(Intake.IntakeState.INIT);
+        robot.deposit.setLinkage(Deposit.LinkageState.INIT);
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(90))),
-                        new SetPointCommand(robot, new Pose(10, 30, Math.toRadians(90))),
-                        new SetPointCommand(robot, new Pose(0, 0, Math.toRadians(0)))
+                        new SetPointCommand(robot, new Pose(10, 30, Math.toRadians(90)),3),
+                        new SetPointCommand(robot, new Pose(0, 0, Math.toRadians(0)),3)));
 
 
 
@@ -42,8 +48,6 @@ public class TestAuto extends CommandOpMode {
 
 
 
-                )
-        );
 
     }
 

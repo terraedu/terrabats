@@ -26,6 +26,7 @@ public class WayPointCommand extends CommandBase {
     public double distH;
     public double distX;
     public double distY;
+    public double pathTime;
 
 
 
@@ -37,10 +38,11 @@ public class WayPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public WayPointCommand(Robot robot, Pose pose) {
+    public WayPointCommand(Robot robot, Pose pose, double pathTime) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
         this.target = pose;
+        this.pathTime = pathTime;
 
         xControl = new PIDFController(GotoConfig.xPID.p, GotoConfig.xPID.i, GotoConfig.xPID.d, GotoConfig.xPID.f);
         yControl = new PIDFController(GotoConfig.yPID.p, GotoConfig.yPID.i, GotoConfig.yPID.d, GotoConfig.xPID.f);
@@ -59,7 +61,7 @@ public class WayPointCommand extends CommandBase {
 
     @Override
     public void initialize() {
-//        timer.reset();
+        timer.reset();
         xControl.reset();
         yControl.reset();
         hControl.reset();
@@ -114,7 +116,7 @@ public class WayPointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 10 && distH <= .2;
+        return dist <= 10 && distH <= .2 || timer.seconds() > pathTime;
 //        return false;
 //        return getPose().distance(target) > 2.0;
     }
