@@ -44,7 +44,7 @@ public class LiftTuning extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.OuttakeState.INIT);
         //#region Command Registrar
 
 //        gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(

@@ -24,7 +24,7 @@ public class Intake extends WSubsystem {
 
     public static double p = 0.0;
 
-    private final SquIDController controller = new SquIDController(0.045);
+    private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
     private RevColorSensorV3 color;
 
@@ -148,9 +148,7 @@ public class Intake extends WSubsystem {
         if (extension.getPower() != controlSignal) {
             extension.setPower(controlSignal);
         }
-        if (intake.getPower() != intakePower) {
-            intake.setPower(intakePower);
-        }
+
     }
 
     @Override

@@ -60,7 +60,7 @@ public class ButtonDebug extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.OuttakeState.INIT);
         robot.deposit.setLinkage(Deposit.LinkageState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
 
@@ -147,7 +147,7 @@ public class ButtonDebug extends CommandOpMode {
                 new WaitCommand(250),
                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                 new SetLiftCommand(robot.deposit, 0),
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECI)
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.SPECI)
         );
     }
 
@@ -171,7 +171,7 @@ public class ButtonDebug extends CommandOpMode {
                 new WaitCommand(250),
                 new SetLiftCommand(robot.deposit, 530),
                 new WaitCommand(250),
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE)
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.SPECIPLACE)
         );
     }
 
@@ -180,7 +180,7 @@ public class ButtonDebug extends CommandOpMode {
                 new InstantCommand(() -> status = RobotMode.PLACING),
                 new SetExtendoCommand(robot.intake, 100),
                 new WaitCommand(150),
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.TRANSFER),
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.RELEASE),
                 new WaitCommand(150),
                 new SetSpinCommand(robot.intake, 1),
@@ -191,7 +191,7 @@ public class ButtonDebug extends CommandOpMode {
                 new SetExtendoCommand(robot.intake, 135),
                 new WaitCommand(150),
                 new SetLiftCommand(robot.deposit, 630),
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.PLACE),
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE),
                 new WaitCommand(300),
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
@@ -208,7 +208,7 @@ public class ButtonDebug extends CommandOpMode {
                 new InstantCommand(() -> status = RobotMode.DRIVING),
                 new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                 new WaitCommand(300),
-                new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                 new WaitCommand(300),
                 new SetLiftCommand(robot.deposit, 0),
                 new WaitCommand(200),

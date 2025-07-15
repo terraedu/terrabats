@@ -17,8 +17,8 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.14;
-    public static double ff = 0.015;
+    public static double p = 0.;
+    public static double ff = 0.;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
@@ -36,7 +36,7 @@ public class Deposit extends WSubsystem {
         SPEC_GRAB
     }
 
-    public enum FourBarState {
+    public enum OuttakeState {
         SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.INIT_PIVOT),
@@ -47,7 +47,7 @@ public class Deposit extends WSubsystem {
         final double armPos;
         final double pivot;
 
-        FourBarState(double arm, double pivot) {
+        OuttakeState(double arm, double pivot) {
             this.armPos = arm;
             this.pivot = pivot;
         }
@@ -103,7 +103,7 @@ public class Deposit extends WSubsystem {
         this.target = target;
     }
 
-    public void setState(FourBarState state) {
+    public void setState(OuttakeState state) {
         armLeft.setPosition(state.armPos);
         armRight.setPosition(state.armPos);
         pivot.setPosition(state.pivot);

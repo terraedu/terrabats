@@ -131,12 +131,12 @@ public class Robot extends WSubsystem {
         backRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // --= Intake =-- //
-        intakeArmRight = new PServo(hardwareMap.get(Servo.class, "ilink"));
-        intakeArmLeft = new PServo(hardwareMap.get(Servo.class, "latch"));
-        iclaw = new PServo(hardwareMap.get(Servo.class, "latch"));
-        turret = new PServo(hardwareMap.get(Servo.class, "latch"));
-        extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "extendo"));
-        extendoEncoder = new Motor(hardwareMap, "br").encoder;
+        intakeArmRight = new PServo(hardwareMap.get(Servo.class, "iarmr"));
+        intakeArmLeft = new PServo(hardwareMap.get(Servo.class, "iarml"));
+        iclaw = new PServo(hardwareMap.get(Servo.class, "iclaw"));
+        turret = new PServo(hardwareMap.get(Servo.class, "turret"));
+        extendo = new PMotor(hardwareMap.get(DcMotorEx.class, "intake"));
+        extendoEncoder = new Motor(hardwareMap, "intake").encoder;
 
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -147,13 +147,13 @@ public class Robot extends WSubsystem {
         armLeft = new PServo(hardwareMap.get(Servo.class, "arml"));
         armRight = new PServo(hardwareMap.get(Servo.class, "armr"));
         pivot = new PServo(hardwareMap.get(Servo.class, "pivot"));
-        claw = new PServo(hardwareMap.get(Servo.class, "claw"));
+        claw = new PServo(hardwareMap.get(Servo.class, "oclaw"));
 
-        liftLeft = new PMotor(hardwareMap.get(DcMotorEx.class, "lil"));
-        liftRight = new PMotor(hardwareMap.get(DcMotorEx.class, "lir"));
+        liftLeft = new PMotor(hardwareMap.get(DcMotorEx.class, "llift"));
+        liftRight = new PMotor(hardwareMap.get(DcMotorEx.class, "rlift"));
 
         claw.setDirection(Servo.Direction.REVERSE);
-        pivot.setDirection(Servo.Direction.REVERSE);
+        pivot.setDirection(Servo.Direction.FORWARD);
         armRight.setDirection(Servo.Direction.REVERSE);
         armLeft.setDirection(Servo.Direction.FORWARD);
 
@@ -167,7 +167,7 @@ public class Robot extends WSubsystem {
         liftRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 //        colorDeposit = hardwareMap.get(RevColorSensorV3.class, "depositColor");
-        liftEncoder = new Motor(hardwareMap, "fl").encoder;
+        liftEncoder = new Motor(hardwareMap, "rlift").encoder;
         liftEncoder.setDirection(Motor.Direction.REVERSE);
 
         liftMotors.add(liftLeft);
@@ -180,7 +180,7 @@ public class Robot extends WSubsystem {
         deposit = new Deposit(this);
         localizer = new PinpointLocalizer(hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint"));
         localizer.setOffsets(38.1, 171.45);
-        //-171.45 38.1
+//        -171.45 38.1
         localizer.setResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         localizer.setDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
 

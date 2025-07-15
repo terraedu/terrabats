@@ -48,7 +48,7 @@ public class AutoTuning extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.OuttakeState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
 
         gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
