@@ -152,13 +152,13 @@ public class Robot extends WSubsystem {
         liftLeft = new PMotor(hardwareMap.get(DcMotorEx.class, "llift"));
         liftRight = new PMotor(hardwareMap.get(DcMotorEx.class, "rlift"));
 
-        claw.setDirection(Servo.Direction.REVERSE);
+        claw.setDirection(Servo.Direction.FORWARD);
         pivot.setDirection(Servo.Direction.FORWARD);
         armRight.setDirection(Servo.Direction.REVERSE);
         armLeft.setDirection(Servo.Direction.FORWARD);
 
-        liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        liftRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         liftRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

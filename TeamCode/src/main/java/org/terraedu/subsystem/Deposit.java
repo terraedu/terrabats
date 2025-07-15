@@ -37,9 +37,9 @@ public class Deposit extends WSubsystem {
     }
 
     public enum OuttakeState {
-        SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
-        TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.INIT_PIVOT),
+        SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
+        TRANSFER(DepositPositions.SAMPLE_PLACE, DepositPositions.INIT_PIVOT),
         PLACE(DepositPositions.PLACE_ARM, DepositPositions.PLACE_PIVOT),
         SPECIPLACE(DepositPositions.INIT_ARM, DepositPositions.SPECI_PIVOT);
 
@@ -67,15 +67,6 @@ public class Deposit extends WSubsystem {
         return controlSignal;
     }
 
-    public enum LinkageState {
-        INIT(DepositPositions.INIT_LINKAGE),
-        PLACE(DepositPositions.PLACE_LINKAGE);
-
-        final double position;
-        LinkageState(double pos) {
-            position = pos;
-        }
-    }
 
     private DepositState currentState = DepositState.INIT;
 
@@ -93,7 +84,6 @@ public class Deposit extends WSubsystem {
         this.encoder = robot.liftEncoder;
     }
 
-    private LinkageState linkageState;
 
     public void setState(DepositState state) {
         this.currentState = state;
@@ -115,15 +105,6 @@ public class Deposit extends WSubsystem {
 
     public void setSampleClosed(boolean closed) {
         this.claw.setSampleState(closed);
-    }
-
-    public void setLinkage(LinkageState state) {
-        this.linkageState = state;
-        linkage.setPosition(state.position);
-    }
-
-    public LinkageState getLinkageState() {
-        return linkageState;
     }
 
     public void setReading(boolean reading) {

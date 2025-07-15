@@ -66,7 +66,6 @@ public class TerraBlue extends CommandOpMode {
 
         drive = robot.drive;
         robot.deposit.setState(Deposit.OuttakeState.INIT);
-        robot.deposit.setLinkage(Deposit.LinkageState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
 
 
@@ -128,14 +127,12 @@ public class TerraBlue extends CommandOpMode {
 
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
-                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
                         new InstantCommand(() -> link = LinkageMode.OUT)
                 )
         );
         gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> status = RobotMode.PLACING),
-                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                         new InstantCommand(() -> link = LinkageMode.IN)
                 )
         );
@@ -222,7 +219,6 @@ public class TerraBlue extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                 new WaitCommand(250),
-                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                 new SetLiftCommand(robot.deposit, 0),
                 new SetArmCommand(robot.deposit, Deposit.OuttakeState.SPECI),
                 new InstantCommand(() -> status = RobotMode.PLACING)
@@ -231,17 +227,6 @@ public class TerraBlue extends CommandOpMode {
     }
 
 
-    private Command toggleSpecimenLinkage() {
-        return new ConditionalCommand(
-
-                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
-                new SequentialCommandGroup(
-                        new InstantCommand(() -> status = RobotMode.PLACING),
-                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT)
-                ),
-                () -> status == RobotMode.PLACING && robot.deposit.getLinkageState() == Deposit.LinkageState.INIT
-        );
-    }
 
     private Command toDrivingFromSpecimen() {
         return new SequentialCommandGroup(
@@ -273,7 +258,6 @@ public class TerraBlue extends CommandOpMode {
                 new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE),
                 new WaitCommand(300),
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
                 new InstantCommand(() -> status = RobotMode.PLACING)
 
 
@@ -285,7 +269,6 @@ public class TerraBlue extends CommandOpMode {
                 new InstantCommand(() -> robot.deposit.setSampleClosed(false)),
                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                 new WaitCommand(300),
-                new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
                 new WaitCommand(300),
                 new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                 new WaitCommand(300),
