@@ -12,7 +12,7 @@ public class DepositPositions {
     public static double CLAW_INIT = 0.0;
     public static double ARM_TRANSFER = 0.0;
     public static double PLACE_PIVOT = 0.15;
-    public static double SPECI_PIVOT = 0.25;
+    public static double SPECI_PIVOT = 0.2;
     public static double PLACE_LINKAGE = 0.51;
     public static double SPECI_ARM = 0.77;
     public static double PLACE_ARM = 0.53;

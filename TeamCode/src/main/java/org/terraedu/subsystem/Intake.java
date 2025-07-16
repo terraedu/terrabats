@@ -54,6 +54,7 @@ public class Intake extends WSubsystem {
         INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
         RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH),
         HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH),
+        COLLECT(IntakePositions.DROP_LINKAGE, IntakePositions.CLOSE_LATCH),
         RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH);
 
 
