@@ -48,22 +48,19 @@ public class Intake extends WSubsystem {
     }
 
     public enum IntakeState{
-        INIT(IntakePositions.INIT_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW),
-        GRAB(IntakePositions.INTAKE_ARM, IntakePositions.INIT_TURRET, IntakePositions.CLOSE_CLAW),
-        HOVER(IntakePositions.GRABPOS_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW),
-        RELEASE(IntakePositions.INIT_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW);
-
-
-
+        INIT(IntakePositions.INIT_ARM, IntakePositions.OPEN_CLAW),
+        INT_READY(IntakePositions.INTAKE_ARM, IntakePositions.OPEN_CLAW),
+        GRAB(IntakePositions.INTAKE_ARM, IntakePositions.CLOSE_CLAW),
+        HOVER(IntakePositions.GRABPOS_ARM, IntakePositions.OPEN_CLAW),
+        TRANSFER(IntakePositions.INIT_ARM, IntakePositions.CLOSE_CLAW),
+        RELEASE(IntakePositions.INIT_ARM, IntakePositions.OPEN_CLAW);
 
         final double armPos;
-        final double turret;
         final double claw;
 
-        IntakeState(double armPos, double turret, double claw) {
+        IntakeState(double armPos, double claw) {
 
             this.armPos = armPos;
-            this.turret = turret;
             this.claw = claw;
         }
     }
@@ -76,7 +73,6 @@ public class Intake extends WSubsystem {
     public void setState(IntakeState state) {
         armRight.setPosition(state.armPos);
         armLeft.setPosition(state.armPos + 0.02);
-        turret.setPosition(state.turret);
         claw.setPosition(state.claw);
     }
 

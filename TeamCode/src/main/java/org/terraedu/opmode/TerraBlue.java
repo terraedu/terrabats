@@ -288,7 +288,7 @@ public class TerraBlue extends CommandOpMode {
                 new SetSpinCommand(robot.intake, 1),
                 new WaitUntilCommand(robot.intake.getSupplier()),
                 new SetSpinCommand(robot.intake, 0),
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INT_READY),
                 new SetExtendoCommand(robot.intake, 0),
                 new SetSpinCommand(robot.intake, -.5),
                 new WaitCommand(300),

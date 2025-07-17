@@ -1,16 +1,12 @@
 package org.terraedu.opmode;
 
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -19,12 +15,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
 import org.terraedu.Robot;
-import org.terraedu.command.bot.SetArmCommand;
-import org.terraedu.command.bot.SetDepositLinkageCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
-import org.terraedu.command.bot.SetLiftCommand;
-import org.terraedu.command.bot.SetSpinCommand;
+import org.terraedu.constants.IntakePositions;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
@@ -38,6 +31,9 @@ public class TerraRed extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
+
+    private double speedCoeff;
+    private double turnspeedCoeff;
     public PlaceMode deposit;
     public LinkageMode link;
     public RobotMode status;
@@ -56,8 +52,6 @@ public class TerraRed extends CommandOpMode {
         status = RobotMode.DRIVING;
         link = LinkageMode.IN;
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
         robot.init(hardwareMap, telemetry, Alliance.RED);
         robot.reset();
 
@@ -69,7 +63,8 @@ public class TerraRed extends CommandOpMode {
         robot.intake.setState(Intake.IntakeState.INIT);
         robot.deposit.setClawClosed(false);
 
-
+        new SetExtendoCommand(robot.intake, 0);
+        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.INIT_TURRET));
 
         //#region Command Registrar
 
@@ -108,6 +103,49 @@ public class TerraRed extends CommandOpMode {
           new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
                   intakeSequence()
                   );
+
+          gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenActive(
+                new SequentialCommandGroup(
+                        new SetIntakeCommand(robot.intake, Intake.IntakeState.INT_READY),
+                        new WaitCommand(250),
+                        new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB),
+                        new WaitCommand(250),
+                        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.INIT_TURRET)),
+                        new SetIntakeCommand(robot.intake, Intake.IntakeState.TRANSFER),
+                        new SetExtendoCommand(robot.intake, 15)
+                )
+          );
+
+          gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(
+                  new SequentialCommandGroup(
+                          new SetExtendoCommand(robot.intake, 250)
+                  )
+          );
+
+          gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
+                    new SequentialCommandGroup(
+                            new SetExtendoCommand(robot.intake, 150)
+                    )
+          );
+
+          gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(
+                    new SequentialCommandGroup(
+                            new InstantCommand(()-> robot.turret.setPosition(IntakePositions.RIGHT_TURRET))
+                    )
+            );
+
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.LEFT_TURRET))
+                )
+        );
+
+          gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
+                    new SequentialCommandGroup(
+                            new SetExtendoCommand(robot.intake, 100)
+                    )
+            );
+
 //        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
 //                toSpecimenMode()
 //        );
@@ -177,11 +215,11 @@ public class TerraRed extends CommandOpMode {
         robot.read();
 
 
-        double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
+        double turn = joystickScalar(gamepad1.left_stick_x *speedCoeff, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(gamepad1.right_stick_x, 0.001),
-                (float) joystickScalar(gamepad1.right_stick_y, 0.001),
+                (float) joystickScalar(-gamepad1.right_stick_x * turnspeedCoeff, 0.001),
+                (float) joystickScalar(gamepad1.right_stick_y * speedCoeff, 0.001),
                 0f
         );
 
@@ -217,8 +255,9 @@ public class TerraRed extends CommandOpMode {
     }
       private Command intakeSequence() {
         return new SequentialCommandGroup(
-                new SetExtendoCommand(robot.intake, 250),
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB)
+                new InstantCommand(()-> drive.setCapped(0.5)),
+                new SetExtendoCommand(robot.intake, 200),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
         );
       }
 

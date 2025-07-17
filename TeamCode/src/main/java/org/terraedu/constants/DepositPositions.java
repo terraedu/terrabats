@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class DepositPositions {
     //edit
-    public static double INIT_ARM = 0.3; // This is the inner limit of the arm (on the back) This should be the transfer position or close to it
+    public static double INIT_ARM = 0.5; // This is the inner limit of the arm (on the back) This should be the transfer position or close to it
     public static double SPECI_ARM = 0.7;
     public static double SPECI_GRAB = 0;
     public static double SAMPLE_PLACE = 0.0;
