@@ -22,7 +22,7 @@ public class Intake extends WSubsystem {
     private Servo armLeft, armRight,claw,turret;
 
 
-    public static double p = 0.065;
+    public static double p = 0.063;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;

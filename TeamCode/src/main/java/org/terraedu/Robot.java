@@ -160,7 +160,7 @@ public class Robot extends WSubsystem {
         armRight.setDirection(Servo.Direction.REVERSE);
         armLeft.setDirection(Servo.Direction.FORWARD);
 
-        liftLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        liftLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         liftRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         liftLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

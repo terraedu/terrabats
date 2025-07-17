@@ -15,8 +15,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
 import org.terraedu.Robot;
+import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
+import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
@@ -25,6 +27,8 @@ import org.terraedu.util.Alliance;
 import org.terraedu.util.LinkageMode;
 import org.terraedu.util.PlaceMode;
 import org.terraedu.util.RobotMode;
+
+import java.util.Set;
 
 @TeleOp(name = "Red")
 public class TerraRed extends CommandOpMode {
@@ -64,7 +68,7 @@ public class TerraRed extends CommandOpMode {
         robot.deposit.setClawClosed(false);
 
         new SetExtendoCommand(robot.intake, 0);
-        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.INIT_TURRET));
+        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET));
 
         //#region Command Registrar
 
@@ -100,51 +104,63 @@ public class TerraRed extends CommandOpMode {
 //
 //                )
 //        );
-          new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
-                  intakeSequence()
-                  );
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
+                intakeSequence()
+        );
 
-          gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenActive(
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
+                sampleDepositSequence()
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenActive(
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INT_READY),
                         new WaitCommand(250),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB),
                         new WaitCommand(250),
-                        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.INIT_TURRET)),
+                        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET)),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.TRANSFER),
-                        new SetExtendoCommand(robot.intake, 15)
-                )
-          );
-
-          gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(
-                  new SequentialCommandGroup(
-                          new SetExtendoCommand(robot.intake, 250)
-                  )
-          );
-
-          gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
-                    new SequentialCommandGroup(
-                            new SetExtendoCommand(robot.intake, 150)
-                    )
-          );
-
-          gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(
-                    new SequentialCommandGroup(
-                            new InstantCommand(()-> robot.turret.setPosition(IntakePositions.RIGHT_TURRET))
-                    )
-            );
-
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(
-                new SequentialCommandGroup(
-                        new InstantCommand(()-> robot.turret.setPosition(IntakePositions.LEFT_TURRET))
+                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                        new SetExtendoCommand(robot.intake, 45)
                 )
         );
 
-          gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
-                    new SequentialCommandGroup(
-                            new SetExtendoCommand(robot.intake, 100)
-                    )
-            );
+        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenActive(
+                new SequentialCommandGroup(
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
+                        new WaitCommand(250),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+                        new WaitCommand(350),
+                        new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW)),
+                        new WaitCommand(150),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
+                        new SetExtendoCommand(robot.intake, 0)
+                )
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(
+                new SequentialCommandGroup(
+                        new SetExtendoCommand(robot.intake, 325)
+                )
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
+                new SequentialCommandGroup(
+                        new SetExtendoCommand(robot.intake, 200)
+                )
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.RIGHT_TURRET))
+                )
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.LEFT_TURRET))
+                )
+        );
 
 //        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
 //                toSpecimenMode()
@@ -215,11 +231,11 @@ public class TerraRed extends CommandOpMode {
         robot.read();
 
 
-        double turn = joystickScalar(gamepad1.left_stick_x *speedCoeff, 0.01);
+        double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
 
         Vector3f driveVec = new Vector3f(
-                (float) joystickScalar(-gamepad1.right_stick_x * turnspeedCoeff, 0.001),
-                (float) joystickScalar(gamepad1.right_stick_y * speedCoeff, 0.001),
+                (float) joystickScalar(-gamepad1.right_stick_x, 0.001),
+                (float) joystickScalar(gamepad1.right_stick_y, 0.001),
                 0f
         );
 
@@ -253,13 +269,19 @@ public class TerraRed extends CommandOpMode {
                         Math.pow(Math.abs(n), Math.log(l / a) / Math.log(l)) * Math.signum(n) :
                         n / a);
     }
-      private Command intakeSequence() {
+
+    private Command intakeSequence() {
         return new SequentialCommandGroup(
-                new InstantCommand(()-> drive.setCapped(0.5)),
-                new SetExtendoCommand(robot.intake, 200),
+                new SetExtendoCommand(robot.intake, 250),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
         );
-      }
+    }
+
+    private Command sampleDepositSequence () {
+        return new SequentialCommandGroup(
+                new SetLiftCommand(robot.deposit, 10)
+        );
+    }
 
 
 //    private Command toSpecimenMode() {

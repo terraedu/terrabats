@@ -39,8 +39,8 @@ public class Deposit extends WSubsystem {
     public enum OuttakeState {
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
         SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
-        TRANSFER(DepositPositions.SAMPLE_PLACE, DepositPositions.INIT_PIVOT),
-        PLACE(DepositPositions.PLACE_ARM, DepositPositions.PLACE_PIVOT),
+        TRANSFER(DepositPositions.SAMPLE_TRANSFER, DepositPositions.TRANSFER_PIVOT),
+        PLACE(DepositPositions.PLACE_ARM, DepositPositions.SPECI_PIVOT),
         SPECIPLACE(DepositPositions.INIT_ARM, DepositPositions.SPECI_PIVOT);
 
 
