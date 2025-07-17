@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -20,7 +19,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.command.bot.SetArmCommand;
-import org.terraedu.command.bot.SetDepositLinkageCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
@@ -290,7 +288,7 @@ public class TerraBlue extends CommandOpMode {
                 new SetSpinCommand(robot.intake, 1),
                 new WaitUntilCommand(robot.intake.getSupplier()),
                 new SetSpinCommand(robot.intake, 0),
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.RETURN),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB),
                 new SetExtendoCommand(robot.intake, 0),
                 new SetSpinCommand(robot.intake, -.5),
                 new WaitCommand(300),

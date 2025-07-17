@@ -141,6 +141,9 @@ public class Robot extends WSubsystem {
         extendo.setDirection(DcMotorSimple.Direction.REVERSE);
         extendo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        intakeArmRight.setDirection(Servo.Direction.FORWARD);
+        intakeArmLeft.setDirection(Servo.Direction.REVERSE);
+        iclaw.setDirection(Servo.Direction.FORWARD);
 
         // --= Outtake =-- //
 

@@ -17,8 +17,8 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.;
-    public static double ff = 0.;
+    public static double p = -0.1;
+    public static double ff = -0.015;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
@@ -95,7 +95,7 @@ public class Deposit extends WSubsystem {
 
     public void setState(OuttakeState state) {
         armLeft.setPosition(state.armPos);
-        armRight.setPosition(state.armPos);
+        armRight.setPosition(state.armPos + 0.0225);
         pivot.setPosition(state.pivot);
     }
 

@@ -22,7 +22,7 @@ public class Intake extends WSubsystem {
     private Servo armLeft, armRight,claw,turret;
 
 
-    public static double p = 0.0;
+    public static double p = 0.065;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
@@ -48,23 +48,21 @@ public class Intake extends WSubsystem {
     }
 
     public enum IntakeState{
-        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH, 0,0),
-        RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH,0,0),
-        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH,0,0),
-        RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH,0,0);
+        INIT(IntakePositions.INIT_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW),
+        GRAB(IntakePositions.INTAKE_ARM, IntakePositions.INIT_TURRET, IntakePositions.CLOSE_CLAW),
+        HOVER(IntakePositions.GRABPOS_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW),
+        RELEASE(IntakePositions.INIT_ARM, IntakePositions.INIT_TURRET, IntakePositions.OPEN_CLAW);
 
 
 
 
-        final double armR;
-        final double armL;
+        final double armPos;
         final double turret;
         final double claw;
 
-        IntakeState(double armR, double armL, double turret, double claw) {
+        IntakeState(double armPos, double turret, double claw) {
 
-            this.armR = armR;
-            this.armL = armL;
+            this.armPos = armPos;
             this.turret = turret;
             this.claw = claw;
         }
@@ -76,8 +74,10 @@ public class Intake extends WSubsystem {
 
 
     public void setState(IntakeState state) {
-        armRight.setPosition(state.armR);
-        armLeft.setPosition(state.armL);
+        armRight.setPosition(state.armPos);
+        armLeft.setPosition(state.armPos + 0.02);
+        turret.setPosition(state.turret);
+        claw.setPosition(state.claw);
     }
 
     public BooleanSupplier getSupplier() {
