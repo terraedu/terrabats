@@ -44,11 +44,11 @@ public class fivespec extends CommandOpMode {
 
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
-                new ParallelCommandGroup(
+                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+        new ParallelCommandGroup(
                         new InstantCommand(() -> robot.deposit.setState(Deposit.FourBarState.SPECIPLACE)),
                         new InstantCommand(() -> robot.intake.setState(Intake.IntakeState.INIT)),
-                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true))
+                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT)
 
                 ),
                 new ParallelCommandGroup(

@@ -319,7 +319,6 @@ public class TerraRed extends CommandOpMode {
                 new SetExtendoCommand(robot.intake, 0),
                 new SetSpinCommand(robot.intake, -.35),
                 new WaitCommand(150),
-                new SetSpinCommand(robot.intake, 0),
                 new InstantCommand(() -> status = RobotMode.INTAKING)
 
 
