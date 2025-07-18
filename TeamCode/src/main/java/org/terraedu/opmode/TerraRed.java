@@ -134,7 +134,9 @@ public class TerraRed extends CommandOpMode {
                         new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW)),
                         new WaitCommand(150),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
-                        new SetExtendoCommand(robot.intake, 0)
+                        new SetExtendoCommand(robot.intake, 0),
+                        new SetLiftCommand(robot.deposit, 300),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE)
                 )
         );
 
@@ -279,7 +281,7 @@ public class TerraRed extends CommandOpMode {
 
     private Command sampleDepositSequence () {
         return new SequentialCommandGroup(
-                new SetLiftCommand(robot.deposit, 10)
+
         );
     }
 

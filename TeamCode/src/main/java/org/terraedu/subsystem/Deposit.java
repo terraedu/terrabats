@@ -17,8 +17,8 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = -0.1;
-    public static double ff = -0.015;
+    public static double p = 0.1;
+    public static double ff = 0.0175;
 
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
@@ -40,7 +40,7 @@ public class Deposit extends WSubsystem {
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
         SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
         TRANSFER(DepositPositions.SAMPLE_TRANSFER, DepositPositions.TRANSFER_PIVOT),
-        PLACE(DepositPositions.PLACE_ARM, DepositPositions.SPECI_PIVOT),
+        PLACE(DepositPositions.PLACE_ARM, DepositPositions.INIT_PIVOT),
         SPECIPLACE(DepositPositions.INIT_ARM, DepositPositions.SPECI_PIVOT);
 
 
@@ -114,7 +114,7 @@ public class Deposit extends WSubsystem {
     @Override
     public void periodic() {
         controller.setP(p);
-        controlSignal = (controller.calculate(position, target)) + ff;
+        controlSignal = -((controller.calculate(position, target)) + ff);
     }
 
     @Override
