@@ -46,6 +46,7 @@ public class TerraRed extends CommandOpMode {
     GamepadEx gph1;
     GamepadEx gph2;
 
+
     private MecanumDrive drive;
 
     @Override
@@ -63,7 +64,7 @@ public class TerraRed extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.OuttakeState.INIT);
+        robot.deposit.setState(Deposit.OuttakeState.START);
         robot.intake.setState(Intake.IntakeState.INIT);
         robot.deposit.setClawClosed(false);
 
@@ -135,8 +136,9 @@ public class TerraRed extends CommandOpMode {
                         new WaitCommand(150),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                         new SetExtendoCommand(robot.intake, 0),
-                        new SetLiftCommand(robot.deposit, 300),
+                        new SetLiftCommand(robot.deposit, 1750),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE)
+
                 )
         );
 

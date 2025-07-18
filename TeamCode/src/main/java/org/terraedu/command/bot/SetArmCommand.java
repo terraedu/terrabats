@@ -10,4 +10,5 @@ public class SetArmCommand extends InstantCommand {
                 () -> deposit.setState(state)
         );
     }
+
 }
