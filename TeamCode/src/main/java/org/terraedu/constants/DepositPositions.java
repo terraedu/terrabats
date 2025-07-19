@@ -6,7 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class DepositPositions {
     public static double INIT_LINKAGE = 0.04;
     public static double INIT_ARM = 0.2;
-    public static double INIT_PIVOT = 0.01;
+    public static double INIT_PIVOT = 0.08  ;
     public static double CLAW_GRAB = 0.45;
     public static double SAMPLE_GRAB = 0.4;
     public static double CLAW_INIT = 0.0;

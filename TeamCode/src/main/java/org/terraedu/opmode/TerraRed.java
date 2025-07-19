@@ -25,6 +25,7 @@ import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
 import org.terraedu.command.bot.SetSpinCommand;
+import org.terraedu.constants.IntakePositions;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
@@ -69,6 +70,8 @@ public class TerraRed extends CommandOpMode {
         robot.deposit.setState(Deposit.FourBarState.INIT);
         robot.deposit.setLinkage(Deposit.LinkageState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
+        robot.latch.setPosition(IntakePositions.CLOSE_LATCH);
+
 
 
         //#region Command Registrar
@@ -156,7 +159,7 @@ public class TerraRed extends CommandOpMode {
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                         new SetSpinCommand(robot.intake, -1),
-                        new WaitCommand(125),
+                        new WaitCommand(450),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
 
                 )
@@ -265,6 +268,7 @@ public class TerraRed extends CommandOpMode {
 
     private Command sampleTransfer() {
         return new SequentialCommandGroup(
+                new InstantCommand(() -> robot.intake.setReading(false)),
                 new SetExtendoCommand(robot.intake, 100),
                 new WaitCommand(150),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.TRANSFER),
@@ -317,8 +321,6 @@ public class TerraRed extends CommandOpMode {
                 new SetSpinCommand(robot.intake, 0),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                 new SetExtendoCommand(robot.intake, 0),
-                new SetSpinCommand(robot.intake, -.35),
-                new WaitCommand(150),
                 new InstantCommand(() -> status = RobotMode.INTAKING)
 
 

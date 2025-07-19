@@ -26,6 +26,8 @@ public class RGB {
         return b;
     }
 
+
+
     public RGBA rgba() {
         return new RGBA(r, g, b, 255);
     }

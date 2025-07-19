@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.terraedu.Globals;
 import org.terraedu.Robot;
+import org.terraedu.constants.DepositPositions;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.RobotMode;
@@ -36,6 +37,8 @@ public class Intake extends WSubsystem {
 
     private boolean isReading = false;
     private boolean hasColor = false;
+    private boolean hasWrongColor = false;
+
 
     public BooleanSupplier intakeSupplier = () -> hasColor;
 
@@ -51,21 +54,21 @@ public class Intake extends WSubsystem {
     }
 
     public enum IntakeState{
-        INIT(IntakePositions.INIT_LINKAGE, IntakePositions.CLOSE_LATCH),
-        RETURN(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH),
-        HOVER(IntakePositions.DROP_LINKAGE, IntakePositions.OPEN_LATCH),
-        COLLECT(IntakePositions.DROP_LINKAGE, IntakePositions.CLOSE_LATCH),
-        RELEASE(IntakePositions.INIT_LINKAGE, IntakePositions.OPEN_LATCH);
+        INIT(IntakePositions.INIT_LINKAGE),
+        RETURN(IntakePositions.INIT_LINKAGE),
+        HOVER(IntakePositions.DROP_LINKAGE),
+        DROP(IntakePositions.DROPDA_LINKAGE),
+
+        COLLECT(IntakePositions.DROP_LINKAGE),
+        RELEASE(IntakePositions.INIT_LINKAGE);
 
 
 
 
         final double linkPos;
-        final double latchPos;
 
-        IntakeState(double link, double latch) {
+        IntakeState(double link) {
             this.linkPos = link;
-            this.latchPos = latch;
         }
     }
     private double controlSignal;
@@ -76,7 +79,6 @@ public class Intake extends WSubsystem {
 
     public void setState(IntakeState state) {
         linkage.setPosition(state.linkPos);
-        latch.setPosition(state.latchPos);
     }
 
     public BooleanSupplier getSupplier() {
@@ -139,6 +141,27 @@ public class Intake extends WSubsystem {
         }else{
             hasColor = true;
         }
+
+        if (isReading) {
+            RevColorSensorV3.Color color2 = this.color.getColor();
+
+            switch (Robot.getInstance().alliance) {
+                case RED -> hasWrongColor = (
+                        color2 == RevColorSensorV3.Color.BLUE || color2 == RevColorSensorV3.Color.YELLOW
+                );
+                case BLUE-> hasWrongColor = (
+                        color2 == RevColorSensorV3.Color.RED || color2 == RevColorSensorV3.Color.YELLOW
+                );
+                case REDY -> hasWrongColor = (
+                        color2 == RevColorSensorV3.Color.BLUE
+                );
+                case BLUEY -> hasWrongColor = (
+                        color2 == RevColorSensorV3.Color.RED
+                );
+            }
+        } else {
+            hasWrongColor = false;
+        }
     }
 
     @Override
@@ -149,6 +172,18 @@ public class Intake extends WSubsystem {
         }
         if (intake.getPower() != intakePower) {
             intake.setPower(intakePower);
+        }
+
+        if (hasColor && isReading && !hasWrongColor) {
+            latch.setPosition(IntakePositions.CLOSE_LATCH);
+        }else if(isReading && !hasWrongColor){
+            latch.setPosition(IntakePositions.CLOSE_LATCH);
+        }   else if(hasWrongColor){
+        latch.setPosition(IntakePositions.OPEN_LATCH);
+         }else {
+            Robot.getInstance();
+            latch.setPosition(IntakePositions.OPEN_LATCH);
+
         }
     }
 
