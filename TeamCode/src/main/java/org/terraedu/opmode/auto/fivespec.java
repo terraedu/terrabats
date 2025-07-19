@@ -97,37 +97,7 @@ public class fivespec extends CommandOpMode {
                         new SetPointCommand(robot, new Pose(5,15, Math.toRadians(0)), .5)
 
                 ), new SequentialCommandGroup(
-                        new SetPointCommand(robot, new Pose(-22,19, Math.toRadians(-41)), 1).alongWith(new SetLiftCommand(robot.deposit, 0)),
-                        new SetPointCommand(robot, new Pose(-29,19, Math.toRadians(-41)), .5).alongWith(new SetExtendoCommand(robot.intake, 400)),
-                        new SetIntakeCommand(robot.intake, Intake.IntakeState.DROP),
-                                new WaitCommand(200),
-
-                                new SetSpinCommand(robot.intake, 1),
-                                new SetExtendoCommand(robot.intake, 420),
-                        new WaitCommand(700),
-                        new SetSpinCommand(robot.intake, 0).alongWith(new SetIntakeCommand(robot.intake, Intake.IntakeState.RETURN)),
-                        new SetPointCommand(robot, new Pose(-33,19, Math.toRadians(-125)), .5).alongWith(new SetExtendoCommand(robot.intake, 200)),
-                                new SetSpinCommand(robot.intake, -1),
-                        new WaitCommand(350),
-                        new SetPointCommand(robot, new Pose(-50,19, Math.toRadians(-41)), .5).alongWith(new SetExtendoCommand(robot.intake, 300)),
-                        new SetIntakeCommand(robot.intake, Intake.IntakeState.DROP),
-                        new WaitCommand(200),
-
-                        new SetSpinCommand(robot.intake, 1),
-                        new SetExtendoCommand(robot.intake, 310),
-        new WaitCommand(700),
-                new SetSpinCommand(robot.intake, 0).alongWith(new SetIntakeCommand(robot.intake, Intake.IntakeState.RETURN)),
-                        new SetPointCommand(robot, new Pose(-50,19, Math.toRadians(-130)), .5).alongWith(new SetExtendoCommand(robot.intake, 100)),
-                        new SetSpinCommand(robot.intake, -1),
-                        new WaitCommand(350),
-                        new SetPointCommand(robot, new Pose(-40,19, Math.toRadians(-55)), .5).alongWith(new SetExtendoCommand(robot.intake, 300)),
-                        new SetIntakeCommand(robot.intake, Intake.IntakeState.DROP),
-                        new WaitCommand(200),
-
-                        new SetSpinCommand(robot.intake, 1),
-                        new SetExtendoCommand(robot.intake, 400),
-                        new WaitCommand(700),
-                        new SetSpinCommand(robot.intake, 0).alongWith(new SetIntakeCommand(robot.intake, Intake.IntakeState.RETURN))
+                        new SetPointCommand(robot, new Pose(-22,19, Math.toRadians(-41)), 1).alongWith(new SetLiftCommand(robot.deposit, 0))
 
 
 
