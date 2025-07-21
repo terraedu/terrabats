@@ -11,6 +11,7 @@ import org.terraedu.util.wrappers.WSubsystem;
 
 public class MecanumDrive extends WSubsystem implements TerraDrive {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    public double speedCoeff;
     public MecanumDrive(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
@@ -21,6 +22,10 @@ public class MecanumDrive extends WSubsystem implements TerraDrive {
         this.frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void setCap(double cap){
+        this.speedCoeff = cap;
     }
 
     @Override
@@ -36,10 +41,10 @@ public class MecanumDrive extends WSubsystem implements TerraDrive {
         double blP = r * Math.sin(robotAngle) - turnSpeed;
         double brP = r * Math.cos(robotAngle) + turnSpeed;
 
-        frontLeft.setPower(flP);
-        frontRight.setPower(frP);
-        backLeft.setPower(blP);
-        backRight.setPower(brP);
+        frontLeft.setPower(flP * speedCoeff);
+        frontRight.setPower(frP * speedCoeff);
+        backLeft.setPower(blP * speedCoeff);
+        backRight.setPower(brP * speedCoeff);
     }
 
     @Override

@@ -88,6 +88,10 @@ public class Intake extends WSubsystem {
         return target;
     }
 
+    public void addTarget(double change){
+        target = position + change;
+    }
+
     public double getPosition() {
         return position;
     }

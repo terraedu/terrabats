@@ -19,6 +19,7 @@ import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
 import org.terraedu.command.bot.SetIntakeCommand;
 import org.terraedu.command.bot.SetLiftCommand;
+import org.terraedu.constants.DepositPositions;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
@@ -30,14 +31,13 @@ import org.terraedu.util.RobotMode;
 
 import java.util.Set;
 
-@TeleOp(name = "Red")
+@TeleOp(name = "OpMode")
 public class TerraRed extends CommandOpMode {
 
     private ElapsedTime timer;
     private double loopTime = 0;
 
-    private double speedCoeff;
-    private double turnspeedCoeff;
+
     public PlaceMode deposit;
     public LinkageMode link;
     public RobotMode status;
@@ -67,54 +67,29 @@ public class TerraRed extends CommandOpMode {
         robot.deposit.setState(Deposit.OuttakeState.START);
         robot.intake.setState(Intake.IntakeState.INIT);
         robot.deposit.setClawClosed(false);
-
         new SetExtendoCommand(robot.intake, 0);
-        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET));
-
+        robot.turret.setPosition(IntakePositions.INIT_TURRET);
+        robot.drive.setCap(0.8);
         //#region Command Registrar
 
-//        // Y Button – Toggle Specimen Mode
-//        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SPECIMEN)).whenActive(
-//                new SequentialCommandGroup(
-//                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-//                        new InstantCommand(() -> robot.setAlliance(Alliance.REDY)),
-//                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
-//                        new WaitCommand(500),
-//                        new InstantCommand(() -> status = RobotMode.DRIVING),
-//                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-//                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
-//                        new InstantCommand(() -> status = RobotMode.DRIVING)
-//
-//
-//
-//                )
-//        );
-//        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SAMPLE)).whenActive(
-//
-//                new SequentialCommandGroup(
-//                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-//                        new InstantCommand(() -> robot.setAlliance(Alliance.RED)),
-//                        new InstantCommand(() -> status = RobotMode.DRIVING),
-//                        new SetExtendoCommand(robot.intake, 0),
-//                        new WaitCommand(500),
-//                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-//                        new InstantCommand(() -> deposit = PlaceMode.SPECIMEN),
-//                        new InstantCommand(() -> status = RobotMode.DRIVING)
-//
-//
-//
-//                )
-//        );
         new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
+                new SequentialCommandGroup(
+                new InstantCommand(()->         robot.drive.setCap(.5)),
                 intakeSequence()
+                )
         );
 
         new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
-                sampleDepositSequence()
+                new SequentialCommandGroup(
+                sampleDepositSequence(),
+                        new InstantCommand(()->         robot.drive.setCap(1))
+
+                )
         );
 
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenActive(
                 new SequentialCommandGroup(
+                        new InstantCommand(()->         robot.drive.setCap(1)),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INT_READY),
                         new WaitCommand(250),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.GRAB),
@@ -122,18 +97,20 @@ public class TerraRed extends CommandOpMode {
                         new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET)),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.TRANSFER),
                         new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                        new SetExtendoCommand(robot.intake, 45)
+                        new SetExtendoCommand(robot.intake, 45),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
+                        new WaitCommand(500),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
+                        new WaitCommand(250),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+                        new WaitCommand(350),
+                        new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW))
                 )
         );
 
         gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenActive(
                 new SequentialCommandGroup(
-                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
-                        new WaitCommand(250),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-                        new WaitCommand(350),
-                        new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW)),
-                        new WaitCommand(150),
+                        new InstantCommand(()->         robot.drive.setCap(.6)),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                         new SetExtendoCommand(robot.intake, 0),
                         new SetLiftCommand(robot.deposit, 1750),
@@ -142,15 +119,33 @@ public class TerraRed extends CommandOpMode {
                 )
         );
 
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.X).whenActive(
                 new SequentialCommandGroup(
-                        new SetExtendoCommand(robot.intake, 325)
+                        new InstantCommand(()->         robot.drive.setCap(.6)),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
+                        new WaitCommand(250),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+                        new WaitCommand(350),
+                        new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW)),
+                        new WaitCommand(150),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
+                        new SetExtendoCommand(robot.intake, 0),
+                        new SetLiftCommand(robot.deposit, 590),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE)
+
                 )
         );
 
-        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
+
+        gph1.getGamepadButton(GamepadKeys.Button.Y).whenActive(
                 new SequentialCommandGroup(
-                        new SetExtendoCommand(robot.intake, 200)
+                        new InstantCommand(()-> robot.intake.addTarget(50))
+                )
+        );
+
+        gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(()-> robot.intake.addTarget(-50))
                 )
         );
 
@@ -160,68 +155,25 @@ public class TerraRed extends CommandOpMode {
                 )
         );
 
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET))
+                )
+        );
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(() -> robot.turret.setPosition(IntakePositions.VERT_TURRET))
+                )
+        );
+
         gph1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenActive(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.turret.setPosition(IntakePositions.LEFT_TURRET))
                 )
         );
 
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
-//                toSpecimenMode()
-//        );
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
-//                toDrivingFromSpecimen()
-//        );
-//
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
-//                sampleTransfer()
-//        );
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
-//                samplePlace()
-//        );
-
-        // DPAD UP – Toggle Linkage between INIT and PLACE
-
-//        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-//                new SequentialCommandGroup(
-//                        new InstantCommand(() -> link = LinkageMode.OUT)
-//                )
-//        );
-//        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-//                new SequentialCommandGroup(
-//                        new InstantCommand(() -> status = RobotMode.PLACING),
-//                        new InstantCommand(() -> link = LinkageMode.IN)
-//                )
-//        );
-
-        // Right Trigger – Intake Logic (Auto-Intake If Driving)
 
 
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
-//                startAutoIntake()
-//
-//        );
-//        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).and(new Trigger(() -> status == RobotMode.INTAKING)).whenActive(
-//                manualEject()
-//        );
-
-
-//        gph1.getGamepadButton(GamepadKeys.Button.B).whenActive(
-//                new InstantCommand(() -> robot.intake.setReading(false))
-//        );
-//
-//        gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
-//                new SequentialCommandGroup(
-//                        new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-//                        new SetSpinCommand(robot.intake, -1),
-//                        new WaitCommand(125),
-//                        new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
-//
-//                )
-//        );
-
-
-        //#endregion
     }
 
     @Override
@@ -254,7 +206,7 @@ public class TerraRed extends CommandOpMode {
         telemetry.addData("intake", robot.intake.getPosition());
         telemetry.addData("deposit", robot.deposit.getPosition());
 
-        telemetry.addData("mode ", deposit);
+        telemetry.addData("mode ", robot.deposit.getDynamic());
         telemetry.addData("reading", robot.intake.getReading());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
@@ -276,6 +228,7 @@ public class TerraRed extends CommandOpMode {
 
     private Command intakeSequence() {
         return new SequentialCommandGroup(
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                 new SetExtendoCommand(robot.intake, 250),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
         );
@@ -283,116 +236,12 @@ public class TerraRed extends CommandOpMode {
 
     private Command sampleDepositSequence () {
         return new SequentialCommandGroup(
-
+                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                new WaitCommand(450),
+                new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
+                new SetLiftCommand(robot.deposit, 0)
         );
     }
-
-
-//    private Command toSpecimenMode() {
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-//                new WaitCommand(250),
-//                new SetLiftCommand(robot.deposit, 0),
-//                new SetArmCommand(robot.deposit, Deposit.OuttakeState.SPECI),
-//                new InstantCommand(() -> status = RobotMode.PLACING)
-//
-//        );
-//    }
-//    private Command toDrivingFromSpecimen() {
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-//                new WaitCommand(250),
-//                new SetLiftCommand(robot.deposit, 530),
-//                new WaitCommand(250),
-//                new SetArmCommand(robot.deposit, Deposit.OuttakeState.SPECIPLACE),
-//                new InstantCommand(() -> status = RobotMode.DRIVING)
-//
-//        );
-//    }
-//
-//    private Command sampleTransfer() {
-//        return new SequentialCommandGroup(
-//                new SetExtendoCommand(robot.intake, 100),
-//                new WaitCommand(150),
-//                new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
-//                new SetIntakeCommand(robot.intake, Intake.IntakeState.RELEASE),
-//                new WaitCommand(150),
-//                new SetSpinCommand(robot.intake, 1),
-//                new SetExtendoCommand(robot.intake, 40),
-//                new WaitCommand(300),
-//                new InstantCommand(() -> robot.deposit.setSampleClosed(true)),
-//                new SetSpinCommand(robot.intake, 0),
-//                new SetExtendoCommand(robot.intake, 135),
-//                new WaitCommand(150),
-//                new SetLiftCommand(robot.deposit, 630),
-//                new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE),
-//                new WaitCommand(300),
-//                new InstantCommand(() -> robot.deposit.setClawClosed(true)),
-//                new InstantCommand(() -> status = RobotMode.PLACING)
-//
-//
-//        );
-//    }
-//
-//    private Command samplePlace() {
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> robot.deposit.setSampleClosed(false)),
-//                new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-//                new WaitCommand(300),
-//                new WaitCommand(300),
-//                new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
-//                new WaitCommand(300),
-//                new SetLiftCommand(robot.deposit, 0),
-//                new WaitCommand(200),
-//                new SetExtendoCommand(robot.intake, 0),
-//                new InstantCommand(() -> status = RobotMode.DRIVING)
-//
-//
-//        );
-//    }
-//
-//    private Command startAutoIntake() {
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> robot.intake.setReading(true)),
-//                new SetExtendoCommand(robot.intake, 475),// Max is 500
-//                new WaitCommand(500),
-//                new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
-//                new SetSpinCommand(robot.intake, 1),
-//                new WaitUntilCommand(robot.intake.getSupplier()),
-//                new SetSpinCommand(robot.intake, 0),
-//                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-//                new SetExtendoCommand(robot.intake, 0),
-//                new SetSpinCommand(robot.intake, -.35),
-//                new WaitCommand(150),
-//                new SetSpinCommand(robot.intake, 0),
-//                new InstantCommand(() -> status = RobotMode.INTAKING)
-//
-//
-//        );
-//    }
-//
-//    private Command cancelIntake() {
-//        return new SequentialCommandGroup(
-//                new SetSpinCommand(robot.intake, 0),
-//                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-//                new SetExtendoCommand(robot.intake, 0),
-//                new InstantCommand(() -> status = RobotMode.DRIVING)
-//        );
-//    }
-//
-//    private Command manualEject() {
-//        return new SequentialCommandGroup(
-//                new InstantCommand(() -> robot.intake.setReading(false)),
-//                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-//                new SetExtendoCommand(robot.intake, 450),
-//                new SetSpinCommand(robot.intake, -1),
-//                new WaitCommand(750),
-//                new SetSpinCommand(robot.intake, 0),
-//                new SetExtendoCommand(robot.intake, 0),
-//                new InstantCommand(() -> status = RobotMode.DRIVING)
-//
-//        );
-//    }
 
 }
 

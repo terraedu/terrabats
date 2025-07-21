@@ -19,7 +19,7 @@ public class Deposit extends WSubsystem {
     private Claw claw;
     public static double p = 0.08;
     public static double ff = 0.0175;
-
+    public double dynamicDeposit;
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
 
@@ -58,6 +58,10 @@ public class Deposit extends WSubsystem {
 
     public double getTarget() {
         return target;
+    }
+
+    public void setDynamic(double position){
+        this.dynamicDeposit = position;
     }
 
     public double getPosition() {
@@ -100,6 +104,8 @@ public class Deposit extends WSubsystem {
         pivot.setPosition(state.pivot);
     }
 
+    public double getDynamic(){ return dynamicDeposit;}
+
     public void setClawClosed(boolean closed) {
         this.claw.setClawState(closed);
     }
@@ -116,12 +122,14 @@ public class Deposit extends WSubsystem {
     public void periodic() {
         controller.setP(p);
         controlSignal = -((controller.calculate(position, target)) + ff);
+
     }
 
     @Override
     public void read() {
         position = encoder.getPosition();
         claw.read();
+        
     }
 
     @Override
