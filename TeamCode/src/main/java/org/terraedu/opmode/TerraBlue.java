@@ -18,7 +18,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
+import org.terraedu.Globals;
 import org.terraedu.Robot;
+import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
@@ -33,6 +35,7 @@ import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.LinkageMode;
 import org.terraedu.util.PlaceMode;
+import org.terraedu.util.Pose;
 import org.terraedu.util.RobotMode;
 
 @TeleOp(name = "Blue")
@@ -76,36 +79,21 @@ public class TerraBlue extends CommandOpMode {
         //#region Command Registrar
 
         // Y Button – Toggle Specimen Mode
-        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SPECIMEN)).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.X).whenActive(
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new InstantCommand(() -> robot.setAlliance(Alliance.BLUEY)),
-                        new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
-                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false))
+                        new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT)
+
 
 
 
                 )
         );
-        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SAMPLE)).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.Y).whenActive(
 
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new InstantCommand(() -> robot.setAlliance(Alliance.BLUE)),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new SetExtendoCommand(robot.intake, 0),
-                        new WaitCommand(750),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> deposit = PlaceMode.SPECIMEN),
-                        new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false))
+                        new SetExtendoCommand(robot.intake, 0)
 
 
 
@@ -113,17 +101,17 @@ public class TerraBlue extends CommandOpMode {
                         )
         );
 
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).whenActive(
                 toSpecimenMode()
         );
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
+        new Trigger(()-> gph1.getButton(GamepadKeys.Button.LEFT_BUMPER)).whenActive(
                 toDrivingFromSpecimen()
         );
 
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
+        new Trigger(()-> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
                 sampleTransfer()
         );
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
+        new Trigger(() -> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
                 samplePlace()
         );
 
@@ -135,7 +123,7 @@ public class TerraBlue extends CommandOpMode {
                         new InstantCommand(() -> link = LinkageMode.OUT)
                 )
         );
-        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> status = RobotMode.PLACING),
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
@@ -181,6 +169,21 @@ public class TerraBlue extends CommandOpMode {
                 })
         );
 
+        gph2.getGamepadButton(GamepadKeys.Button.A).whenActive(
+                new SequentialCommandGroup(
+                        new InstantCommand(()-> Globals.AUTO = true),
+                        new InstantCommand(()-> robot.localizer.reset())
+
+                        )
+        );
+
+        gph2.getGamepadButton(GamepadKeys.Button.B).whenActive(
+               new SequentialCommandGroup(
+                new InstantCommand(()-> Globals.AUTO = true),
+                new SetPointCommand(robot,new Pose(0,0,0),1)
+               )
+        );
+
         //#endregion
     }
 
@@ -211,9 +214,9 @@ public class TerraBlue extends CommandOpMode {
         double loop = System.nanoTime();
 //        telemetry.addData("serov", robot.intakeLinkage.getPosition());
 //        telemetry.addData("target", robot.intake.getTarget());
-        telemetry.addData("pos", robot.intake.getPosition());
+//        telemetry.addData("pos", robot.intake.getPosition());
         telemetry.addData("mode ", deposit);
-        telemetry.addData("reading", robot.intake.getReading());
+//        telemetry.addData("reading", robot.intake.getReading());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
@@ -261,7 +264,7 @@ public class TerraBlue extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new WaitCommand(250),
-                new SetLiftCommand(robot.deposit, 512),
+                new SetLiftCommand(robot.deposit, 470),
                 new WaitCommand(250),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                 new InstantCommand(() -> status = RobotMode.DRIVING)

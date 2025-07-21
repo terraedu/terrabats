@@ -73,18 +73,16 @@ public class TerraRed extends CommandOpMode {
         robot.latch.setPosition(IntakePositions.CLOSE_LATCH);
 
 
-
         //#region Command Registrar
 
         // Y Button – Toggle Specimen Mode
-        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SPECIMEN)).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.X).whenActive(
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new InstantCommand(() -> robot.setAlliance(Alliance.REDY)),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
-                        new WaitCommand(500),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
+                        new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
                         new InstantCommand(() -> deposit = PlaceMode.SAMPLE),
                         new InstantCommand(() -> status = RobotMode.DRIVING)
 
@@ -92,34 +90,34 @@ public class TerraRed extends CommandOpMode {
 
                 )
         );
-        gph1.getGamepadButton(GamepadKeys.Button.Y).and(new Trigger(() -> deposit == PlaceMode.SAMPLE)).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.Y).whenActive(
 
                 new SequentialCommandGroup(
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new InstantCommand(() -> robot.setAlliance(Alliance.RED)),
                         new InstantCommand(() -> status = RobotMode.DRIVING),
                         new SetExtendoCommand(robot.intake, 0),
-                        new WaitCommand(500),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(false)),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
+                        new InstantCommand(() -> status = RobotMode.DRIVING),
                         new InstantCommand(() -> deposit = PlaceMode.SPECIMEN),
                         new InstantCommand(() -> status = RobotMode.DRIVING)
+
 
 
 
                 )
         );
 
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
                 toSpecimenMode()
         );
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SPECIMEN).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
+        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
                 toDrivingFromSpecimen()
         );
 
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
+        new Trigger(()-> gph1.getButton(GamepadKeys.Button.LEFT_BUMPER)).and(new Trigger(() -> status == RobotMode.DRIVING)).whenActive(
                 sampleTransfer()
         );
-        new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1 && deposit == PlaceMode.SAMPLE).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
+        new Trigger(() -> gph1.getButton(GamepadKeys.Button.LEFT_BUMPER)).and(new Trigger(() -> status == RobotMode.PLACING)).whenActive(
                 samplePlace()
         );
 
@@ -131,7 +129,7 @@ public class TerraRed extends CommandOpMode {
                         new InstantCommand(() -> link = LinkageMode.OUT)
                 )
         );
-        gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> status = RobotMode.PLACING),
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.INIT),
@@ -158,8 +156,7 @@ public class TerraRed extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                        new SetSpinCommand(robot.intake, -1),
-                        new WaitCommand(450),
+                        new WaitCommand( 450),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
 
                 )
@@ -210,7 +207,7 @@ public class TerraRed extends CommandOpMode {
 //        telemetry.addData("target", robot.intake.getTarget());
 //        telemetry.addData("pos", robot.intake.getPosition());
         telemetry.addData("mode ", deposit);
-        telemetry.addData("reading", robot.intake.getReading());
+//        telemetry.addData("reading", robot.intake.getReading());
 
         telemetry.addData("hz ", 1000000000 / (loop - loopTime));
         loopTime = loop;
@@ -319,8 +316,8 @@ public class TerraRed extends CommandOpMode {
                 new SetSpinCommand(robot.intake, 1),
                 new WaitUntilCommand(robot.intake.getSupplier()),
                 new SetSpinCommand(robot.intake, 0),
-                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                 new SetExtendoCommand(robot.intake, 0),
+                new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
                 new InstantCommand(() -> status = RobotMode.INTAKING)
 
 
