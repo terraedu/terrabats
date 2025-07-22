@@ -74,7 +74,7 @@ public class TerraRed extends CommandOpMode {
 
         new Trigger(() -> gph1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1).whenActive(
                 new SequentialCommandGroup(
-                new InstantCommand(()->         robot.drive.setCap(.5)),
+                new InstantCommand(()->         robot.drive.setCap(.3)),
                 intakeSequence()
                 )
         );
@@ -99,18 +99,18 @@ public class TerraRed extends CommandOpMode {
                         new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                         new SetExtendoCommand(robot.intake, 45),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
-                        new WaitCommand(500),
-                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
-                        new WaitCommand(250),
-                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new WaitCommand(350),
+                        new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
+                        new WaitCommand(100),
+                        new InstantCommand(() -> robot.deposit.setClawClosed(true)),
+                        new WaitCommand(100),
                         new InstantCommand(() -> robot.iclaw.setPosition(IntakePositions.OPEN_CLAW))
                 )
         );
 
         gph1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenActive(
                 new SequentialCommandGroup(
-                        new InstantCommand(()->         robot.drive.setCap(.6)),
+                        new InstantCommand(()->         robot.drive.setCap(.8)),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                         new SetExtendoCommand(robot.intake, 0),
                         new SetLiftCommand(robot.deposit, 1750),

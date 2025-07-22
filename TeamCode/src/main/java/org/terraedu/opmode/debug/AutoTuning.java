@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -24,7 +25,6 @@ import org.terraedu.util.RobotMode;
 public class AutoTuning extends CommandOpMode {
     private double loopTime = 0;
     private final Robot robot = Robot.getInstance();
-
     private ElapsedTime timer;
     public RobotMode status;
 
@@ -43,6 +43,8 @@ public class AutoTuning extends CommandOpMode {
         Globals.AUTO = true;
         robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
+
+        robot.drive.setCap(1);
 
         gph1 = new GamepadEx(gamepad1);
         gph2 = new GamepadEx(gamepad2);
