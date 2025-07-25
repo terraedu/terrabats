@@ -9,4 +9,5 @@ import org.terraedu.util.RobotMode;
 public class Globals {
     public static boolean AUTO = false;
     public static RobotMode MODE = RobotMode.DRIVING;
+    public static boolean SHOULD_LOG = false;
 }

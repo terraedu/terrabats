@@ -18,6 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
+import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
@@ -59,6 +60,8 @@ public class TerraRed extends CommandOpMode {
         link = LinkageMode.IN;
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        Globals.SHOULD_LOG = true;
 
         robot.init(hardwareMap, telemetry, Alliance.RED);
         robot.reset();

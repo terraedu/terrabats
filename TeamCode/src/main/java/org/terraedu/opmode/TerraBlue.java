@@ -63,6 +63,8 @@ public class TerraBlue extends CommandOpMode {
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
+        Globals.SHOULD_LOG = true;
+
         robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
 

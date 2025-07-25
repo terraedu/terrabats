@@ -1,5 +1,7 @@
 package org.terraedu;
 
+import android.annotation.SuppressLint;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -21,6 +23,7 @@ import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.subsystem.PinpointLocalizer;
 import org.terraedu.util.Alliance;
+import org.terraedu.util.TimingLogger;
 import org.terraedu.util.control.GoBildaPinpointDriver;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.positional.PMotor;
@@ -205,12 +208,38 @@ public class Robot extends WSubsystem {
 
 
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
+
+        if (Globals.SHOULD_LOG) {
+            Terrabats.LOGGER.debug("Initialized Robot");
+        }
     }
 
     @Override
     public void periodic() {
+        long startIntake = System.nanoTime();
         intake.periodic();
+        long endIntake = System.nanoTime();
+        TimingLogger.log("periodic", "intake", (endIntake - startIntake) / 1_000_000.0);
+
+        long startDeposit = System.nanoTime();
         deposit.periodic();
+        long endDeposit = System.nanoTime();
+        TimingLogger.log("periodic", "deposit", (endDeposit - startDeposit) / 1_000_000.0);
+
+        long startHang = System.nanoTime();
+        hang.periodic();
+        long endHang = System.nanoTime();
+        TimingLogger.log("periodic", "hang", (endHang - startHang) / 1_000_000.0);
+
+        long startDrive = System.nanoTime();
+        drive.periodic();
+        long endDrive = System.nanoTime();
+        TimingLogger.log("periodic", "drive", (endDrive - startDrive) / 1_000_000.0);
+
+        long startLocalizer = System.nanoTime();
+        localizer.periodic();
+        long endLocalizer = System.nanoTime();
+        TimingLogger.log("periodic", "localizer", (endLocalizer - startLocalizer) / 1_000_000.0);
 
         if (voltageTimer.seconds() > 5) {
             voltageTimer.reset();
@@ -220,19 +249,34 @@ public class Robot extends WSubsystem {
 
     @Override
     public void read() {
+        long startIntake = System.nanoTime();
         intake.read();
+        TimingLogger.log("read", "intake", (System.nanoTime() - startIntake) / 1_000_000.0);
+
+        long startDeposit = System.nanoTime();
         deposit.read();
+        TimingLogger.log("read", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
 
         if (Globals.AUTO) {
+            long startLocalizer = System.nanoTime();
             localizer.read();
+            TimingLogger.log("read", "localizer", (System.nanoTime() - startLocalizer) / 1_000_000.0);
         }
     }
 
     @Override
     public void write() {
+        long startHang = System.nanoTime();
         hang.write();
+        TimingLogger.log("write", "hang", (System.nanoTime() - startHang) / 1_000_000.0);
+
+        long startIntake = System.nanoTime();
         intake.write();
+        TimingLogger.log("write", "intake", (System.nanoTime() - startIntake) / 1_000_000.0);
+
+        long startDeposit = System.nanoTime();
         deposit.write();
+        TimingLogger.log("write", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
     }
 
     public void clearBulkCache() {
