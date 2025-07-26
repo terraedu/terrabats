@@ -42,7 +42,7 @@ public class Deposit extends WSubsystem {
         SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
         TRANSFER(DepositPositions.SAMPLE_TRANSFER, DepositPositions.TRANSFER_PIVOT),
         PLACE(DepositPositions.PLACE_ARM, DepositPositions.PLACEHIGH_PIVOT),
-        SPECIPLACE(DepositPositions.INIT_ARM, DepositPositions.SPECI_PIVOT);
+        PARK(DepositPositions.PARK_ARM, DepositPositions.PLACEHIGH_PIVOT);
 
 
         final double armPos;

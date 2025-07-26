@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.joml.Vector3f;
+import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
@@ -52,6 +53,8 @@ public class TerraRed extends CommandOpMode {
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
+
+        Globals.AUTO = false;
 
         deposit = PlaceMode.SPECIMEN;
         status = RobotMode.DRIVING;
@@ -97,7 +100,7 @@ public class TerraRed extends CommandOpMode {
                         new InstantCommand(() -> robot.turret.setPosition(IntakePositions.INIT_TURRET)),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.TRANSFER),
                         new InstantCommand(() -> robot.deposit.setClawClosed(false)),
-                        new SetExtendoCommand(robot.intake, 45),
+                        new SetExtendoCommand(robot.intake, 10),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                         new WaitCommand(350),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.TRANSFER),
@@ -130,7 +133,7 @@ public class TerraRed extends CommandOpMode {
                         new WaitCommand(150),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
                         new SetExtendoCommand(robot.intake, 0),
-                        new SetLiftCommand(robot.deposit, 590),
+                        new SetLiftCommand(robot.deposit, 610),
                         new SetArmCommand(robot.deposit, Deposit.OuttakeState.PLACE)
 
                 )
@@ -239,7 +242,7 @@ public class TerraRed extends CommandOpMode {
                 new InstantCommand(() -> robot.deposit.setClawClosed(false)),
                 new WaitCommand(450),
                 new SetArmCommand(robot.deposit, Deposit.OuttakeState.INIT),
-                new SetLiftCommand(robot.deposit, 0)
+                new SetLiftCommand(robot.deposit, 15)
         );
     }
 

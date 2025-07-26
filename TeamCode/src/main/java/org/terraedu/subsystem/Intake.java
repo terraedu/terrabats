@@ -52,7 +52,7 @@ public class Intake extends WSubsystem {
         INT_READY(IntakePositions.INTAKE_ARM, IntakePositions.OPEN_CLAW),
         GRAB(IntakePositions.INTAKE_ARM, IntakePositions.CLOSE_CLAW),
         HOVER(IntakePositions.GRABPOS_ARM, IntakePositions.OPEN_CLAW),
-        TRANSFER(IntakePositions.INIT_ARM, IntakePositions.CLOSE_CLAW),
+        TRANSFER(IntakePositions.TRANSFER_ARM, IntakePositions.CLOSE_CLAW),
         RELEASE(IntakePositions.INIT_ARM, IntakePositions.OPEN_CLAW);
 
         final double armPos;

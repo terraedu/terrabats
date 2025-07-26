@@ -30,6 +30,9 @@ public class Claw extends WSubsystem {
     public BooleanSupplier getSupplier() {
         return clawSupplier;
     }
+    public void setClosed(double pos) {
+        servo.setPosition(pos);
+    }
 
     public void setClawState(boolean opened) {
         isClawOpen = opened;
@@ -67,14 +70,13 @@ public class Claw extends WSubsystem {
 
     @Override
     public void write() {
+        if(!Globals.AUTO){
         if (isClawOpen) {
             servo.setPosition(DepositPositions.CLAW_GRAB);
-        } else if(isSampleOpen){
-            servo.setPosition(DepositPositions.SAMPLE_GRAB);
-
         }else{
             servo.setPosition(DepositPositions.CLAW_INIT);
         }
+    }
     }
 
     @Override

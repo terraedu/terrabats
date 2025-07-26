@@ -55,7 +55,7 @@ public class AutoTuning extends CommandOpMode {
 
         gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
                 new SequentialCommandGroup(
-                        new SetPointCommand(robot, new Pose(0, 0, Math.toRadians(0)))
+                        new SetPointCommand(robot, new Pose(10, 10, Math.toRadians(90)), 5)
                 )
 
         );

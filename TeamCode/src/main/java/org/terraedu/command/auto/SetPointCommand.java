@@ -26,6 +26,7 @@ public class SetPointCommand extends CommandBase {
     public double distH;
     public double distX;
     public double distY;
+    public double pathTime;
 
 
 
@@ -37,10 +38,11 @@ public class SetPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public SetPointCommand(Robot robot, Pose pose) {
+    public SetPointCommand(Robot robot, Pose pose, double pathTime) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
         this.target = pose;
+        this.pathTime = pathTime;
 
         xControl = new PIDFController(GotoConfig.xPID.p, GotoConfig.xPID.i, GotoConfig.xPID.d, GotoConfig.xPID.f);
         yControl = new PIDFController(GotoConfig.yPID.p, GotoConfig.yPID.i, GotoConfig.yPID.d, GotoConfig.xPID.f);
@@ -59,7 +61,7 @@ public class SetPointCommand extends CommandBase {
 
     @Override
     public void initialize() {
-//        timer.reset();
+        timer.reset();
         xControl.reset();
         yControl.reset();
         hControl.reset();
@@ -110,7 +112,7 @@ public class SetPointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 0.2 && distH <= 1;
+        return dist <= 0.2 && distH <= 0.5 || timer.seconds() > pathTime;
 //        return false;
 
     }
