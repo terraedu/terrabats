@@ -53,7 +53,7 @@ public class fivespec extends CommandOpMode {
                         ),
                         new ParallelCommandGroup(
                                 new SetPointCommand(robot, new Pose(-2, 15, Math.toRadians(0)), .5),
-                                new SetLiftCommand(robot.deposit, 460)
+                                new SetLiftCommand(robot.deposit, 410)
 
                         )
                         , new SequentialCommandGroup(
@@ -75,7 +75,7 @@ public class fivespec extends CommandOpMode {
                         new SetPointCommand(robot, new Pose(-30, 0, Math.toRadians(0)), .5),
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new WaitCommand(75),
-                        new SetLiftCommand(robot.deposit, 460),
+                        new SetLiftCommand(robot.deposit, 410),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE).alongWith(new SetPointCommand(robot, new Pose(2, 15, Math.toRadians(0)), .5))
 
 
@@ -120,7 +120,7 @@ public class fivespec extends CommandOpMode {
                         new SetPointCommand(robot, new Pose(-30, 0, Math.toRadians(0)), .5),
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new WaitCommand(75),
-                        new SetLiftCommand(robot.deposit, 440),
+                        new SetLiftCommand(robot.deposit, 410),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE).alongWith(new SetPointCommand(robot, new Pose(4, 15, Math.toRadians(0)), 1)),
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
 
@@ -146,12 +146,12 @@ public class fivespec extends CommandOpMode {
                         new SetPointCommand(robot, new Pose(-30, 0, Math.toRadians(0)), .5),
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new WaitCommand(75),
-                        new SetLiftCommand(robot.deposit, 460),
+                        new SetLiftCommand(robot.deposit, 410),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE).alongWith(new SetPointCommand(robot, new Pose(6, 15, Math.toRadians(0)), 1.5)),
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
 
                 ), new SequentialCommandGroup(
-                        new SetLiftCommand(robot.deposit, 460).alongWith(new SetPointCommand(robot, new Pose(6, 15, Math.toRadians(0)), .5)),
+                        new SetLiftCommand(robot.deposit, 410).alongWith(new SetPointCommand(robot, new Pose(6, 15, Math.toRadians(0)), .5)),
                         new WaitCommand(200),
                         new SetPointCommand(robot, new Pose(6, 30, Math.toRadians(0)), .5)
 
@@ -172,13 +172,13 @@ public class fivespec extends CommandOpMode {
                         new SetPointCommand(robot, new Pose(-30, 0, Math.toRadians(0)), .5),
                         new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                         new WaitCommand(75),
-                        new SetLiftCommand(robot.deposit, 500),
+                        new SetLiftCommand(robot.deposit, 410),
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE).alongWith(new SetPointCommand(robot, new Pose(9, 15, Math.toRadians(0)), 1)),
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE)
 
                 ), new SequentialCommandGroup(
 
-        new SetLiftCommand(robot.deposit, 500).alongWith(new SetPointCommand(robot, new Pose(9, 15, Math.toRadians(0)), .5)),
+        new SetLiftCommand(robot.deposit, 410).alongWith(new SetPointCommand(robot, new Pose(9, 15, Math.toRadians(0)), .5)),
                         new WaitCommand(100),
 
                         new SetPointCommand(robot, new Pose(9, 30, Math.toRadians(0)), .5)

@@ -20,6 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.joml.Vector3f;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
+import org.terraedu.command.auto.HeadingCommand;
 import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
@@ -110,15 +111,21 @@ public class TerraBlue extends CommandOpMode {
                 toDrivingFromSpecimen()
         );
 
-        new Trigger(()-> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
-                sampleTransfer()
-        );
-        new Trigger(() -> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
-                samplePlace()
-        );
+//        new Trigger(()-> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
+//                sampleTransfer()
+//        );
+//        new Trigger(() -> gph1.getButton(GamepadKeys.Button.RIGHT_STICK_BUTTON)).whenActive(
+//                samplePlace()
+//        );
 
         // DPAD UP – Toggle Linkage between INIT and PLACE
 
+        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new SequentialCommandGroup(
+                        new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
+                        new InstantCommand(() -> link = LinkageMode.OUT)
+                )
+        );
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         new SetDepositLinkageCommand(robot.deposit, Deposit.LinkageState.PLACE),
@@ -170,8 +177,12 @@ public class TerraBlue extends CommandOpMode {
                     robot.hang.setState(Hang.HangState.OUT);
                 })
         );
-
-        gph2.getGamepadButton(GamepadKeys.Button.A).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenHeld(
+                new InstantCommand(() -> {
+                    robot.hang.setState(Hang.HangState.STATIONARY);
+                })
+        );
+        gph1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenActive(
                 new SequentialCommandGroup(
                         new InstantCommand(()-> Globals.AUTO = true),
                         new InstantCommand(()-> robot.localizer.reset())
@@ -179,10 +190,10 @@ public class TerraBlue extends CommandOpMode {
                         )
         );
 
-        gph2.getGamepadButton(GamepadKeys.Button.B).whenActive(
+        gph1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenHeld(
                new SequentialCommandGroup(
                 new InstantCommand(()-> Globals.AUTO = true),
-                new SetPointCommand(robot,new Pose(0,0,0),1)
+                new HeadingCommand(robot,new Pose(0,0,0),1)
                )
         );
 
@@ -198,6 +209,8 @@ public class TerraBlue extends CommandOpMode {
         }
 
         robot.read();
+
+//        robot.deposit.setPower(gamepad2.left_stick_y);
 
 
         double turn = joystickScalar(gamepad1.left_stick_x, 0.01);
@@ -216,7 +229,7 @@ public class TerraBlue extends CommandOpMode {
         double loop = System.nanoTime();
 //        telemetry.addData("serov", robot.intakeLinkage.getPosition());
 //        telemetry.addData("target", robot.intake.getTarget());
-//        telemetry.addData("pos", robot.intake.getPosition());
+        telemetry.addData("pos", robot.deposit.getPosition());
         telemetry.addData("mode ", deposit);
 //        telemetry.addData("reading", robot.intake.getReading());
 
@@ -266,7 +279,7 @@ public class TerraBlue extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new WaitCommand(250),
-                new SetLiftCommand(robot.deposit, 470),
+                new SetLiftCommand(robot.deposit, 410),
                 new WaitCommand(250),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                 new InstantCommand(() -> status = RobotMode.DRIVING)

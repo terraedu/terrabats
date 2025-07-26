@@ -1,6 +1,7 @@
 package org.terraedu.subsystem;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,10 +18,16 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.14;
-    public static double ff = 0.015;
+    public static double p = 0.035;
+    public static double i = 0;
+    public static double d = 0;
+    public static double f = 0.005;
 
-    private final SquIDController controller = new SquIDController(p);
+    public static double ff = 0.03 *0;
+    public double manual;
+
+
+    private final PIDFController controller = new PIDFController(p,i,d,f);
     private final Motor.Encoder encoder;
 
     private double lastPower = 0;
@@ -122,6 +129,10 @@ public class Deposit extends WSubsystem {
         linkage.setPosition(state.position);
     }
 
+    public void setPower(double pow){
+        this.manual = pow;
+    }
+
     public LinkageState getLinkageState() {
         return linkageState;
     }
@@ -133,7 +144,10 @@ public class Deposit extends WSubsystem {
     @Override
     public void periodic() {
         controller.setP(p);
-        controlSignal = (controller.calculate(position, target)) + ff;
+        controller.setD(d);
+        controller.setF(f);
+        controlSignal = -((controller.calculate(position, target)));
+
     }
 
     @Override
@@ -150,6 +164,9 @@ public class Deposit extends WSubsystem {
                 lastPower = controlSignal;
             }
         });
+//        motors.forEach((s)-> {
+//            s.setPower(manual);
+//        });
         claw.write();
     }
 
