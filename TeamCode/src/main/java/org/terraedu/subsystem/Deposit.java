@@ -18,7 +18,7 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.035;
+    public static double p = 0.14;
     public static double i = 0;
     public static double d = 0;
     public static double f = 0.005;
@@ -27,7 +27,7 @@ public class Deposit extends WSubsystem {
     public double manual;
 
 
-    private final PIDFController controller = new PIDFController(p,i,d,f);
+    private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
 
     private double lastPower = 0;
@@ -144,8 +144,8 @@ public class Deposit extends WSubsystem {
     @Override
     public void periodic() {
         controller.setP(p);
-        controller.setD(d);
-        controller.setF(f);
+//        controller.setD(d);
+//        controller.setF(f);
         controlSignal = -((controller.calculate(position, target)));
 
     }

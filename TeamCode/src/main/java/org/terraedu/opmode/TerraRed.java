@@ -279,7 +279,7 @@ public class TerraRed extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new WaitCommand(250),
-                new SetLiftCommand(robot.deposit, 410),
+                new SetLiftCommand(robot.deposit, 460),
                 new WaitCommand(250),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                 new InstantCommand(() -> status = RobotMode.DRIVING)
