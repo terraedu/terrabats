@@ -67,6 +67,7 @@ public class Claw extends WSubsystem {
 
     @Override
     public void write() {
+      if(!Globals.AUTO)
         if (isClawOpen) {
             servo.setPosition(DepositPositions.CLAW_GRAB);
         } else if(isSampleOpen){

@@ -18,7 +18,7 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public static double p = 0.14;
+    public static double p = 0.1;
     public static double i = 0;
     public static double d = 0;
     public static double f = 0.005;
@@ -60,7 +60,9 @@ public class Deposit extends WSubsystem {
         }
     }
 
-
+    public void addTarget(double change){
+        target = target + change;
+    }
 
     public double getTarget() {
         return target;

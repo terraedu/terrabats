@@ -287,4 +287,9 @@ public class Robot extends WSubsystem {
     public void reset() {
         localizer.reset();
     }
+    public void hardwarereset() {
+        liftEncoder.reset();
+        extendoEncoder.reset();
+
+    }
 }

@@ -85,6 +85,8 @@ public class TerraRed extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.X).whenActive(
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.setAlliance(Alliance.REDY)),
+                        new InstantCommand(()-> status = RobotMode.DRIVING),
+
                         new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT)
 
 
@@ -96,7 +98,10 @@ public class TerraRed extends CommandOpMode {
 
                 new SequentialCommandGroup(
                         new InstantCommand(() -> robot.setAlliance(Alliance.RED)),
-                        new SetExtendoCommand(robot.intake, 0)
+                        new SetArmCommand(robot.deposit, Deposit.FourBarState.INIT),
+                        new InstantCommand(()-> status = RobotMode.DRIVING),
+
+        new SetExtendoCommand(robot.intake, 0)
 
 
 
@@ -159,7 +164,8 @@ public class TerraRed extends CommandOpMode {
         gph1.getGamepadButton(GamepadKeys.Button.A).whenActive(
                 new SequentialCommandGroup(
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.INIT),
-                        new WaitCommand( 450),
+                        new SetSpinCommand(robot.intake,1),
+                        new WaitCommand( 600),
                         new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER)
 
                 )
@@ -184,18 +190,11 @@ public class TerraRed extends CommandOpMode {
         );
         gph1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenActive(
                 new SequentialCommandGroup(
-                        new InstantCommand(()-> Globals.AUTO = true),
-                        new InstantCommand(()-> robot.localizer.reset())
+                        new InstantCommand(()-> robot.deposit.addTarget(30))
 
                 )
         );
 
-        gph1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenHeld(
-                new SequentialCommandGroup(
-                        new InstantCommand(()-> Globals.AUTO = true),
-                        new HeadingCommand(robot,new Pose(0,0,0),1)
-                )
-        );
 
         //#endregion
     }
@@ -279,7 +278,7 @@ public class TerraRed extends CommandOpMode {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.deposit.setClawClosed(true)),
                 new WaitCommand(250),
-                new SetLiftCommand(robot.deposit, 460),
+                new SetLiftCommand(robot.deposit, 485),
                 new WaitCommand(250),
                 new SetArmCommand(robot.deposit, Deposit.FourBarState.SPECIPLACE),
                 new InstantCommand(() -> status = RobotMode.DRIVING)
@@ -334,7 +333,7 @@ public class TerraRed extends CommandOpMode {
     private Command startAutoIntake() {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> robot.intake.setReading(true)),
-                new SetExtendoCommand(robot.intake, 640),// Max is 660
+                new SetExtendoCommand(robot.intake, 600),// Max is 660
                 new WaitCommand(700),
                 new SetIntakeCommand(robot.intake, Intake.IntakeState.HOVER),
                 new SetSpinCommand(robot.intake, 1),
