@@ -62,7 +62,6 @@ public class TerraBlue extends CommandOpMode {
         status = RobotMode.DRIVING;
         link = LinkageMode.IN;
 
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.SHOULD_LOG = true;
 
