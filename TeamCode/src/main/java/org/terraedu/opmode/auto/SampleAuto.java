@@ -41,6 +41,7 @@ public class SampleAuto extends CommandOpMode {
         Globals.AUTO = true;
         robot.init(hardwareMap, telemetry, Alliance.BLUE);
         robot.reset();
+        robot.hardwarereset();
         robot.drive.setCap(1);
 
         CommandScheduler.getInstance().schedule(
