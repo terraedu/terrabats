@@ -62,7 +62,7 @@ public class TerraRed extends CommandOpMode {
         status = RobotMode.DRIVING;
         link = LinkageMode.IN;
 
-
+        Globals.AUTO = false;
         Globals.SHOULD_LOG = true;
 
         robot.init(hardwareMap, telemetry, Alliance.RED);

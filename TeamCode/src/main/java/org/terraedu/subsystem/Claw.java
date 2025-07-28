@@ -70,9 +70,6 @@ public class Claw extends WSubsystem {
       if(!Globals.AUTO)
         if (isClawOpen) {
             servo.setPosition(DepositPositions.CLAW_GRAB);
-        } else if(isSampleOpen){
-            servo.setPosition(DepositPositions.SAMPLE_GRAB);
-
         }else{
             servo.setPosition(DepositPositions.CLAW_INIT);
         }
