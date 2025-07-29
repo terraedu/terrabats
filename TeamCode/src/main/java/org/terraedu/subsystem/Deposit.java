@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
+import org.terraedu.util.Voltage;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 
@@ -18,6 +19,7 @@ public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
+    public Voltage voltage;
     public static double p = 0.1;
     public static double i = 0;
     public static double d = 0;
@@ -89,6 +91,7 @@ public class Deposit extends WSubsystem {
     private DepositState currentState = DepositState.INIT;
 
     private double controlSignal;
+    private double scaledSignal;
     private double position;
     private double target = 0.0;
 
@@ -149,7 +152,7 @@ public class Deposit extends WSubsystem {
 //        controller.setD(d);
 //        controller.setF(f);
         controlSignal = -((controller.calculate(position, target)));
-
+        scaledSignal = voltage.scale(controlSignal);
     }
 
     @Override
@@ -161,9 +164,9 @@ public class Deposit extends WSubsystem {
     @Override
     public void write() {
         motors.forEach((s) -> {
-            if (lastPower != controlSignal) {
-                s.setPower(controlSignal);
-                lastPower = controlSignal;
+            if (lastPower != scaledSignal) {
+                s.setPower(scaledSignal);
+                lastPower = scaledSignal;
             }
         });
 //        motors.forEach((s)-> {

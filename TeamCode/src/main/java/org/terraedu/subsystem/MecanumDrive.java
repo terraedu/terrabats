@@ -6,11 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.joml.Vector3f;
+import org.terraedu.util.Voltage;
 import org.terraedu.util.interfaces.TerraDrive;
 import org.terraedu.util.wrappers.WSubsystem;
 
 public class MecanumDrive extends WSubsystem implements TerraDrive {
     private DcMotorEx frontLeft, frontRight, backLeft, backRight;
+    public Voltage voltage;
 
     public MecanumDrive(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight) {
         this.frontLeft = frontLeft;
@@ -32,10 +34,10 @@ public class MecanumDrive extends WSubsystem implements TerraDrive {
         double r = Math.hypot(-strafe, forward);
         double robotAngle = Math.atan2(forward, -strafe) + Math.PI / 4;
 
-        double flP = r * Math.cos(robotAngle) - turnSpeed;
-        double frP = r * Math.sin(robotAngle) + turnSpeed;
-        double blP = r * Math.sin(robotAngle) - turnSpeed;
-        double brP = r * Math.cos(robotAngle) + turnSpeed;
+        double flP = voltage.scale(r * Math.cos(robotAngle) - turnSpeed);
+        double frP = voltage.scale(r * Math.sin(robotAngle) + turnSpeed);
+        double blP = voltage.scale(r * Math.sin(robotAngle) - turnSpeed);
+        double brP = voltage.scale(r * Math.cos(robotAngle) + turnSpeed);
 
         frontLeft.setPower(flP);
         frontRight.setPower(frP);

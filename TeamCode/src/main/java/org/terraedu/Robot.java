@@ -74,7 +74,8 @@ public class Robot extends WSubsystem {
     List<LynxModule> allHubs;
     public LynxModule CONTROL_HUB;
 
-    private double voltage = 0.0;
+    public double voltage = 0.0;
+    public double idealVoltage = 13.7; // Change this as per tuning preferences
     private ElapsedTime voltageTimer;
 
     //#endregion

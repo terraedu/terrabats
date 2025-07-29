@@ -12,6 +12,7 @@ import org.terraedu.constants.DepositPositions;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.RobotMode;
+import org.terraedu.util.Voltage;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
@@ -27,7 +28,7 @@ public class Intake extends WSubsystem {
 
 
     public static double p = 0.045;
-
+    public Voltage voltage;
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
     private RevColorSensorV3 color;
@@ -72,6 +73,8 @@ public class Intake extends WSubsystem {
         }
     }
     private double controlSignal;
+    private double scaledSignal;
+    private double scaledPower;
     private double position;
     private double target = 0.0;
 
@@ -113,6 +116,7 @@ public class Intake extends WSubsystem {
     @Override
     public void periodic() {
         controlSignal = controller.calculate(position, target);
+        scaledSignal = voltage.scale(controlSignal);
     }
 
     @Override
@@ -167,11 +171,13 @@ public class Intake extends WSubsystem {
     @Override
     public void write() {
 
-        if (extension.getPower() != controlSignal) {
-            extension.setPower(controlSignal);
+        scaledPower = voltage.scale(intakePower);
+
+        if (extension.getPower() != scaledSignal) {
+            extension.setPower(scaledSignal);
         }
-        if (intake.getPower() != intakePower) {
-            intake.setPower(intakePower);
+        if (intake.getPower() != scaledPower) {
+            intake.setPower(scaledPower);
         }
 
         if (hasColor && isReading && !hasWrongColor) {
