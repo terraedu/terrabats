@@ -1,7 +1,5 @@
 package org.terraedu;
 
-import android.annotation.SuppressLint;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
@@ -17,11 +15,13 @@ import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.subsystem.PinpointLocalizer;
+import org.terraedu.subsystem.Cameras;
 import org.terraedu.util.Alliance;
 import org.terraedu.util.TimingLogger;
 import org.terraedu.util.control.GoBildaPinpointDriver;
@@ -84,7 +84,7 @@ public class Robot extends WSubsystem {
     public HardwareMap hardwareMap;
     private Telemetry telemetry;
     //#endregion
-
+    public Cameras cameras;
     public MecanumDrive drive;
     public Hang hang;
     public Intake intake;
@@ -194,6 +194,7 @@ public class Robot extends WSubsystem {
 
         liftMotors.add(liftLeft);
         liftMotors.add(liftRight);
+
 
         //#endregion
 
