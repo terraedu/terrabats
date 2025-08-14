@@ -17,7 +17,7 @@ public class NoStopNew extends Controller2DNew {
 
     public Point lastPos = new Point();
     public double lastTime = 0;
-
+//
 
     public NoStopNew(double kp, double restPower, double minVel, double ratio, double accuracy){
         rvController =  new RV(kp, restPower, minVel, ratio){
