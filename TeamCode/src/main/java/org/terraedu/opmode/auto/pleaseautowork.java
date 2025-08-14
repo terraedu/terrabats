@@ -4,8 +4,6 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.InstantCommand;
-import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -13,13 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.auto.SetPointCommand;
-import org.terraedu.command.bot.SetArmCommand;
-import org.terraedu.command.bot.SetDepositLinkageCommand;
-import org.terraedu.command.bot.SetLiftCommand;
-import org.terraedu.subsystem.Deposit;
-import org.terraedu.subsystem.Intake;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.Pose;
+import org.terraedu.util.system.Alliance;
+import org.terraedu.util.system.Pose;
 
 @Autonomous(name = "pleaswork yo")
 public class pleaseautowork extends CommandOpMode {

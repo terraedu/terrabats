@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.joml.Vector3f;
-import org.terraedu.util.Voltage;
+import org.terraedu.util.system.Voltage;
 import org.terraedu.util.interfaces.TerraDrive;
 import org.terraedu.util.wrappers.WSubsystem;
 

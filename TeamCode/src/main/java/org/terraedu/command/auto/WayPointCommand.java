@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.subsystem.PinpointLocalizer;
-import org.terraedu.util.Pose;
+import org.terraedu.util.system.Pose;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 
@@ -116,7 +116,7 @@ public class WayPointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 10 && distH <= .2 || timer.seconds() > pathTime;
+        return dist <= 16 && distH <= .2 || timer.seconds() > pathTime;
 //        return false;
 //        return getPose().distance(target) > 2.0;
     }

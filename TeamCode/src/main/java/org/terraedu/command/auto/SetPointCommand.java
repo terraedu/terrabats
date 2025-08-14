@@ -11,9 +11,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.joml.Vector3f;
 import org.terraedu.Robot;
-import org.terraedu.util.Pose;
+import org.terraedu.util.system.Pose;
 import org.terraedu.subsystem.PinpointLocalizer;
-import org.terraedu.util.Voltage;
+import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 

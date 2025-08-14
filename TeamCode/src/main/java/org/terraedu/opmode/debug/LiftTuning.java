@@ -13,8 +13,9 @@ import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.RobotMode;
+import org.terraedu.util.Modes;
+import org.terraedu.util.Modes.RobotMode;
+import org.terraedu.util.system.Alliance;
 
 //@TeleOp(name = "Lift Tuning")
 public class LiftTuning extends CommandOpMode {

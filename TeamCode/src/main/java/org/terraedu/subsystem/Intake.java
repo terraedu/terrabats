@@ -6,13 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.terraedu.Globals;
 import org.terraedu.Robot;
-import org.terraedu.constants.DepositPositions;
 import org.terraedu.constants.IntakePositions;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.RobotMode;
-import org.terraedu.util.Voltage;
+import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;

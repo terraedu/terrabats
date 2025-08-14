@@ -1,4 +1,4 @@
-package org.terraedu.util;
+package org.terraedu.util.system;
 
 import org.joml.Vector2d;
 

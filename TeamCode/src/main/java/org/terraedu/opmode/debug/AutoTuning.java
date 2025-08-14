@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.terraedu.Globals;
@@ -16,9 +15,10 @@ import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.Pose;
-import org.terraedu.util.RobotMode;
+import org.terraedu.util.Modes;
+import org.terraedu.util.Modes.RobotMode;
+import org.terraedu.util.system.Alliance;
+import org.terraedu.util.system.Pose;
 
 //@TeleOp(name = "Auto Tuning Tele")
 public class AutoTuning extends CommandOpMode {

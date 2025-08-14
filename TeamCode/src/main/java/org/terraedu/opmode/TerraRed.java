@@ -1,8 +1,6 @@
 package org.terraedu.opmode;
 
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
@@ -20,8 +18,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.joml.Vector3f;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
-import org.terraedu.command.auto.HeadingCommand;
-import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.command.bot.SetArmCommand;
 import org.terraedu.command.bot.SetDepositLinkageCommand;
 import org.terraedu.command.bot.SetExtendoCommand;
@@ -33,11 +29,11 @@ import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.LinkageMode;
-import org.terraedu.util.PlaceMode;
-import org.terraedu.util.Pose;
-import org.terraedu.util.RobotMode;
+import org.terraedu.util.Modes;
+import org.terraedu.util.Modes.LinkageMode;
+import org.terraedu.util.Modes.PlaceMode;
+import org.terraedu.util.Modes.RobotMode;
+import org.terraedu.util.system.Alliance;
 
 @TeleOp(name = "Red")
 public class TerraRed extends CommandOpMode {

@@ -15,14 +15,13 @@ import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.subsystem.PinpointLocalizer;
 import org.terraedu.subsystem.Cameras;
-import org.terraedu.util.Alliance;
+import org.terraedu.util.system.Alliance;
 import org.terraedu.util.TimingLogger;
 import org.terraedu.util.control.GoBildaPinpointDriver;
 import org.terraedu.util.wrappers.WSubsystem;
@@ -212,7 +211,7 @@ public class Robot extends WSubsystem {
         voltage = hardwareMap.voltageSensor.iterator().next().getVoltage();
 
         if (Globals.SHOULD_LOG) {
-            Terrabats.LOGGER.debug("Initialized Robot");
+            TerraLog.LOGGER.debug("Initialized Robot");
         }
     }
 

@@ -27,9 +27,10 @@ import org.terraedu.command.bot.SetSpinCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Alliance;
-import org.terraedu.util.PlaceMode;
-import org.terraedu.util.RobotMode;
+import org.terraedu.util.Modes;
+import org.terraedu.util.Modes.PlaceMode;
+import org.terraedu.util.Modes.RobotMode;
+import org.terraedu.util.system.Alliance;
 
 //@TeleOp(name = "DeButton")
 public class ButtonDebug extends CommandOpMode {
