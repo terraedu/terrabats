@@ -90,7 +90,7 @@ public class WayPointCommand extends CommandBase {
             powX = xlControl.calculate(current.x);
             powY = ylControl.calculate(current.y);
         }
-
+//
         double x = powX;
         double y = -powY;
 
