@@ -11,24 +11,37 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.joml.Vector3f;
 import org.terraedu.Robot;
-import org.terraedu.util.system.Pose;
 import org.terraedu.subsystem.PinpointLocalizer;
-import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
+import org.terraedu.util.system.Pose;
+import org.terraedu.util.system.Voltage;
 
-public class SetPointCommand extends CommandBase {
+public class FollowPointCommand extends CommandBase {
     private final TerraDrive drive;
     private final PinpointLocalizer localizer;
     private final Pose target;
+
+    public double pathAngle;
+
+    public double tolX;
+    public double tolY;
+    public double initialAngle;
+    public double initialX;
+    public double initialY;
+
     double powX;
     double powY;
+
     public double dist;
     public double distH;
     public double distX;
     public double distY;
+
     public double pathTime;
     public Voltage voltage;
+
+    public boolean reached;
 
 
 
@@ -40,11 +53,21 @@ public class SetPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public SetPointCommand(Robot robot, Pose pose, double pathTime) {
+    public FollowPointCommand(Robot robot, Pose pose, double tolX, double tolY, double pathTime) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
         this.target = pose;
         this.pathTime = pathTime;
+        this.tolX = tolX;
+        this.tolY = tolY;
+
+        Pose initial = getPose();
+        initialAngle = initial.getAngle();
+        initialX = initial.getAngle();
+        initialY = initial.getAngle();
+
+
+
 
         xControl = new PIDFController(AutoConfig.xPID.p, AutoConfig.xPID.i, AutoConfig.xPID.d, AutoConfig.xPID.f);
         yControl = new PIDFController(AutoConfig.yPID.p, AutoConfig.yPID.i, AutoConfig.yPID.d, AutoConfig.xPID.f);
@@ -73,17 +96,28 @@ public class SetPointCommand extends CommandBase {
     public void execute() {
         Pose current = getPose();
 
+        distX = target.x - current.x;
+        distY = target.y - current.y;
+
+        reached = (distX <= tolX) && (distY <= tolY);
+
+        double distSq = pow(distX, 2) + pow(distY, 2);
+        dist = sqrt(distSq);
+
         xControl.setSetPoint(target.x);
         yControl.setSetPoint(target.y);
         xlControl.setSetPoint(target.x);
         ylControl.setSetPoint(target.y);
+
+        pathAngle = Math.asin(distX / dist);
+
+        if(reached)
         hControl.setSetPoint(Math.toRadians(target.getAngle()));
+        else{
+        hControl.setSetPoint(pathAngle);
+        }
 
-        distX = target.x - current.x;
-        distY = target.y - current.y;
 
-        double distSq = pow(distX, 2) + pow(distY, 2);
-        dist = sqrt(distSq);
 
         if (abs(dist) <= 30) {
             powX = xControl.calculate(current.x);
@@ -114,7 +148,7 @@ public class SetPointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 0.2 && distH <= 0.5 || timer.seconds() > pathTime;
+        return (dist <= 0.2 && reached && distH <= 0.5) || timer.seconds() > pathTime;
 //        return false;
 
     }

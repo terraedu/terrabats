@@ -10,12 +10,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.terraedu.Globals;
 import org.terraedu.Robot;
+import org.terraedu.command.auto.FollowPointCommand;
 import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.util.system.Alliance;
 import org.terraedu.util.system.Pose;
 
-@Autonomous(name = "pleaswork yo")
-public class pleaseautowork extends CommandOpMode {
+@Autonomous(name = "test")
+public class autotest extends CommandOpMode {
 
     private double loopTime = 0;
     private final Robot robot = Robot.getInstance();
@@ -23,8 +24,6 @@ public class pleaseautowork extends CommandOpMode {
     @Override
     public void initialize() {
         CommandScheduler.getInstance().reset();
-
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         Globals.AUTO = true;
 
@@ -34,18 +33,12 @@ public class pleaseautowork extends CommandOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
 
-                                new SetPointCommand(robot, new Pose(-2, 15, Math.toRadians(0)), .5),
-
-
+                        new FollowPointCommand(robot, new Pose(-20, 50, 90), 1, 1,  .5),
                         new WaitCommand(5000),
-                        new SetPointCommand(robot, new Pose(0, 29, Math.toRadians(0)), .5),
-                        new WaitCommand(5000),
+                        new FollowPointCommand(robot, new Pose(-10, 10, 0), 1, 1,  .5)
 
-                        new SetPointCommand(robot, new Pose(0, 15, Math.toRadians(0)), .25),
-        new WaitCommand(5000)
 
-//        new SetPointCommand(robot, new Pose(0, 15, Math.toRadians(0)), .25)
-//        new WaitCommand(5000),
+
 
                 )
 

@@ -44,11 +44,11 @@ public class WayPointCommand extends CommandBase {
         this.target = pose;
         this.pathTime = pathTime;
 
-        xControl = new PIDFController(GotoConfig.xPID.p, GotoConfig.xPID.i, GotoConfig.xPID.d, GotoConfig.xPID.f);
-        yControl = new PIDFController(GotoConfig.yPID.p, GotoConfig.yPID.i, GotoConfig.yPID.d, GotoConfig.xPID.f);
-        xlControl = new PIDFController(GotoConfig.xlPID.p, GotoConfig.xlPID.i, GotoConfig.xlPID.d, GotoConfig.xlPID.f);
-        ylControl = new PIDFController(GotoConfig.ylPID.p, GotoConfig.ylPID.i, GotoConfig.ylPID.d, GotoConfig.ylPID.f);
-        hControl = new PIDFController(GotoConfig.hPID.p, GotoConfig.hPID.i, GotoConfig.hPID.d, GotoConfig.xPID.f);
+        xControl = new PIDFController(AutoConfig.xPID.p, AutoConfig.xPID.i, AutoConfig.xPID.d, AutoConfig.xPID.f);
+        yControl = new PIDFController(AutoConfig.yPID.p, AutoConfig.yPID.i, AutoConfig.yPID.d, AutoConfig.xPID.f);
+        xlControl = new PIDFController(AutoConfig.xlPID.p, AutoConfig.xlPID.i, AutoConfig.xlPID.d, AutoConfig.xlPID.f);
+        ylControl = new PIDFController(AutoConfig.ylPID.p, AutoConfig.ylPID.i, AutoConfig.ylPID.d, AutoConfig.ylPID.f);
+        hControl = new PIDFController(AutoConfig.hPID.p, AutoConfig.hPID.i, AutoConfig.hPID.d, AutoConfig.xPID.f);
     }
 
     Pose getPose() {

@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
-public class GotoConfig {
+public class AutoConfig {
 
     public static PIDFCoefficients xPID = new PIDFCoefficients(0.21,0,0.018,0);
     public static PIDFCoefficients yPID = new PIDFCoefficients( 0.21,0,0.018,0);
