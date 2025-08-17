@@ -40,11 +40,11 @@ public class SetPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public SetPointCommand(Robot robot, Pose pose, double pathTime) {
+    public SetPointCommand(Robot robot, Pose position, double pathSeconds) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
-        this.target = pose;
-        this.pathTime = pathTime;
+        this.target = position;
+        this.pathTime = pathSeconds;
 
         xControl = new PIDFController(AutoConfig.xPID.p, AutoConfig.xPID.i, AutoConfig.xPID.d, AutoConfig.xPID.f);
         yControl = new PIDFController(AutoConfig.yPID.p, AutoConfig.yPID.i, AutoConfig.yPID.d, AutoConfig.xPID.f);

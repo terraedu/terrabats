@@ -53,11 +53,11 @@ public class FollowPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public FollowPointCommand(Robot robot, Pose pose, double tolX, double tolY, double pathTime) {
+    public FollowPointCommand(Robot robot, Pose position, double tolX, double tolY, double pathSeconds) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
-        this.target = pose;
-        this.pathTime = pathTime;
+        this.target = position;
+        this.pathTime = pathSeconds;
         this.tolX = tolX;
         this.tolY = tolY;
 
