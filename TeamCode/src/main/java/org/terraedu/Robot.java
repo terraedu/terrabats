@@ -1,7 +1,5 @@
 package org.terraedu;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
@@ -105,6 +103,16 @@ public class Robot extends WSubsystem {
         return INSTANCE;
     }
 
+
+    public double scale(double input) {
+
+
+        double output = (input * voltage) / idealVoltage;
+
+        return output;
+
+    }
+
     public void init(HardwareMap hardwareMap, Telemetry telemetry, Alliance alliance) {
         this.hardwareMap = hardwareMap;
         this.alliance = alliance;
@@ -118,7 +126,6 @@ public class Robot extends WSubsystem {
             }
         }
 
-        this.telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         voltageTimer = new ElapsedTime();
 
@@ -222,15 +229,15 @@ public class Robot extends WSubsystem {
         long endIntake = System.nanoTime();
         TimingLogger.log("periodic", "intake", (endIntake - startIntake) / 1_000_000.0);
 
-        long startDeposit = System.nanoTime();
-        deposit.periodic();
-        long endDeposit = System.nanoTime();
-        TimingLogger.log("periodic", "deposit", (endDeposit - startDeposit) / 1_000_000.0);
-
-        long startHang = System.nanoTime();
-        hang.periodic();
-        long endHang = System.nanoTime();
-        TimingLogger.log("periodic", "hang", (endHang - startHang) / 1_000_000.0);
+//        long startDeposit = System.nanoTime();
+//        deposit.periodic();
+//        long endDeposit = System.nanoTime();
+//        TimingLogger.log("periodic", "deposit", (endDeposit - startDeposit) / 1_000_000.0);
+//
+//        long startHang = System.nanoTime();
+//        hang.periodic();
+//        long endHang = System.nanoTime();
+//        TimingLogger.log("periodic", "hang", (endHang - startHang) / 1_000_000.0);
 
         long startDrive = System.nanoTime();
         drive.periodic();
@@ -254,9 +261,9 @@ public class Robot extends WSubsystem {
         intake.read();
         TimingLogger.log("read", "intake", (System.nanoTime() - startIntake) / 1_000_000.0);
 
-        long startDeposit = System.nanoTime();
-        deposit.read();
-        TimingLogger.log("read", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
+//        long startDeposit = System.nanoTime();
+//        deposit.read();
+//        TimingLogger.log("read", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
 
         if (Globals.AUTO) {
             long startLocalizer = System.nanoTime();
@@ -267,17 +274,17 @@ public class Robot extends WSubsystem {
 
     @Override
     public void write() {
-        long startHang = System.nanoTime();
-        hang.write();
-        TimingLogger.log("write", "hang", (System.nanoTime() - startHang) / 1_000_000.0);
+//        long startHang = System.nanoTime();
+//        hang.write();
+//        TimingLogger.log("write", "hang", (System.nanoTime() - startHang) / 1_000_000.0);
 
         long startIntake = System.nanoTime();
         intake.write();
         TimingLogger.log("write", "intake", (System.nanoTime() - startIntake) / 1_000_000.0);
 
-        long startDeposit = System.nanoTime();
-        deposit.write();
-        TimingLogger.log("write", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
+//        long startDeposit = System.nanoTime();
+//        deposit.write();
+//        TimingLogger.log("write", "deposit", (System.nanoTime() - startDeposit) / 1_000_000.0);
     }
 
     public void clearBulkCache() {

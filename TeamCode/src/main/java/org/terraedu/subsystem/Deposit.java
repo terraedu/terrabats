@@ -1,24 +1,21 @@
 package org.terraedu.subsystem;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.terraedu.Robot;
 import org.terraedu.constants.DepositPositions;
-import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 
 import java.util.Set;
 
-@Config
 public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
     private Claw claw;
-    public Voltage voltage;
+    private final Robot robot = Robot.getInstance();
     public static double p = 0.1;
     public static double i = 0;
     public static double d = 0;
@@ -34,17 +31,6 @@ public class Deposit extends WSubsystem {
     private double lastPower = 0;
 
     public enum DepositState {
-        INIT,
-        GRAB,
-        SAMPLE,
-        RESET,
-        NEUTRAL,
-        SPEC_HIGH,
-        SPEC_LOW,
-        SPEC_GRAB
-    }
-
-    public enum FourBarState {
         SPECI(DepositPositions.SPECI_ARM, DepositPositions.INIT_PIVOT),
         INIT(DepositPositions.INIT_ARM, DepositPositions.INIT_PIVOT),
         TRANSFER(DepositPositions.ARM_TRANSFER, DepositPositions.INIT_PIVOT),
@@ -55,7 +41,7 @@ public class Deposit extends WSubsystem {
         final double armPos;
         final double pivot;
 
-        FourBarState(double arm, double pivot) {
+        DepositState(double arm, double pivot) {
             this.armPos = arm;
             this.pivot = pivot;
         }
@@ -87,7 +73,6 @@ public class Deposit extends WSubsystem {
         }
     }
 
-    private DepositState currentState = DepositState.INIT;
 
     private double controlSignal;
     private double scaledSignal;
@@ -106,15 +91,12 @@ public class Deposit extends WSubsystem {
 
     private LinkageState linkageState;
 
-    public void setState(DepositState state) {
-        this.currentState = state;
-    }
 
     public void setTarget(double target) {
         this.target = target;
     }
 
-    public void setState(FourBarState state) {
+    public void setState(DepositState state) {
         armLeft.setPosition(state.armPos);
         armRight.setPosition(state.armPos);
         pivot.setPosition(state.pivot);
@@ -151,7 +133,7 @@ public class Deposit extends WSubsystem {
 //        controller.setD(d);
 //        controller.setF(f);
         controlSignal = -((controller.calculate(position, target)));
-        scaledSignal = voltage.scale(controlSignal);
+        scaledSignal = robot.scale(controlSignal);
     }
 
     @Override

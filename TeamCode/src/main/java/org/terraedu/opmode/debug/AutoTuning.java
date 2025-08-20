@@ -15,7 +15,6 @@ import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Modes;
 import org.terraedu.util.Modes.RobotMode;
 import org.terraedu.util.system.Alliance;
 import org.terraedu.util.system.Pose;
@@ -48,7 +47,7 @@ public class AutoTuning extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.DepositState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
 
         gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(

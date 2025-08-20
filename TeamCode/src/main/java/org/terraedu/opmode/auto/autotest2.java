@@ -9,13 +9,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
 import org.terraedu.command.auto.FollowPointCommand;
-import org.terraedu.command.auto.SetPointCommand;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.util.system.Alliance;
 import org.terraedu.util.system.Pose;
 
-@Autonomous(name = "test")
-public class autotest extends CommandOpMode {
+@Autonomous(name = "test2")
+public class autotest2 extends CommandOpMode {
 
     private double loopTime = 0;
     private final Robot robot = Robot.getInstance();
@@ -34,9 +33,9 @@ public class autotest extends CommandOpMode {
         CommandScheduler.getInstance().schedule(
                 new SequentialCommandGroup(
 
-                        new FollowPointCommand(robot, new Pose(-50, 50, 0), 20, 20,  3),
+                        new FollowPointCommand(robot, new Pose(50, 50, 0), 20, 20,  3),
                         new WaitCommand(5000),
-                        new FollowPointCommand(robot, new Pose(-10, 10, 0), 20, 20,  3)
+                        new FollowPointCommand(robot, new Pose(10, 10, 0), 20, 20,  3)
 
 
 

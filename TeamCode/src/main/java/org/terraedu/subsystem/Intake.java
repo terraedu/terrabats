@@ -1,6 +1,5 @@
 package org.terraedu.subsystem;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -8,14 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.terraedu.Robot;
 import org.terraedu.constants.IntakePositions;
-import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.SquIDController;
 import org.terraedu.util.wrappers.WSubsystem;
 import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.function.BooleanSupplier;
 
-@Config
 public class Intake extends WSubsystem {
 
     private ElapsedTime time;
@@ -24,7 +21,7 @@ public class Intake extends WSubsystem {
 
 
     public static double p = 0.045;
-    public Voltage voltage;
+    private final Robot robot = Robot.getInstance();
     private final SquIDController controller = new SquIDController(p);
     private final Motor.Encoder encoder;
     private RevColorSensorV3 color;
@@ -112,7 +109,7 @@ public class Intake extends WSubsystem {
     @Override
     public void periodic() {
         controlSignal = controller.calculate(position, target);
-        scaledSignal = voltage.scale(controlSignal);
+        scaledSignal = robot.scale(controlSignal);
     }
 
     @Override
@@ -167,7 +164,7 @@ public class Intake extends WSubsystem {
     @Override
     public void write() {
 
-        scaledPower = voltage.scale(intakePower);
+        scaledPower = robot.scale(intakePower);
 
         if (extension.getPower() != scaledSignal) {
             extension.setPower(scaledSignal);

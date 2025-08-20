@@ -1,14 +1,8 @@
 package org.terraedu.opmode.tele;
 
-import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
-import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
-import com.arcrobotics.ftclib.command.WaitCommand;
-import com.arcrobotics.ftclib.command.WaitUntilCommand;
-import com.arcrobotics.ftclib.command.button.Trigger;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,16 +11,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.joml.Vector3f;
 import org.terraedu.Globals;
 import org.terraedu.Robot;
-import org.terraedu.command.bot.SetArmCommand;
-import org.terraedu.command.bot.SetDepositLinkageCommand;
-import org.terraedu.command.bot.SetExtendoCommand;
-import org.terraedu.command.bot.SetIntakeCommand;
-import org.terraedu.command.bot.SetLiftCommand;
-import org.terraedu.command.bot.SetSpinCommand;
 import org.terraedu.command.teleop.SetExampleCommand;
 import org.terraedu.constants.IntakePositions;
 import org.terraedu.subsystem.Deposit;
-import org.terraedu.subsystem.Hang;
 import org.terraedu.subsystem.Intake;
 import org.terraedu.subsystem.MecanumDrive;
 import org.terraedu.util.Modes.LinkageMode;
@@ -69,7 +56,7 @@ public class TerraBlue extends CommandOpMode {
 
         drive = robot.drive;
 
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.DepositState.INIT);
         robot.deposit.setLinkage(Deposit.LinkageState.INIT);
         robot.intake.setState(Intake.IntakeState.INIT);
         robot.latch.setPosition(IntakePositions.CLOSE_LATCH);

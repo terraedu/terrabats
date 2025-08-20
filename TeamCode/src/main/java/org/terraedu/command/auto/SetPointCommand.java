@@ -13,7 +13,6 @@ import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.util.system.Pose;
 import org.terraedu.subsystem.PinpointLocalizer;
-import org.terraedu.util.system.Voltage;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 
@@ -28,7 +27,7 @@ public class SetPointCommand extends CommandBase {
     public double distX;
     public double distY;
     public double pathTime;
-    public Voltage voltage;
+    private final Robot robot = Robot.getInstance();
 
 
 
@@ -98,10 +97,10 @@ public class SetPointCommand extends CommandBase {
 
 
 
-        double heading = voltage.scale(hControl.calculateAngleWrap(current.getAngle()));
+        double heading = robot.scale(hControl.calculateAngleWrap(current.getAngle()));
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
-        double x_rotated = voltage.scale(x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading));
-        double y_rotated = voltage.scale(x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading));
+        double x_rotated = robot.scale(x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading));
+        double y_rotated = robot.scale(x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading));
         distH = Math.toRadians(target.getAngle()) - currentHeading;
 
         drive.set(new Vector3f((float) x_rotated, (float) y_rotated, 0f), heading);

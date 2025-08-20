@@ -15,12 +15,13 @@ import org.terraedu.subsystem.PinpointLocalizer;
 import org.terraedu.util.control.PIDFController;
 import org.terraedu.util.interfaces.TerraDrive;
 import org.terraedu.util.system.Pose;
-import org.terraedu.util.system.Voltage;
 
 public class FollowPointCommand extends CommandBase {
     private final TerraDrive drive;
     private final PinpointLocalizer localizer;
     private final Pose target;
+
+    private final Robot robot = Robot.getInstance();
 
     public double pathAngle;
 
@@ -39,9 +40,11 @@ public class FollowPointCommand extends CommandBase {
     public double distY;
 
     public double pathTime;
-    public Voltage voltage;
+
 
     public boolean reached;
+    public boolean flipped;
+    public boolean negativeY;
 
 
 
@@ -99,7 +102,12 @@ public class FollowPointCommand extends CommandBase {
         distX = target.x - current.x;
         distY = target.y - current.y;
 
-        reached = (distX <= tolX) && (distY <= tolY);
+        double absTargetY = Math.abs(target.y);
+        double absY = Math.abs(current.y);
+
+        negativeY = target.y < 0;
+        flipped = (absTargetY < absY);
+        reached = (Math.abs(distX) <= tolX) && (Math.abs(distY) <= tolY);
 
         double distSq = pow(distX, 2) + pow(distY, 2);
         dist = sqrt(distSq);
@@ -112,9 +120,16 @@ public class FollowPointCommand extends CommandBase {
         pathAngle = Math.asin(distX / dist);
 
         if(reached)
-        hControl.setSetPoint(Math.toRadians(target.getAngle()));
-        else{
-        hControl.setSetPoint(pathAngle);
+            hControl.setSetPoint(Math.toRadians(target.getAngle()));
+        else if(flipped && negativeY){
+            hControl.setSetPoint(pathAngle);
+
+        }else if(flipped){
+            hControl.setSetPoint(-pathAngle);
+        }else if(negativeY){
+            hControl.setSetPoint(-pathAngle);
+        }else {
+            hControl.setSetPoint(pathAngle);
         }
 
 
@@ -132,10 +147,10 @@ public class FollowPointCommand extends CommandBase {
 
 
 
-        double heading = voltage.scale(hControl.calculateAngleWrap(current.getAngle()));
+        double heading = robot.scale(hControl.calculateAngleWrap(current.getAngle()));
         double currentHeading = localizer.getPose().getHeading(AngleUnit.RADIANS);
-        double x_rotated = voltage.scale(x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading));
-        double y_rotated = voltage.scale(x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading));
+        double x_rotated = robot.scale(x * Math.cos(-currentHeading) - y * Math.sin(-currentHeading));
+        double y_rotated = robot.scale(x * Math.sin(-currentHeading) + y * Math.cos(-currentHeading));
         distH = Math.toRadians(target.getAngle()) - currentHeading;
 
         drive.set(new Vector3f((float) x_rotated, (float) y_rotated, 0f), heading);

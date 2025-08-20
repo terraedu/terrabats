@@ -13,7 +13,6 @@ import org.joml.Vector3f;
 import org.terraedu.Robot;
 import org.terraedu.subsystem.Deposit;
 import org.terraedu.subsystem.MecanumDrive;
-import org.terraedu.util.Modes;
 import org.terraedu.util.Modes.RobotMode;
 import org.terraedu.util.system.Alliance;
 
@@ -45,7 +44,7 @@ public class LiftTuning extends CommandOpMode {
         gph2 = new GamepadEx(gamepad2);
 
         drive = robot.drive;
-        robot.deposit.setState(Deposit.FourBarState.INIT);
+        robot.deposit.setState(Deposit.DepositState.INIT);
         //#region Command Registrar
 
 //        gph1.getGamepadButton(GamepadKeys.Button.A).toggleWhenPressed(
