@@ -1,5 +1,6 @@
 package org.terraedu.subsystem;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,6 +14,7 @@ import org.terraedu.util.wrappers.sensors.RevColorSensorV3;
 
 import java.util.function.BooleanSupplier;
 
+@Config
 public class Intake extends WSubsystem {
 
     private ElapsedTime time;

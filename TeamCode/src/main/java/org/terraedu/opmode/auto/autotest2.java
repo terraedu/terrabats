@@ -1,5 +1,7 @@
 package org.terraedu.opmode.auto;
 
+import static org.ejml.ops.MatrixIO.print;
+
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
@@ -13,7 +15,7 @@ import org.terraedu.subsystem.Intake;
 import org.terraedu.util.system.Alliance;
 import org.terraedu.util.system.Pose;
 
-@Autonomous(name = "test2")
+//@Autonomous(name = "test2")
 public class autotest2 extends CommandOpMode {
 
     private double loopTime = 0;
@@ -34,6 +36,8 @@ public class autotest2 extends CommandOpMode {
                 new SequentialCommandGroup(
 
                         new FollowPointCommand(robot, new Pose(50, 50, 0), 20, 20,  3),
+                        new WaitCommand(5000),
+                        new FollowPointCommand(robot, new Pose(30, 50, 0), 20, 20,  3),
                         new WaitCommand(5000),
                         new FollowPointCommand(robot, new Pose(10, 10, 0), 20, 20,  3)
 

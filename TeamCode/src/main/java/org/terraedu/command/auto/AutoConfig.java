@@ -3,6 +3,8 @@ package org.terraedu.command.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.terraedu.util.system.TrapezoidProfile;
+
 @Config
 public class AutoConfig {
 
@@ -11,4 +13,6 @@ public class AutoConfig {
     public static PIDFCoefficients xlPID = new PIDFCoefficients(0.16,0,0.018,0);
     public static PIDFCoefficients ylPID = new PIDFCoefficients(0.16,0,0.018,0);
     public static PIDFCoefficients hPID = new PIDFCoefficients(-4,0,-0.17,0);
+
+
 }

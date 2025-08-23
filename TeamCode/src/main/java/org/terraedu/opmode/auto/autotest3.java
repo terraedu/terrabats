@@ -13,7 +13,7 @@ import org.terraedu.subsystem.Intake;
 import org.terraedu.util.system.Alliance;
 import org.terraedu.util.system.Pose;
 
-@Autonomous(name = "test3")
+//@Autonomous(name = "test3")
 public class autotest3 extends CommandOpMode {
 
     private double loopTime = 0;

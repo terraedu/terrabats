@@ -1,5 +1,6 @@
 package org.terraedu.subsystem;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,6 +12,7 @@ import org.terraedu.util.wrappers.WSubsystem;
 
 import java.util.Set;
 
+@Config
 public class Deposit extends WSubsystem {
     private Set<DcMotorEx> motors;
     private Servo pivot, linkage, armLeft, armRight;
