@@ -11,26 +11,39 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.joml.Vector3f;
 import org.terraedu.Robot;
-import org.terraedu.util.system.Pose;
 import org.terraedu.subsystem.PinpointLocalizer;
 import org.terraedu.util.control.PIDFController;
+import org.terraedu.util.control.pathing.BezierFollower;
 import org.terraedu.util.interfaces.TerraDrive;
+import org.terraedu.util.system.Pose;
 
-public class SetPointCommand extends CommandBase {
+public class FollowCurveCommand extends CommandBase {
     private final TerraDrive drive;
     private final PinpointLocalizer localizer;
     private final Pose target;
+
+    private final Robot robot = Robot.getInstance();
+
     double powX;
     double powY;
+
     public double dist;
     public double distH;
     public double distX;
     public double distY;
+
     public double pathTime;
-    private final Robot robot = Robot.getInstance();
+
+    private final BezierFollower follower;
 
 
     private ElapsedTime timer = new ElapsedTime();
+
+    public double distTravel;
+    public double[] prevPoint;
+    public double[] robotPos;
+    public double[] targetArc;
+    public double targetHeading;
 
     private final PIDFController xControl;
     private final PIDFController yControl;
@@ -38,11 +51,30 @@ public class SetPointCommand extends CommandBase {
     private final PIDFController ylControl;
     private final PIDFController hControl;
 
-    public SetPointCommand(Robot robot, Pose position, double pathSeconds) {
+    public FollowCurveCommand(Robot robot, Pose position, double curveFactor, double pathSeconds) {
         this.drive = robot.drive;
         this.localizer = robot.localizer;
         this.target = position;
         this.pathTime = pathSeconds;
+
+        double startX = localizer.getCurrX();
+        double startY = localizer.getCurrY();
+        double endX = target.x;
+        double endY = target.y;
+
+        double factor = curveFactor;
+        double dx = endX - startX;
+        double dy = endY - startY;
+        double mag = Math.hypot(dx, dy);
+        double offset = factor * mag; // higher bends more away from the straight lines
+
+        double ctrlX = (startX + endX) / 2.0 - dy / mag * offset;
+        double ctrlY = (startY + endY) / 2.0 + dx / mag * offset;
+
+        this.follower = new BezierFollower(
+                new double[]{startX, ctrlX, endX},
+                new double[]{startY, ctrlY, endY}
+        );
 
         xControl = new PIDFController(AutoConfig.xPID.p, AutoConfig.xPID.i, AutoConfig.xPID.d, AutoConfig.xPID.f);
         yControl = new PIDFController(AutoConfig.yPID.p, AutoConfig.yPID.i, AutoConfig.yPID.d, AutoConfig.xPID.f);
@@ -65,23 +97,34 @@ public class SetPointCommand extends CommandBase {
         xControl.reset();
         yControl.reset();
         hControl.reset();
+        distTravel = 0;
+        Pose curr = getPose();
+        prevPoint = new double[]{curr.x, curr.y};
     }
 
     @Override
     public void execute() {
+
         Pose current = getPose();
 
-        xControl.setSetPoint(target.x);
-        yControl.setSetPoint(target.y);
-        xlControl.setSetPoint(target.x);
-        ylControl.setSetPoint(target.y);
-        hControl.setSetPoint(Math.toRadians(target.getAngle()));
+        robotPos = new double[]{current.x, current.y};
+        distTravel += Math.hypot(robotPos[0] - prevPoint[0], robotPos[1] - prevPoint[1]);
+        prevPoint = robotPos;
 
         distX = target.x - current.x;
         distY = target.y - current.y;
 
+
+        targetArc = follower.getTarget(distTravel);
+        targetHeading = follower.getTargetHeading(distTravel);
+
+
         double distSq = pow(distX, 2) + pow(distY, 2);
         dist = sqrt(distSq);
+
+        xControl.setSetPoint(targetArc[0]);
+        yControl.setSetPoint(targetArc[1]);
+        hControl.setSetPoint(targetHeading);
 
         if (abs(dist) <= 30) {
             powX = xControl.calculate(current.x);
@@ -90,6 +133,8 @@ public class SetPointCommand extends CommandBase {
             powX = xlControl.calculate(current.x);
             powY = ylControl.calculate(current.y);
         }
+
+
 
         double x = powX;
         double y = -powY;
@@ -111,7 +156,7 @@ public class SetPointCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return dist <= 0.2 && distH <= 0.5 || timer.seconds() > pathTime;
+        return (dist <= 0.2 && distH <= 0.5) || timer.seconds() > pathTime;
 
     }
 }

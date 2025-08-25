@@ -29,7 +29,6 @@ public class WayPointCommand extends CommandBase {
     public double pathTime;
 
 
-
     private ElapsedTime timer = new ElapsedTime();
 
     private final PIDFController xControl;
@@ -86,14 +85,13 @@ public class WayPointCommand extends CommandBase {
         if (abs(dist) <= 30) {
             powX = xControl.calculate(current.x);
             powY = yControl.calculate(current.y);
-        }else {
+        } else {
             powX = xlControl.calculate(current.x);
             powY = ylControl.calculate(current.y);
         }
 
         double x = powX;
         double y = -powY;
-
 
 
         double heading = (hControl.calculateAngleWrap(current.getAngle()));
@@ -107,17 +105,15 @@ public class WayPointCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        drive.set(new Vector3f(0f,0f,0f), 0);
+        drive.set(new Vector3f(0f, 0f, 0f), 0);
     }
 
-    public boolean getFinished(){
+    public boolean getFinished() {
         return isFinished();
     }
 
     @Override
     public boolean isFinished() {
         return dist <= 16 && distH <= .2 || timer.seconds() > pathTime;
-//        return false;
-//        return getPose().distance(target) > 2.0;
     }
 }

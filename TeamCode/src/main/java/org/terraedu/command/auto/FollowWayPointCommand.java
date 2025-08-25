@@ -46,7 +46,6 @@ public class FollowWayPointCommand extends CommandBase {
     public boolean negativeY;
 
 
-
     private ElapsedTime timer = new ElapsedTime();
 
     private final PIDFController xControl;
@@ -67,8 +66,6 @@ public class FollowWayPointCommand extends CommandBase {
         initialAngle = initial.getAngle();
         initialX = initial.getAngle();
         initialY = initial.getAngle();
-
-
 
 
         xControl = new PIDFController(AutoConfig.xPID.p, AutoConfig.xPID.i, AutoConfig.xPID.d, AutoConfig.xPID.f);
@@ -118,31 +115,28 @@ public class FollowWayPointCommand extends CommandBase {
         pathAngle = Math.asin(distX / dist);
 
 
-
-        if(flipped && negativeY){
+        if (flipped && negativeY) {
             hControl.setSetPoint(pathAngle);
 
-        }else if(flipped){
+        } else if (flipped) {
             hControl.setSetPoint(-pathAngle);
-        }else if(negativeY){
+        } else if (negativeY) {
             hControl.setSetPoint(-pathAngle);
-        }else {
+        } else {
             hControl.setSetPoint(pathAngle);
         }
-
 
 
         if (abs(dist) <= 30) {
             powX = xControl.calculate(current.x);
             powY = yControl.calculate(current.y);
-        }else {
+        } else {
             powX = xlControl.calculate(current.x);
             powY = ylControl.calculate(current.y);
         }
 
         double x = powX;
         double y = -powY;
-
 
 
         double heading = robot.scale(hControl.calculateAngleWrap(current.getAngle()));
@@ -156,13 +150,12 @@ public class FollowWayPointCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        drive.set(new Vector3f(0f,0f,0f), 0);
+        drive.set(new Vector3f(0f, 0f, 0f), 0);
     }
 
     @Override
     public boolean isFinished() {
         return (dist <= tolerance && distH <= tolerance) || timer.seconds() > pathTime;
-//        return false;
 
     }
 }
